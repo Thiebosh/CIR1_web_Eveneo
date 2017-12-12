@@ -14,7 +14,20 @@
         font-weight: normal;
       }
       .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-slide-container {
+    visibility: hidden;
+    display: initial;
+}
+.remark-visible {
+    visibility: visible;
+}
+.inlineimg img{
+	display: inline-block;
+	max-width: 150px;
+
+}
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/mermaid@7.0.0/dist/mermaid.css" media="all"/>
   </head>
   <body>
     <textarea id="source">
@@ -44,8 +57,48 @@ class: center, middle
 
 
 ---
-
+class: center, middle
 # Introduction
+
+---
+
+# Qui suis-je?
+
+- François Dambrine (ISEN, CIR, promo56) .inlineimg[![photo](https://scontent.flux1-1.fna.fbcdn.net/v/t1.0-9/10003522_610694192333147_860122324_n.jpg?oh=deb23430536ff1b4aae3a086a6781fe0&oe=5AC2819D)]
+- Développeur chez Vadesecure .inlineimg[![vadesecure](https://www.vadesecure.com/wp-content/uploads/vade-secure-logo@2x.png)]
+- Développeur Open Source pour Zeste De Savoir .inlineimg[![zds](./zds.png)]
+
+---
+
+# Mais pourquoi PHP?
+
+- Quoi qu'il arrive le navigateur voit du HTML et du CSS
+- PHP est un langage de **programmation**, HTML un langage de **description**
+- [82.4%* des sites](https://w3techs.com/technologies/details/pl-php/all/all) internet utilisent PHP (Facebook, Wikipedia...) 
+
+**Avec PHP vous générez *dynamiquement* du HTML et l'envoyez au navigateur**
+
+---
+## Créer un site HTML
+
+<div class="mermaid">
+graph TD
+    html(Écrire le code HTML à la main) --> ftp(Envoyer le fichier html, les images et le CSS sur l'hébergement)
+    ftp --> nav(Affichage sur le navigateur)
+</div>
+
+A chaque fois que vous désirez changer quelque chose (texte, image) il faut tout refaire.
+
+---
+## Avec PHP
+
+<div class="mermaid">
+graph TD
+    php(Créer la logique qui permet d'afficher la page) --> ftp(Envoyer le fichier php, les images et le CSS sur l'hébergement)
+    ftp --> nav(Affichage sur le navigateur)
+    nav --> blog(Entrer le nouveau texte sur la page de rédaction)
+    blog --> nav
+</div>
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
@@ -53,5 +106,9 @@ class: center, middle
     <script>
       var slideshow = remark.create();
     </script>
+<script src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad: true, theme: 'forest'});
+  </script>
   </body>
 </html>
