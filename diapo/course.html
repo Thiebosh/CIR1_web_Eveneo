@@ -102,11 +102,11 @@ graph TD
 
 ---
 
-# Client/Serveur
+# Client/Serveur (1/2)
 
 ![modèle client server](./client_server.png)
 1. Requête HTTP du client au serveur;
-2. Exécution du code PHP (moteur Zend Engine);
+2. Exécution du code PHP;
 3. Réponse HTTP du serveur au client.
 
 ???
@@ -115,6 +115,38 @@ L'utilisation de page web est basée sur le modèle client/serveur et le protoco
 A distance, un serveur "écoute" le port 80 (ou le port 443). 
 Le client (le navigateur) envoie une requête HTTP.
 Le serveur la reçoit et lance la génération du HTML. Puis renvoie la page via une réponse HTTP.
+
+---
+
+# Client/server (2/2)
+
+## URL (Unified ressource locator)
+
+https://fr.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Historique?lang=fr
+
+<div class="mermaid">
+graph BT
+	subgraph 
+		proto[https://]
+		dom[fr.wikipedia.org]
+		path["/wiki/Hypertext_Transfer_Protocol"]
+		tag["#Historique"]
+		qstring[?lang=fr]
+	end
+	subgraph 
+		e_proto[Protocole] --> proto
+		e_dom[Domaine ou FQDN] --> dom
+		e_path["Chemin (path) vers la page désirée"] --> path
+		e_tag[Tag ou ancre] --> tag
+		e_qstring[Query string] --> qstring
+	end
+</div>
+???
+C'est avec les URLs qu'on arrive à envoyer des requêtes au serveur et que celui-ci sait ce qu'il doit faire.
+Comme vous pouvez le remarquer lorsque vous utilisiez le html vous regardiez `file://....` alors que pour les sites dynamiques on utilise `http/https`.
+Dans un premier temps on va simplifier la gestion des urls à "le path est le chemin vers le fichier html ou PHP qu'on demande" on ira plus loin à la fin du cours.
+
+
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
