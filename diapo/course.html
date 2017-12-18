@@ -26,6 +26,14 @@
 	max-width: 150px;
 
 }
+
+.px300 img{
+	display: inline-block;
+	max-width: 300px;
+
+}
+
+
     </style>
     <link rel="stylesheet" href="https://unpkg.com/mermaid@7.0.0/dist/mermaid.css" media="all"/>
   </head>
@@ -146,6 +154,65 @@ C'est avec les URLs qu'on arrive à envoyer des requêtes au serveur et que celu
 Comme vous pouvez le remarquer lorsque vous utilisiez le html vous regardiez `file://....` alors que pour les sites dynamiques on utilise `http/https`.
 Dans un premier temps on va simplifier la gestion des urls à "le path est le chemin vers le fichier html ou PHP qu'on demande" on ira plus loin à la fin du cours.
 
+---
+# Le protocole HTTP
+
+- Créé par le CEA
+- Protocole textuel
+- 2 parties : Entête et Corps
+
+.px300[![T.Berners Lee](./berners_lee.png)]
+
+???
+
+Le protocole HTTP (Hyper Text Transfert Protocole) est un protocole de la couche **applicative** du modèle OSI.
+
+Créé par le CEA pour partager les recherches et permettre à toutes les universités et centres de recherche d'avoir leur base d'articles/recherches tout en liant aux recherche des autres universités.
+
+Protocole textuel <=> un humain peut le lire. C'est du texte qui parcourt les tuyau. Inverse des protocoles binaires tels que bit torrent.
+
+La requête et la réponse contiennent potentiellement deux parties:  les entêtes et le corps.
+
+---
+
+# Entêtes
+
+La requête ET la réponse en ont
+
+Exemple:
+
+```
+Host: fr.wikipedia.org
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3
+Accept-Encoding: gzip, deflate, br
+Cookie: WMF-Last-Access-Global=18-Dec-2017; WMF-Last-Access=18-Dec-2017; CP=H2; GeoIP=FR:HDF:Lille:50.63:3.06:v4
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+If-Modified-Since: Sun, 17 Dec 2017 14:18:37 GMT
+Cache-Control: max-age=0
+```
+
+???
+
+Utiliser firefox, avec la touche F12 pour montrer les requêtes.
+
+---
+
+# Corps
+
+Facultatif, contient les données de la ressource.
+
+- Le HTML, les images, le CSS... pour la réponse;
+- Ce que vous envoyez au serveur pour la requête.
+
+**On en reparlera avec les formulaires et les superglobales**
+
+---
+class: center, middle
+
+# Let's go to code
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
