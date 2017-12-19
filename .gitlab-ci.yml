@@ -5,6 +5,8 @@ pages:
   script:
   - mkdir public
   - cp -rp diapo public/
+  - cp -rp tp* public/
+  - cp index.html public/
   artifacts:
     paths:
     - public

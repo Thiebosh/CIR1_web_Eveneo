@@ -241,8 +241,7 @@ echo "<html>
 	<body>
 		<h1>Mon premier site en PHP</h1>
 	</body>
-</html>"
-?>
+</html>";
 ```
 ---
 
@@ -250,13 +249,15 @@ echo "<html>
 
 ## Pour développer : 
 
-`php -S chemin_de_votre_dossier`
+`php -S localhost:8000 -t chemin_de_votre_dossier`
 
 ## Pour héberger une vraie application
 
 [lighttpd](https://www.lighttpd.net/), [nginx](https://nginx.org/en/), [apache](https://httpd.apache.org/)...
 
 ???
+
+notez le `:8000`: c'est dû au fait que votre OS n'acceptera de lancer votre serveur sur le port 80, il faut être root
 
 php possède un serveur léger qui vous permet de développer très facilement.
 Cependant ce serveur n'set pas très performant, ce n'est **pas** son but. 
@@ -273,7 +274,7 @@ Ces serveurs possèdent des fonctionnalités supplémentaire pour :
 
 # L'url dans le navigateur
 
-`http://localhost/index.php`
+`http://localhost:8000/index.php`
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
