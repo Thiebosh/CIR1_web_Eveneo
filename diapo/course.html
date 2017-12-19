@@ -215,6 +215,7 @@ class: center, middle
 # Let's go to code
 
 ---
+class: center, middle
 
 # À votre avis, que faut-il faire?
 
@@ -242,6 +243,7 @@ echo "<html>
 		<h1>Mon premier site en PHP</h1>
 	</body>
 </html>";
+?>
 ```
 ---
 
@@ -275,6 +277,44 @@ Ces serveurs possèdent des fonctionnalités supplémentaire pour :
 # L'url dans le navigateur
 
 `http://localhost:8000/index.php`
+
+---
+
+# Algorithmique (1/3)
+
+- toute instruction se termine par `;`
+- une variable = `$uneVariable`, pas besoin de définir son type
+- `if`, `while` et `for` comme en C
+
+Exemple:
+
+```php
+<?php
+/*
+ * let's do bubble sort
+ *
+*/
+function bubbleSort($array) {
+	for ($inverseIterator = count($array) - 1; $inverseIterator > 0; $inverseIterator--) {
+		for ($comparedIterator = 0; $comparedIterator < $inverseIterator - 1; $comparedIterator++) {
+			if($array[$comparedIterator + 1] < $array[$comparedIterator]) {
+				// array_swap is a function integrated to php itself
+				array_swap($array, $comparedIterator + 1, $comparedIterator);
+			}
+		}
+	}
+}
+$toBeSortedArray = [5, 42, 8, sqrt(11), 3.14, 44, 128, 2];
+bubbleSort($toBeSortedArray); // tables are modified like if they were pointers
+?>
+```
+
+???
+deux syntaxes pour les commentaires
+la syntaxe du tableau
+définition d'une fonction
+appel d'une fonction
+référence pour les tableaux, valeur pour les autres.
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
