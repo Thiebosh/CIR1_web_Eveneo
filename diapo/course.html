@@ -280,19 +280,16 @@ Ces serveurs possèdent des fonctionnalités supplémentaire pour :
 
 ---
 
-# Algorithmique (1/3)
+# Algorithmique (1/2)
 
 - toute instruction se termine par `;`
 - une variable = `$uneVariable`, pas besoin de définir son type
 - `if`, `while` et `for` comme en C
 
-Exemple:
-
 ```php
 <?php
 /*
  * let's do bubble sort
- *
 */
 function bubbleSort($array) {
 	for ($inverseIterator = count($array) - 1; $inverseIterator > 0; $inverseIterator--) {
@@ -315,6 +312,45 @@ la syntaxe du tableau
 définition d'une fonction
 appel d'une fonction
 référence pour les tableaux, valeur pour les autres.
+---
+# Algorithmique (2/2)
+
+Quatre [types] de données :
+
+- les "scalairs" : entiers, flottant, booléens et string : se manipulent comme en C;
+- les tableaux : toujours une référence
+- les objets : toujours une référence
+- les `callable` : permet d'être appelé comme une fonction.
+
+[types]: http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
+???
+
+pour faciliter la lisibilité des fonctions vous pouvez "forcer" le type des paramètres et du retour
+
+---
+# Moteur de template
+
+- fonction `include` : fait un "copier/coller" d'un autre fichier dans celui-là.
+- insérer du code php dans du html
+
+template.html
+```html+php
+<html>
+	<header><title><?= $title ?></title></header>
+	<body>
+		Bonjour, aujourd'hui nous sommes le : <?= $date ?>
+	</body>
+</html>
+```
+
+index2.php
+```php
+<?php
+$title = "Cours de CIR 1";
+$date = date('d/m/Y');
+include('template.html');
+```
+
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
