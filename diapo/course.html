@@ -214,6 +214,66 @@ class: center, middle
 
 # Let's go to code
 
+---
+
+# À votre avis, que faut-il faire?
+
+???
+
+---
+
+## Créer un code qui génère du HTML
+
+## Démarrer un serveur web
+
+## Entrer la bonne url dans votre navigateur
+
+---
+
+# Générer du HTML
+
+créer un fichier index.php
+
+```php
+<?php
+
+echo "<html>
+	<body>
+		<h1>Mon premier site en PHP</h1>
+	</body>
+</html>"
+?>
+```
+---
+
+# Lancer le serveur web
+
+## Pour développer : 
+
+`php -S chemin_de_votre_dossier`
+
+## Pour héberger une vraie application
+
+[lighttpd](https://www.lighttpd.net/), [nginx](https://nginx.org/en/), [apache](https://httpd.apache.org/)...
+
+???
+
+php possède un serveur léger qui vous permet de développer très facilement.
+Cependant ce serveur n'set pas très performant, ce n'est **pas** son but. 
+
+Les applications professionnelles utilisent des serveurs tels que nginx, lighttpd, apache... 
+Ces serveurs possèdent des fonctionnalités supplémentaire pour :
+
+- améliorer la rapidité de réponse (cache, maintient des connexions, répartition de la charge...)
+- améliorer la sécurité (interdiction de parcourir les arborescences, protection contre certaines failles...)
+- gestion du https
+- gestion des journaux d'accès (obligatoires par la loi)
+
+---
+
+# L'url dans le navigateur
+
+`http://localhost/index.php`
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
