@@ -1,7 +1,7 @@
 	<!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
+    <title>CIR1 : Développement Web</title>
     <meta charset="utf-8">
     <style>
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -32,7 +32,10 @@
 	max-width: 300px;
 
 }
-
+.table_container td{
+	border-bottom: 1px solid black !important;
+	border-right: 1px solid black !important;
+}
 
     </style>
     <link rel="stylesheet" href="https://unpkg.com/mermaid@7.0.0/dist/mermaid.css" media="all"/>
@@ -247,13 +250,13 @@ echo "<html>
 ```
 ---
 
-# Lancer le serveur web
+## Lancer le serveur web
 
-## Pour développer : 
+### Pour développer : 
 
 `php -S localhost:8000 -t chemin_de_votre_dossier`
 
-## Pour héberger une vraie application
+### Pour héberger une vraie application
 
 [lighttpd](https://www.lighttpd.net/), [nginx](https://nginx.org/en/), [apache](https://httpd.apache.org/)...
 
@@ -274,13 +277,13 @@ Ces serveurs possèdent des fonctionnalités supplémentaire pour :
 
 ---
 
-# L'url dans le navigateur
+## L'url dans le navigateur
 
 `http://localhost:8000/index.php`
 
 ---
 
-# Algorithmique (1/2)
+## Algorithmique (1/2)
 
 - toute instruction se termine par `;`
 - une variable = `$uneVariable`, pas besoin de définir son type
@@ -313,7 +316,7 @@ définition d'une fonction
 appel d'une fonction
 référence pour les tableaux, valeur pour les autres.
 ---
-# Algorithmique (2/2)
+## Algorithmique (2/2)
 
 Quatre [types] de données :
 
@@ -328,7 +331,7 @@ Quatre [types] de données :
 pour faciliter la lisibilité des fonctions vous pouvez "forcer" le type des paramètres et du retour
 
 ---
-# Moteur de template
+## Moteur de template (1/2)
 
 - fonction `include` : fait un "copier/coller" d'un autre fichier dans celui-là.
 - insérer du code php dans du html
@@ -349,8 +352,120 @@ index2.php
 $title = "Cours de CIR 1";
 $date = date('d/m/Y');
 include('template.html');
+?>
+
+```
+???
+
+La fonction "include" va chercher le fichier désiré et va le "copier/coller" dans le flux courant.
+Vous pouvez ainsi créer un premier fichier `.php` qui va inclure votre programme, puis inclure un fichier `.html` dans lequel vous n'allez faire que de l'affichage.
+la syntaxe `<?= $variable ?>` est en fait un alias de `<?php echo $variable; ?>`.
+
+Regarder [le server](http://localhost:8000/examples/example_template/index.php)
+---
+## Moteur de template (2/2)
+
+Insérer du code php dans le html (et vice versa)
+
+```php+html
+<html>
+<head><title>Liste des séances</title></head>
+<body>
+<ol>
+<?php
+	for($i=0; $i < count($seances); $i++) {
+		?>
+		<li>Séance <?= $i + 1 ?> : <?= $seances[$i] ?></li>
+		<?php
+	}
+?>
+</ol>
+</body>
+</html>
+```
+index.php
+```php
+<?php
+$seances = ['Introduction', 'Données utilisateur', 'Base de données (1/2)', 'Base de données (2/2)', 'PHP++'];
+include('template.html');
+?>
+```
+???
+Pour intégrer du code php, il suffit d'ouvrir `<?php` chaque fois qu'on veut ajouter du code et fermer avec `?>` chaque fois qu'on veut mettre du html
+
+Regarder [le server](http://localhost:8000/examples/example_template_for/index.php)
+---
+class: center, middle
+
+# Les tableaux
+---
+class: center, middle
+
+**Protip:** Oubliez ce que vous avez fait en C
+---
+class: center, middle
+![Clé-Valeur](./key_value.png)
+
+---
+class: table_container
+# Quand les clefs sont des entiers
+
+```php
+<?php
+$array = ['clef 0', 'clef 1'];
+$array[] = 'clef 2'; // mets "clef 2" à la fin
+in_array('clef 1', $array); // true
+?>
 ```
 
+clefs|valeurs
+-----|-------
+0| `"clef 0"`
+1| `"clef 1"`
+2| `"clef 2"`
+
+---
+class: table_container
+
+# Quand les clefs ne sont pas des entiers (e.g string)
+```php
+<?php
+$array = ['clef 0' => 'valeur 0'];
+$array['clef 2'] = 'valeur 2'; // associe "valeur 2" à la clef "clef 2"
+$a = $array['clef 3']: // WARNING, Undefined Index
+in_array('clef 1', $array); // false
+isset($array, 'clef 2'); // true
+
+?>
+```
+clefs|valeurs
+-----|-------
+`"clef 0"`| `"valeur 0"`
+`"clef 2"`| `"valeur 2"`
+`"clef 3"`| `"valeur 3"`
+
+---
+
+# Parcourir un tableau
+
+```php
+<?php
+$array = ['clef 0' => 'valeur 0', 'clef 2' => 'valeur 2'];
+foreach($array as $key => $value) {
+	echo 'À la clef ' . $key . 'a été associé la valeur ' . $value;
+}
+?>
+```
+Si seule la valeur importe :
+
+```php
+<?php
+$array = [2, 4 ,6, 8, 10];
+foreach($array as $evenNumber) {
+	echo $evenNumber . '<br/>';
+}
+?>
+```
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
