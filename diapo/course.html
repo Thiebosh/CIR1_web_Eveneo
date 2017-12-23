@@ -520,7 +520,7 @@ ex: le panier Amazon
 
 - `$_SERVER`: contient les données de l'entête http
 - `$_SESSION` : contient les données de session (on y arrive)
-- `$_COOKIES` : contient les données de cookies (on y arrive)
+- `$_COOKIE` : contient les données de cookies (on y arrive)
 - `$_GET` : contient les données de la [query string](#10)
 - `$_POST` : contient les données des formulaires de type POST (séance 2)
 - `$_FILES` : contient les données des formulaires de type POST + multipart (séance 2)
@@ -542,7 +542,39 @@ ex: le panier Amazon
 - On inject du code, html/js malicieux dans le site.
 - Une seule solution : `htmlspecialchars($displayedVariable, ENT_QUOTE);`
 
-**protip** : à chaque fois que vous voyez `<= ... ?>` assurez vous que `htmlspecialchars` est appelé (`<?= htmlspecialchars($displayedVariable) ?>`)
+**protip** : à chaque fois que vous voyez `<?= ... ?>` assurez vous que `htmlspecialchars` est appelé (`<?= htmlspecialchars($displayedVariable) ?>`)
+
+---
+
+# Filter Input, Escape Output
+
+- Vérifier que la variable existe et est correcte : `isset`, `empty`, `filter_var`;
+- N'altérez (retirer des caractères comme les espaces, enlever des bouts de textes complets...) la variable qu'au besoin;
+- Posez-vous toujours la question "quels sont les caractères spéciaux dans ce que j'utilise" et utilisez la fonction qui va "échaper" lesdits caractères.
+
+---
+# Session et Cookies
+
+Session | Cookie
+--------|-------
+Les données de la session sont stockées sur le serveur, l'identifiant de session est stocké dans un cookie| Les données sont stockées chez le client.
+L'identifiant est envoyé dans les headers HTTP|Les données transitent via les headers HTTP
+[`session_start`](http://php.net/manual/fr/function.session-start.php)|[`setcookie`](http://php.net/manual/fr/function.setcookie.php)
+`$_SESSION['clef'] = "valeur sérialisable" | `$_COOKIE['nom_du_cookie']= "valeur du cookie"
+Taille non limitée | 4 Ko max le plus souvent
+`session_destroy` pour arrêter la session| .
+
+---
+# Quelques exemples
+
+- [Quand tout marche bien](http://localhost:8000/examples/example_session/session_ok.php?lang=fr&course=cir1)
+- [Headers sent](http://localhost:8000/examples/example_session/session_headers.php?lang=fr&course=cir1)
+- [Cookie too big](http://localhost:8000/examples/example_session/cookie_big.php?lang=fr&course=cir1)
+
+---
+class: center, middle
+
+# Préparation du TP
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
