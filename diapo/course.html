@@ -385,7 +385,7 @@ La fonction "include" va chercher le fichier désiré et va le "copier/coller" d
 Vous pouvez ainsi créer un premier fichier `.php` qui va inclure votre programme, puis inclure un fichier `.html` dans lequel vous n'allez faire que de l'affichage.
 la syntaxe `<?= $variable ?>` est en fait un alias de `<?php echo $variable; ?>`.
 
-Regarder [le server](http://localhost:8000/examples/example_template/index.php)
+Regarder [le serveur](http://localhost:8000/examples/example_template/index.php)
 ---
 ## Moteur de template (2/2)
 
@@ -490,6 +490,58 @@ foreach($array as $evenNumber) {
 }
 ?>
 ```
+---
+class: table_container
+Résumé avant la suite
+
+---
+- On evoie une requête HTTP.
+- PHP la traite et génère du code html en retour.
+- En PHP les tableaux sont une structure très puissante.
+- A chaque requête PHP s'exécute indépendamment de ce qu'il s'est passé dans les pages précédentes.
+---
+class: table_container
+Comment faire communiquer les pages entre elles? 
+
+ex: le panier Amazon
+
+---
+# Les super globales (1/3)
+
+- Ce sont des tableaux avec des clefs "string".
+- Ils sont accessibles partout dans votre programmes.
+- Ils contiennent des données que vous ne maîtrisez pas !
+
+---
+
+# Les super globales (2/3)
+
+- `$_SERVER`: contient les données de l'entête http
+- `$_SESSION` : contient les données de session (on y arrive)
+- `$_COOKIES` : contient les données de cookies (on y arrive)
+- `$_GET` : contient les données de la [query string](#10)
+- `$_POST` : contient les données des formulaires de type POST (séance 2)
+- `$_FILES` : contient les données des formulaires de type POST + multipart (séance 2)
+
+---
+# Les super globales (3/3)
+
+[exemple](http://localhost:8000/examples/example_superglobales/index.php?lang=fr&course=cir1)
+
+???
+- Aucune des données présente dans `$_SERVER` n'est fiable à 100%, démo avec F12 de FF
+- Faire attention quand on veut insérer un lien avec un `&` dans du html.
+- Faille XSS
+
+---
+# Faille XSS
+
+- Faille de type "injection" ([TOP 1 OWASP](https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/owasptop10/OWASP%20Top%2010%20-%202013%20-%20French.pdf))
+- On inject du code, html/js malicieux dans le site.
+- Une seule solution : `htmlspecialchars($displayedVariable, ENT_QUOTE);`
+
+**protip** : à chaque fois que vous voyez `<= ... ?>` assurez vous que `htmlspecialchars` est appelé (`<?= htmlspecialchars($displayedVariable) ?>`)
+
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
