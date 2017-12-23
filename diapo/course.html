@@ -316,7 +316,7 @@ définition d'une fonction
 appel d'une fonction
 référence pour les tableaux, valeur pour les autres.
 ---
-## Algorithmique (2/2)
+## Algorithmique (2/3)
 
 Quatre [types] de données :
 
@@ -329,6 +329,30 @@ Quatre [types] de données :
 ???
 
 pour faciliter la lisibilité des fonctions vous pouvez "forcer" le type des paramètres et du retour
+
+---
+## Algorithmique (3/3)
+
+```php
+<?php
+$i = 2 + 5;
+$j = 2 * $i
+$i <= $j; // true
+$text = "with double quotes" . ' or with simple quotes' . ' but it\'s better to keep simple quotes';
+$r = 55 % 10; // 5
+5 == '5'; // true
+5 === '5'; // false
+true || false; // true
+true && false; // false
+!true || false; // false
+?>
+```
+
+???
+Les opérateurs sont les mêmes que dans à plupart des langages;
+les toutes les opérations sauf `===` sont des opérations "à conversion", c'est à dire que si le type n'est pas le même à gauche et à droite,
+php va tenter de convertir les types en quelques chose de comparable. Faites donc très attention. Il y a plusieurs manières de représenter true et false par exemple.
+
 
 ---
 ## Moteur de template (1/2)
