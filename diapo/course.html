@@ -633,11 +633,130 @@ class: center, middle
 
 ## Résumé du cours précédent
 ---
+- PHP permet de **générer** *dynamiquement* du HTML
+- Se base sur le modèle **client-serveur** et le protocole **HTTP**
+- HTTP est un protocole **textuel**
+- PHP est un langage de **programmation** qui permet de mettre en place des **algorithmes**
+- Les tableaux en PHP associent une **clef** (entier/string) à sa **valeur** (peu importe)
+- Les variables **superglobales** sont accessibles partout dans le code
+
+---
 class: center, middle
 
 ## Vos questions
 
+---
+class: center, middle
+# Avez vous le form?
+---
+# Envoyer des données au serveur (1/4)
 
+```html
+<form action="./reponse_formulaire.php">
+    <fieldset id="identity">
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+</form>
+```
+
+???
+Ce formulaire envoie les données avec la méthode GET. Du coup les données seront accessibles avec la variable $_GET
+Rappel sur la faille XSS
+Que se passe-t-il si je mets un texte trop long?
+---
+# Envoyer des données au serveur (2/4)
+```html
+<form action="./reponse_formulaire-post.php" method="POST">
+    <fieldset id="identity">
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+        <p>
+            <textarea name="comment" placeholder="Votre texte"></textarea>
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+</form>
+```
+---
+# Envoyer des données au serveur (3/4)
+```html
+<form action="./reponse_formulaire-check.php" method="POST">
+    <fieldset id="identity">
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+        <p>
+            <label for="hobbies">Vos passions</label>
+            <input type="checkbox" name="hobby" value="foot">foot<br/>
+            <input type="checkbox" name="hobby" value="rugby">rugby<br/>
+            <input type="checkbox" name="hobby" value="fifa">fifa<br/>
+            <input type="checkbox" name="hobby" value="skyrim">Je suis le dovahkiin<br/>
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+</form>
+```
+???
+Le cas des checkbox est un peu complexe. Comme on veut qu'elles aient le même nom pour rassembler toutes les valeurs ensemble, il faut dire à php comment s'en sortir.
+Voir la requête http (body).
+Expliquer l'astuce => les `[]`
+Expliquer que l'astuce vaut en fait pour tous les type de champ, on peut ainsi mettre plusieurs champs texte sous le même nom.
+---
+# Envoyer des données au serveur (4/4)
+```html
+<form action="./reponse_formulaire-file.php" method="POST" enctype="multipart/form-data">
+    <fieldset id="identity">
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+        <p>
+            <input type="file" name="avatar" id="avatar"/><label for="avatar">Votre avatar</label>
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+</form>
+```
+???
+Envoyer un fichier demande une configuration supplémentaire.
+En effet, souvenez-vous, le protocole HTTP est un protocole textuel. A l'opposé un fichier est par défaut du simple code binaire.
+Il faut donc dire à votre navigateur "envoyez les fichiers dans une seconde partie de la requête au format binaire".
+Cela génère un encodage en base64.
+
+Montrer la requête.
+---
+# Sauvegarder le fichier
+
+---
+
+# Attention, sécurité
+
+- Les extensions ne suffisent pas à s'assurer qu'un fichier est ce qu'il prétend être.
+- Le type MIME aussi.
+- Si vous avez une image, n'hésitez pas à la retailler/la compresser pour éviter des pages trop lourdes.
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
