@@ -652,19 +652,19 @@ class: center, middle
 # Envoyer des données au serveur (1/4)
 
 ```html
-<form action="./reponse_formulaire.php">
-    <fieldset id="identity">
-        <p>
-            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
-        </p>
-        <p>
-            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
-        </p>
-    </fieldset>
-    <p>
-        <input type="submit" value="Send"/>
-    </p>
-</form>
+&lt;form action="./reponse_formulaire.php">
+    &lt;fieldset id="identity">
+        &lt;p>
+            &lt;input type="text" name="firstname" id="firstname"/>&lt;label for="firstname">Prénom&lt;/label>
+        &lt;/p>
+        &lt;p>
+            &lt;input type="text" name="lastname" id="lastname"/>&lt;label for="lastname">Nom&lt;/label>
+        &lt;/p>
+    &lt;/fieldset>
+    &lt;p>
+        &lt;input type="submit" value="Send"/>
+    &lt;/p>
+&lt;/form>
 ```
 
 ???
@@ -675,8 +675,8 @@ Que se passe-t-il si je mets un texte trop long?
 # Envoyer des données au serveur (2/4)
 
 ```html
-<form action="./reponse_formulaire-post.php" method="POST">
-    <fieldset id="identity">
+&lt;form action="./reponse_formulaire-post.php" method="POST">
+    &lt;fieldset id="identity">
         <p>
             <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
         </p>
@@ -690,13 +690,13 @@ Que se passe-t-il si je mets un texte trop long?
     <p>
         <input type="submit" value="Send"/>
     </p>
-</form>
+&lt;/form>
 ```
 ---
 # Envoyer des données au serveur (3/4)
 
 ```html
-<form action="./reponse_formulaire-check.php" method="POST">
+&lt;form action="./reponse_formulaire-check.php" method="POST">
     <fieldset id="identity">
         <p>
             <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
@@ -715,7 +715,7 @@ Que se passe-t-il si je mets un texte trop long?
     <p>
         <input type="submit" value="Send"/>
     </p>
-</form>
+&lt;/form>
 ```
 ???
 Le cas des checkbox est un peu complexe. Comme on veut qu'elles aient le même nom pour rassembler toutes les valeurs ensemble, il faut dire à php comment s'en sortir.
@@ -726,7 +726,7 @@ Expliquer que l'astuce vaut en fait pour tous les type de champ, on peut ainsi m
 # Envoyer des données au serveur (4/4)
 
 ```html
-<form action="./reponse_formulaire-file.php" method="POST" enctype="multipart/form-data">
+&lt;form action="./reponse_formulaire-file.php" method="POST" enctype="multipart/form-data">
     <fieldset id="identity">
         <p>
             <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
@@ -741,7 +741,7 @@ Expliquer que l'astuce vaut en fait pour tous les type de champ, on peut ainsi m
     <p>
         <input type="submit" value="Send"/>
     </p>
-</form>
+&lt;/form>
 ```
 ???
 Envoyer un fichier demande une configuration supplémentaire.
