@@ -78,6 +78,7 @@ class: center, middle
 - François Dambrine (ISEN, CIR, promo56) .inlineimg[![photo](https://scontent.flux1-1.fna.fbcdn.net/v/t1.0-9/10003522_610694192333147_860122324_n.jpg?oh=deb23430536ff1b4aae3a086a6781fe0&oe=5AC2819D)]
 - Développeur chez Vadesecure .inlineimg[![vadesecure](https://www.vadesecure.com/wp-content/uploads/vade-secure-logo@2x.png)]
 - Développeur Open Source pour Zeste De Savoir .inlineimg[![zds](./zds.png)]
+- Pour poser vos questions : francois.dambrine@isen-lille.fr
 
 ---
 
@@ -283,11 +284,36 @@ Ces serveurs possèdent des fonctionnalités supplémentaire pour :
 
 ---
 
-## Algorithmique (1/2)
+## Algorithmique (1/4)
+```php
+<?php
+$testedVariable = 42;
+if ($testedVariable < 42) {
+    echo "Answer not yet found";
+} else if ($testedVariable === 42) {
+    echo "Answer to the question of life, universe and everything is " . $testedVariable;
+else {
+    echo "You don't even know the question."
+}
+for ($i = 0; $i < 5; $i++){
+    echo $i;
+}
 
+$hasAnEnd = false;
+while ($hasAnEnd) {
+    $hasAnEnd = rand(0, 10) < 4.2;
+    echo "let's continue";
+}
+?>
+```
+???
 - toute instruction se termine par `;`
 - une variable = `$uneVariable`, pas besoin de définir son type
 - `if`, `while` et `for` comme en C
+
+---
+## Algorithmique (2/4)
+
 
 ```php
 <?php
@@ -315,8 +341,10 @@ la syntaxe du tableau
 définition d'une fonction
 appel d'une fonction
 référence pour les tableaux, valeur pour les autres.
+
+
 ---
-## Algorithmique (2/3)
+## Algorithmique (3/4)
 
 Quatre [types] de données :
 
@@ -331,7 +359,7 @@ Quatre [types] de données :
 pour faciliter la lisibilité des fonctions vous pouvez "forcer" le type des paramètres et du retour
 
 ---
-## Algorithmique (3/3)
+## Algorithmique (4/4)
 
 ```php
 <?php
@@ -577,6 +605,7 @@ class: center, middle
 # Préparation du TP
 
 ---
+# L'énoncé
 
 1. Se créer un compte (le temps du TP) sur https://framagit.org
 2. Allez sur https://framagit.org/artragis/cours-cir1 et appuyez sur "Forker"
@@ -594,6 +623,20 @@ class: center, middle
 
 - `var_dump` vous permet d'afficher les informations d'une variable
 - Utilisez le débugeur pas à pas ([Une vidéo d'exemple](https://www.youtube.com/watch?v=VlaIeGhIeWM&list=PLVifCHXZPhdFkKfW3e6iOSFAEjzgBmCz4))
+
+---
+class: center, middle
+
+# Séance 2 : Jouer avec les données utilisateur
+---
+class: center, middle
+
+## Résumé du cours précédent
+---
+class: center, middle
+
+## Vos questions
+
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
