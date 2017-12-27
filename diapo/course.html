@@ -675,8 +675,8 @@ Que se passe-t-il si je mets un texte trop long?
 # Envoyer des données au serveur (2/4)
 
 ```html
-&lt;form action="./reponse_formulaire-post.php" method="POST">
-    &lt;fieldset id="identity">
+&lt;form action="./reponse_formulaire-post.php" method="POST"&gt;
+    &lt;fieldset id="identity"&gt;
         <p>
             <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
         </p>
@@ -684,19 +684,19 @@ Que se passe-t-il si je mets un texte trop long?
             <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
         </p>
         <p>
-            <!--<textarea name="comment" placeholder="Votre texte"></textarea>-->
+            &lt;textarea name="comment" placeholder="Votre texte"&gt;&lt/textarea&gt;
         </p>
     </fieldset>
     <p>
         <input type="submit" value="Send"/>
     </p>
-&lt;/form>
+&lt;/form&gt;
 ```
 ---
 # Envoyer des données au serveur (3/4)
 
 ```html
-&lt;form action="./reponse_formulaire-check.php" method="POST">
+&lt;form action="./reponse_formulaire-check.php" method="POST"&gt;
     <fieldset id="identity">
         <p>
             <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
@@ -715,7 +715,7 @@ Que se passe-t-il si je mets un texte trop long?
     <p>
         <input type="submit" value="Send"/>
     </p>
-&lt;/form>
+&lt;/form&gt;
 ```
 ???
 Le cas des checkbox est un peu complexe. Comme on veut qu'elles aient le même nom pour rassembler toutes les valeurs ensemble, il faut dire à php comment s'en sortir.
@@ -726,7 +726,7 @@ Expliquer que l'astuce vaut en fait pour tous les type de champ, on peut ainsi m
 # Envoyer des données au serveur (4/4)
 
 ```html
-&lt;form action="./reponse_formulaire-file.php" method="POST" enctype="multipart/form-data">
+&lt;form action="./reponse_formulaire-file.php" method="POST" enctype="multipart/form-data"&gt;
     <fieldset id="identity">
         <p>
             <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
@@ -741,7 +741,7 @@ Expliquer que l'astuce vaut en fait pour tous les type de champ, on peut ainsi m
     <p>
         <input type="submit" value="Send"/>
     </p>
-&lt;/form>
+&lt;/form&gt;
 ```
 ???
 Envoyer un fichier demande une configuration supplémentaire.
