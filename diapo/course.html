@@ -524,7 +524,7 @@ class: center, middle
 # Résumé avant la suite
 
 ---
-class middle
+class: middle
 
 - On evoie une requête HTTP.
 - PHP la traite et génère du code html en retour.
@@ -755,6 +755,17 @@ Montrer la requête.
 ---
 # Sauvegarder le fichier
 
+- utiliser la fonction `move_uploaded_file`
+- utiliser les données dans la variable `$_FILES`
+```php
+<?php
+define('TARGET_DIRECTORY', './');
+if(!empty($_FILES['avatar'])) {
+    move_uploaded_files($_FILES['avatar']['tmp_name'], TARGET_DIRECTORY . $_FILES['name']);
+}
+?>
+```
+
 ---
 
 # Attention, sécurité
@@ -762,6 +773,74 @@ Montrer la requête.
 - Les extensions ne suffisent pas à s'assurer qu'un fichier est ce qu'il prétend être.
 - Le type MIME aussi.
 - Si vous avez une image, n'hésitez pas à la retailler/la compresser pour éviter des pages trop lourdes.
+- Assurez-vous que le nom de fichier est unique (pour ne pas écraser un fichier quand ce n'est pas voulu) (`sha1`/`sha256`)
+
+---
+# Écrire, lire et modifier un fichier
+
+- Ouverture d’un fichier avec fopen (r/r+, w/w+, a/a+) et fermeture avec fclose. 
+- Lecture caractère par caractère avec fgetc, ligne par ligne avec fgets, ou la totalité du fichier avec file_get_contents.
+- Écriture ligne par ligne avec fputs, ou avec fwrite pour plus de contrôle.
+- Ouverture d’un dossier avec opendir et fermeture avec closedir. Parcours d’un dossier avec readdir. Lister en fonction des noms avec `glob`
+- Attention à la position du curseur, utilisez fseek pour le replacer. Avec a et a+, les données sont toujours ajoutées à la fin, fseek n’a donc aucune influence. Attention également aux permissions des fichiers/dossiers.
+
+---
+# Organisons-nous
+
+> En informatique, et plus particulièrement en développement logiciel, un patron de conception (souvent appelé design pattern) est un arrangement caractéristique de modules,
+> reconnu comme bonne pratique en réponse à un problème de conception d'un logiciel. Il décrit une solution standard, utilisable dans la conception de différents logiciels
+
+![source](https://fr.wikipedia.org/wiki/Patron_de_conception)
+???
+Lorsqu'on développe un logiciel, on finit rapidement par avoir affaire à des clases de problèmes similaires.
+Certains problèmes ont vu leur solution formalisée dans des **patrons de conception et d'organisation**.
+---
+# MVC
+
+- Comment les données sont-elles organisées <=> le modèle
+- Quelles sont les règles pour utiliser les données <=> Le contrôleur
+- Comment on affiche les données? La vue
+
+![MVC](./mvc.png)
+
+---
+# Utiliser une bibliothèque tierse
+
+**Ne réinventez pas la roue**
+
+- télécharger [composer](https://getcomposer.org/download/)
+- ajouter votre dépendance dans la section "autoload" du fichier `composer.json`
+- ajouter vos fichiers de fonctions dans la même section
+- lancer la commande `php composer.phar install`
+- ajouter la ligne `require(__DIR__ . '/vendor/autoload.php');` dans votre contrôleur
+
+**Attention** : les dépendances seront codées avec la POO. On verra plus tard comment utiliser le tout.
+---
+class: center, middle
+
+# TP2 : un site dynamique
+---
+class: center, middle
+Séance 3: 
+# Séance 2 : Jouer avec les données utilisateur
+---
+class: center, middle
+
+## Résumé du cours précédent
+---
+- Utiliser la méthode $_POST dans les formulaires
+- Envoyer des fichiers
+- HTTP est un protocole **textuel**
+- PHP est un langage de **programmation** qui permet de mettre en place des **algorithmes**
+- Les tableaux en PHP associent une **clef** (entier/string) à sa **valeur** (peu importe)
+- Les variables **superglobales** sont accessibles partout dans le code
+
+---
+class: center, middle
+
+## Vos questions
+
+---
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
