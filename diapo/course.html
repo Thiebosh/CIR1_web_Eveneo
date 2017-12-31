@@ -856,6 +856,213 @@ Nous allons utiliser mysql/mariadb, qui est une base relationnelle
 - Chaque **entité** est représentée par une **table**;
 - Lorsque des liens d'apartenance entre entités existent, des **clefs étrangères** sont créés.
 
+---
+# Gérer la base
+
+- le client `mysql`
+- le client PHPMyAdmin
+- le client MysqlWorkbenc
+???
+
+J'utiliserai le dernier, il est développé par oracle et permet d'éviter pas mal de soucis propres à phpmyadmin.
+---
+# La base de données pour le TP : nos premières entités
+
+- En tant qu'utilisateur anonyme, je veux pouvoir me connecter avec mon login et mon mot de passe.
+- En tant qu'utilisateur connecté, je veux pouvoir poster un message (du texte) sur le chat.
+- Chacun des messages postés par les utilisateurs seront datés pour être affichés dans l'ordre.
+
+---
+# La base de données pour le TP : nos premières entités
+
+<div class="mermaid">
+classDiagram
+    User --o Message : (1/n)
+    User : id (int)
+    User : login (string)
+    User : pass (string)
+    Message : id (int)
+    Message : message (string)
+    Message : creation_date (DateTime)
+</div>
+---
+# Les `id`
+
+- C'est l'abréviation de "identifiant"
+- Il permet de retrouver le user/message car il est unique
+- Par convention, on crée un identifiant sous forme d'entier et on met les autres champs avec des contraintes plus lâche
+- **Propre à mysql** : utiliser l'AutoIncrement pour les champ ID.
+---
+# les différents string (1/2)
+
+- CHAR(size) : une chaîne de caractères de taille `size`.
+- VARCHAR(size) : une chaîne de caractères dont la taille maximale est `size`.
+- TEXT/LONG TEXT: une chaîne de caractères sans réelle limite de taille.
+
+L'avantage de `CHAR` et `VARCHAR` c'est qu'on peut mettre une contrainte d'unicité et un index => performance.
+---
+# les différents string (2/2)
+
+- login => varchar
+- pass => varchar (on verra juste après plus en détail)
+- body => TEXT
+
+---
+# Un point sur les password (un peu d'hygiène numérique)
+
+- Un mot de passe ne doit être connu que de l'utilisateur, pas de l'application;
+- Un mot de passe ne doit pas avoir de limite de nombre de caractères;
+- Un mot de passe ne doit pas être stocké en clair;
+
+---
+# Un point sur les password (un peu d'hygiène numérique)
+
+Il faut utiliser des **fonctions de hash**.
+
+- quand on stock en bdd `password_hash($userDefinedPassword, PASSWORD_DEFAULT);`
+- quand on veut vérifier que le mot de passe est bon :
+```php
+<?php
+$passwordFromLoginForm = (string)filter_input(INPUT_POST, 'password');
+$hashedPasswordInDatabase = getUserData()['pass']; // we'll code that together
+if (password_verify($passwordFromLoginForm, $hashedPasswordInDatabase) {
+    // It's OK
+} else {
+   // bad credentials
+}
+```
+???
+Il faut stocker un hash, ce hash a toujours le même nombre de caractères, 60.
+néanmoins, php nous conseille d'utiliser un champ de 255. 
+---
+class: middle, center
+
+# Créons les deux tables
+---
+# Les requêtes SQL de base
+
+- `SELECT login, pass FROM user`
+- ```sql
+SELECT text, creation_date 
+FROM message 
+WHERE creation_date > DATE_SUB(NOW(), INTERVAL 1 HOUR) 
+ORDER BY creation_date ASC
+LIMIT 25 OFFSET 0
+```
+- `INSERT INTO user (login, pass) VALUES('login', '');`
+---
+# Se connecter à la base avec PHP
+
+1. `PDO`/`POO`
+2. `new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '');`
+3. gérer les erreurs : les exceptions
+
+```php
+<?php
+try {
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '');
+} catch (Exception $e) {
+      exit('Erreur de connexion à la base de données.');
+}
+```
+---
+# Ce qu'on dira de l'orienté objet **pour le moment**
+
+- C'est un moyen de séparer le code pour que chaque **classe** fasse un métier bien défini;
+- Il s'appuie sur la notion de classe, qui définit le métier et d'instance qui permet d'avoir l'état courant;
+- Créer une instance avec `new`;
+- Chaque objet possède des **attributs** et des **méthodes**, accessible avec l'opérateur `->`.
+---
+# Ce qu'on dira de l'orienté objet **pour le moment** (exemple)
+```php
+<?php
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', $opts);
+   $resultCursor = $bdd->query('SELECT login, pass FROM user');
+   foreach($resultCursor as $row) {
+        echo $row['user'] . ' ' . $row['pass'];
+    }
+} catch (Exception $e) {
+        exit('Erreur de connexion à la base de données.');
+}
+?>
+```
+???
+
+On se connecte en faisant new PDO,
+On appelle la méthode query avec `->`
+Le "curseur" retourné est un objet qui *implémente une interface `Iterable`*, cela signifie qu'on dit à PHP "ça peut être utilisé comme un tableau dans un foreach"
+Les lignes retournées sont des tableaux associatifs.
+---
+# Bonjour, je m'appele `'; DROP DATABASE;`
+```php
+<?php
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', $opts);
+   $resultCursor = $bdd->query('SELECT login, pass FROM user WHERE login ="' . $_POST['login'] . '"');
+   // ...
+} catch (Exception $e) {
+        exit('Erreur de connexion à la base de données.');
+}
+?>
+```
+???
+- rappelez-vous filter input, escape output. Ici le output n'est plus de l'html mais du SQL. Il faut donc échaper le texte pour que le SQL soit bon
+- l'injection de code est une faille de sécurité importante
+- elle peut avoir lieu aussi bien dans les requêtes de sélection que dans les requêtes d'insertion
+---
+# Qui veut la sécurité, prépare la requête
+
+<div class="mermaid">
+graph LR
+    PDO --> Statement : "prepare($request)"
+    Statement --> execute["Execution in db execute([$param1,$param2])"]
+    exec --> fetch["fetch()"]
+    fetch -> close("Close statement")
+</div>
+
+---
+# Qui veut la sécurité, prépare la requête
+```php
+<?php
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', $opts);
+
+```
+---
+# Update & Delete
+
+- `UPDATE message SET body = 'Hello world' WHERE id = 1;`
+- `DELETE FROM message WHERE creation_date < DATE_SUB(NOW(), INTERVAL 1 HOUR)`
+
+---
+# note sur la sécurité des mots de passe de la base de données
+
+Stockez ces données dans un fichier de configuration, au format que vous souhaites.
+
+Puis ne donnez les droits d'écriture à personne d'autre que le possesseur (chmod 644).
+Lors de la connexion, lisez le fichier et créez la connexion.
+
+```php
+<?php
+$ini_array = parse_ini_file("secrets.ini", true);
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO($ini_array['db']['dsn'], $ini_array['db']['user'], $ini_array['db']['pass'], $opts);
+} catch (Exception $e) {
+        exit('Erreur de connexion à la base de données.');
+}
+```
+et secrets.ini :
+```ini
+[db]
+dsn = mysql:host=localhost;dbname=test;charset=utf8
+user = root
+pass = 
+```
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
