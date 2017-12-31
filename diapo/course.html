@@ -951,11 +951,13 @@ SELECT text, creation_date
 FROM message 
 WHERE creation_date > DATE_SUB(NOW(), INTERVAL 1 HOUR) 
 ORDER BY creation_date ASC
-LIMIT 25 OFFSET 0
+LIMIT 25 OFFSET 0;
 ```
+
 - `INSERT INTO user (login, pass) VALUES('login', '');`
 
 ---
+
 # Se connecter à la base avec PHP
 
 1. `PDO`/`POO`
@@ -969,6 +971,7 @@ try {
 } catch (Exception $e) {
       exit('Erreur de connexion à la base de données.');
 }
+?>
 ```
 ---
 # Ce qu'on dira de l'orienté objet **pour le moment**
