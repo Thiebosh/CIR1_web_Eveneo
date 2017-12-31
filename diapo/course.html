@@ -1,4 +1,4 @@
-	<!DOCTYPE html>
+1/n	<!DOCTYPE html>
 <html>
   <head>
     <title>CIR1 : Développement Web</title>
@@ -881,7 +881,7 @@ J'utiliserai le dernier, il est développé par oracle et permet d'éviter pas m
 
 <div class="mermaid">
 classDiagram
-    User --o Message : "(1/n)"
+    User --o Message
     User : "id (int)"
     User : "login (string)
     User : "pass (string)
@@ -954,15 +954,14 @@ WHERE creation_date > DATE_SUB(NOW(), INTERVAL 1 HOUR)
 ORDER BY creation_date ASC
 LIMIT 25 OFFSET 0;
 ```
-- `INSERT INTO user (login, pass) VALUES('login', '');`
+- `INSERT INTO user (login, pass) VALUES('login', '');`.
 
----
 
 ---
 
 # Se connecter à la base avec PHP
 
-1. `PDO`/`POO`
+1. `PDO`/POO
 2. `new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '');`
 3. gérer les erreurs : les exceptions
 
