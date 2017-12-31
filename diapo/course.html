@@ -881,13 +881,13 @@ J'utiliserai le dernier, il est développé par oracle et permet d'éviter pas m
 
 <div class="mermaid">
 classDiagram
-    User --o Message : (1/n)
-    User : id (int)
-    User : login (string)
-    User : pass (string)
-    Message : id (int)
-    Message : message (string)
-    Message : creation_date (DateTime)
+    User --o Message : "(1/n)"
+    User : "id (int)"
+    User : "login (string)
+    User : "pass (string)
+    Message : "id (int)
+    Message : "message (string)
+    Message : "creation_date (DateTime)
 </div>
 ---
 # Les `id`
@@ -954,6 +954,7 @@ ORDER BY creation_date ASC
 LIMIT 25 OFFSET 0
 ```
 - `INSERT INTO user (login, pass) VALUES('login', '');`
+
 ---
 # Se connecter à la base avec PHP
 
@@ -976,7 +977,9 @@ try {
 - Il s'appuie sur la notion de classe, qui définit le métier et d'instance qui permet d'avoir l'état courant;
 - Créer une instance avec `new`;
 - Chaque objet possède des **attributs** et des **méthodes**, accessible avec l'opérateur `->`.
+
 ---
+
 # Ce qu'on dira de l'orienté objet **pour le moment** (exemple)
 ```php
 <?php
@@ -998,8 +1001,11 @@ On se connecte en faisant new PDO,
 On appelle la méthode query avec `->`
 Le "curseur" retourné est un objet qui *implémente une interface `Iterable`*, cela signifie qu'on dit à PHP "ça peut être utilisé comme un tableau dans un foreach"
 Les lignes retournées sont des tableaux associatifs.
+
 ---
+
 # Bonjour, je m'appele `'; DROP DATABASE;`
+
 ```php
 <?php
 try {
@@ -1016,7 +1022,9 @@ try {
 - rappelez-vous filter input, escape output. Ici le output n'est plus de l'html mais du SQL. Il faut donc échaper le texte pour que le SQL soit bon
 - l'injection de code est une faille de sécurité importante
 - elle peut avoir lieu aussi bien dans les requêtes de sélection que dans les requêtes d'insertion
+
 ---
+
 # Qui veut la sécurité, prépare la requête
 
 <div class="mermaid">
