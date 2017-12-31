@@ -934,6 +934,7 @@ if (password_verify($passwordFromLoginForm, $hashedPasswordInDatabase) {
 } else {
    // bad credentials
 }
+?>
 ```
 ???
 Il faut stocker un hash, ce hash a toujours le même nombre de caractères, 60.
@@ -953,8 +954,9 @@ WHERE creation_date > DATE_SUB(NOW(), INTERVAL 1 HOUR)
 ORDER BY creation_date ASC
 LIMIT 25 OFFSET 0;
 ```
-
 - `INSERT INTO user (login, pass) VALUES('login', '');`
+
+---
 
 ---
 
