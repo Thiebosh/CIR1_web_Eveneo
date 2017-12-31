@@ -1,4 +1,4 @@
-1/n	<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>CIR1 : Développement Web</title>
@@ -907,9 +907,9 @@ L'avantage de `CHAR` et `VARCHAR` c'est qu'on peut mettre une contrainte d'unici
 ---
 # les différents string (2/2)
 
-- login => varchar
-- pass => varchar (on verra juste après plus en détail)
-- body => TEXT
+- login =&gt; varchar
+- pass =&gt; varchar (on verra juste après plus en détail)
+- body =&gt; TEXT
 
 ---
 # Un point sur les password (un peu d'hygiène numérique)
@@ -946,16 +946,17 @@ class: middle, center
 ---
 # Les requêtes SQL de base
 
-- `SELECT login, pass FROM user`
-- ```sql
+```sql
+SELECT login, pass FROM user`;
+ 
 SELECT text, creation_date 
 FROM message 
 WHERE creation_date > DATE_SUB(NOW(), INTERVAL 1 HOUR) 
 ORDER BY creation_date ASC
 LIMIT 25 OFFSET 0;
-```
-- `INSERT INTO user (login, pass) VALUES('login', '');`.
 
+`INSERT INTO user (login, pass) VALUES('login', '');
+```
 
 ---
 
@@ -974,8 +975,9 @@ try {
 }
 ?>
 ```
+
 ---
-# Ce qu'on dira de l'orienté objet **pour le moment**
+# Ce qu'on dira de l'orienté objet *pour le moment*
 
 - C'est un moyen de séparer le code pour que chaque **classe** fasse un métier bien défini;
 - Il s'appuie sur la notion de classe, qui définit le métier et d'instance qui permet d'avoir l'état courant;
