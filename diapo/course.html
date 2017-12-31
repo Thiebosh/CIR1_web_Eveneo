@@ -1035,7 +1035,7 @@ try {
 
 <div class="mermaid">
 graph LR
-    PDO --> Statement : "prepare($request)"
+    PDO -"prepare($request)"-> Statement
     Statement --> execute["Execution in db execute([$param1,$param2])"]
     exec --> fetch["fetch()"]
     fetch -> close("Close statement")
