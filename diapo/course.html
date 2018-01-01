@@ -879,7 +879,7 @@ J'utiliserai le dernier, il est développé par oracle et permet d'éviter pas m
 ---
 # La base de données pour le TP : nos premières entités
 
-<div class="mermaid">
+<div class="mermaid height400">
 classDiagram
     User --o Message
     User : "id (int)"
@@ -1057,9 +1057,9 @@ try {
 - `DELETE FROM message WHERE creation_date < DATE_SUB(NOW(), INTERVAL 1 HOUR)`
 
 ---
-# note sur la sécurité des mots de passe de la base de données
+# Sécurité des mots de passe de la BDD
 
-Stockez ces données dans un fichier de configuration, au format que vous souhaites.
+Stockez ces données dans un fichier de configuration, au format que vous souhaitez.
 
 Puis ne donnez les droits d'écriture à personne d'autre que le possesseur (chmod 644).
 Lors de la connexion, lisez le fichier et créez la connexion.
