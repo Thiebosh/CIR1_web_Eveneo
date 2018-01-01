@@ -1048,7 +1048,16 @@ graph LR
 try {
    $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
    $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', $opts);
-
+   $query = "SELECT text, creation_date FROM message WHERE creation_date > DATE_SUB(NOW(), INTERVAL 1 HOUR)
+   ORDER BY creation_date ASC LIMIT :limit OFFSET :offset";
+   $statement = $pdo ->prepare($query);
+   $statement->bindValue(':limit', 25, PDO::PARAM_INT); // important car sinon PDO mettra des quotes
+   $statement->bindValue(':offset', 0, PDO::PARAM_INT);
+   $statement->execute();
+   foreach($statement as $row){
+       // bla
+    }
+catch(PDOException $e){}
 ```
 ---
 # Update & Delete
@@ -1056,6 +1065,19 @@ try {
 - `UPDATE message SET body = 'Hello world' WHERE id = 1;`
 - `DELETE FROM message WHERE creation_date < DATE_SUB(NOW(), INTERVAL 1 HOUR)`
 
+```php
+<?php
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', $opts);
+   $query = "UPDATE message SET body = :body WHERE id = :id";
+   $statement = $pdo ->prepare($query);
+   $statement->execute([':body' => 'Hello world', ':id' => 1]);
+   foreach($statement as $row){
+       // bla
+    }
+catch(PDOException $e){}
+```
 ---
 # Sécurité des mots de passe de la BDD
 
