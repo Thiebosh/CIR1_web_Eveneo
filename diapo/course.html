@@ -380,7 +380,7 @@ pour faciliter la lisibilité des fonctions vous pouvez "forcer" le type des par
 ```php
 <?php
 $i = 2 + 5;
-$j = 2 * $i
+$j = 2 * $i;
 $i <= $j; // true
 $text = "with double quotes" . ' or with simple quotes' . ' but it\'s better to keep simple quotes';
 $r = 55 % 10; // 5
@@ -500,7 +500,7 @@ class: table_container
 <?php
 $array = ['clef 0' => 'valeur 0'];
 $array['clef 2'] = 'valeur 2'; // associe "valeur 2" à la clef "clef 2"
-$a = $array['clef 3']: // WARNING, Undefined Index
+$a = $array['clef 3']; // WARNING, Undefined Index
 in_array('clef 1', $array); // false
 isset($array, 'clef 2'); // true
 
@@ -510,7 +510,6 @@ clefs|valeurs
 -----|-------
 `"clef 0"`| `"valeur 0"`
 `"clef 2"`| `"valeur 2"`
-`"clef 3"`| `"valeur 3"`
 
 ---
 
