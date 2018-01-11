@@ -58,9 +58,44 @@ tp de Romain Belmonte
 
 - Une cellule a deux états possibles : vivant ou mort
 - La survie : chaque cellule ayant deux ou trois cellules adjacentes survit jusqu'à la génération suivante.
-- La mort : chaque cellule ayant quatre cellules adjacentes ou plus meurt par surpopulation. Chaque cellule n'ayant qu'une ou aucune, cellule adjacente meurt d'isolement.
-- La naissance : chaque emplacement adjacent a exactement trois cellules, fait naître une nouvelle cellule pour la génération suivante.
+- La mort : Si une cellule a autour d'elle (gauche, droite, haut, bas et diagonales) 4 cellules vivante ou plus, elle meure dans la génération suivante par surpopulation.
+- La mort : Chaque cellule n'ayant qu'une ou aucune cellule adjacente vivante, cellule adjacente meurt d'isolement.
+- La naissance : Si une cellule a exactement trois cellules adjacentes vivantes, fait naître une nouvelle cellule pour la génération suivante.
 - Toutes les naissances et toutes les morts ont lieu en même temps au cours d'une génération.
+
+---
+# Un peu d'aide :
+
+Une grille peut se représenter comme un tableau à 2 dimension. Pour cela il faut faire "un tableau de tableaux".
+
+Il faut vous imaginer que les clefs du premier tableau représente les numéros des lignes. Les clefs du second les colonnes.
+
+---
+```php
+<?php
+[
+    ['a', 'b', 'c'],
+    ['d', 'e', 'f'],
+    ['g', 'h', 'i']
+]
+?>
+```
+
+Représente le tableau
+
+a | b | c
+--|---|--
+d|e|f
+g|h|i
+---
+
+```php
+<?php
+$array[1][1] = 'k'; // change la cellule de la deuxième ligne, deuxième colonne en 'k'
+// donc 'e' devient 'k'
+$lettre = $array[2][0]; // prend la lettre à la troisième ligne, première colonne, i.e 'g'
+?>
+```
 
 ---
 # Le petit guide de survie
