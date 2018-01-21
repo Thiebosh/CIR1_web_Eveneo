@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<title>Game of life</title>
+		<meta charset="utf-8"/>
+	</head>
+	<body>
+		<h1>État du jeu</h1>
+		<ul>
+			<li>Commencé : <?= $started ? 'oui': 'non' ?></li>
+			<li>Génération : <?= $_SESSION['generation'] ?></li>
+		</ul>
+		<table>
+			<?php
+				foreach($_SESSION['game'] as $row) {
+					?><tr><?php
+					foreach($row as $col) {
+						?><td><?= $col ? 'o' : ' ' ?></td>
+					<?php }
+					?></tr>
+				<?php } ?>
+		</table>
+	</body>
+</html>
