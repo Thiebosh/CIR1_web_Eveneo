@@ -782,7 +782,7 @@ Montrer la requête.
 <?php
 define('TARGET_DIRECTORY', './');
 if(!empty($_FILES['avatar'])) {
-    move_uploaded_files($_FILES['avatar']['tmp_name'], TARGET_DIRECTORY . $_FILES['name']);
+    move_uploaded_file($_FILES['avatar']['tmp_name'], TARGET_DIRECTORY . $_FILES['avatar']['name']);
 }
 ?>
 ```
