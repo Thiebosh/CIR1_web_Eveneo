@@ -1,0 +1,8 @@
+[28-Dec-2017 13:36:56 Europe/Berlin] PHP Parse error:  syntax error, unexpected '{' in /home/fdambrine/course/diapo/examples/example_superglobales/index.php on line 3
+[28-Dec-2017 13:37:17 Europe/Berlin] PHP Parse error:  syntax error, unexpected '<' in /home/fdambrine/course/diapo/examples/example_superglobales/index.php on line 24
+[28-Dec-2017 13:37:50 Europe/Berlin] PHP Warning:  Cookie names cannot contain any of the following '=,; \t\r\n\013\014' in /home/fdambrine/course/diapo/examples/example_superglobales/index.php on line 4
+[28-Dec-2017 13:38:16 Europe/Berlin] PHP Warning:  Cookie names cannot contain any of the following '=,; \t\r\n\013\014' in /home/fdambrine/course/diapo/examples/example_superglobales/index.php on line 4
+[28-Dec-2017 13:44:11 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined function php_info() in /home/fdambrine/course/diapo/examples/example_superglobales/index.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/fdambrine/course/diapo/examples/example_superglobales/index.php on line 8

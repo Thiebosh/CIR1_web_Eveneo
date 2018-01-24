@@ -1,0 +1,24 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Game of life</title>	
+	<meta http-equiv="refresh" content="<?= htmlspecialchars($_GET["time"]) ?>; url=./index.php?time=<?= htmlspecialchars($_GET["time"]) ?>"/>
+</head>
+<body>
+
+	<table>
+		<?php
+		for ($y = 0; $y < $_SESSION['dimensions'][1]; $y++) {
+			echo '<tr>';
+				for ($x = 0; $x < $_SESSION['dimensions'][0]; $x++) {
+					if ($_SESSION['plateau'][$x][$y]['cell']) echo '<td>' . 'O' . '</td>';
+					else echo '<td>' . ' ' . '</td>';
+				}
+			echo '</tr>';
+		}
+		?>
+	</table>
+	<?//= htmlspecialchars($_GET["name"]) ?>
+	
+</body>
+</html>
