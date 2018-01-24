@@ -177,7 +177,7 @@ Dans un premier temps on va simplifier la gestion des urls à "le path est le ch
 ---
 # Le protocole HTTP
 
-- Créé par le CEA
+- Créé au CERN pour partager les connaissances sur ARPANet
 - Protocole textuel
 - 2 parties : Entête et Corps
 
@@ -660,9 +660,15 @@ class: center, middle
 ---
 class: center, middle
 
-## Vos questions
+## Quelques questions par rapport au dernier cours
 
 ---
+
+# Comment fonctionne foreach?
+
+
+---
+
 class: center, middle
 # Avez vous le form?
 ---
@@ -818,22 +824,7 @@ Certains problèmes ont vu leur solution formalisée dans des **patrons de conce
 
 .height400[![MVC](./mvc.png)]
 
----
-# Utiliser une bibliothèque tierse
-
-**Ne réinventez pas la roue**
-
-- télécharger [composer](https://getcomposer.org/download/)
-- ajouter votre dépendance dans la section "autoload" du fichier `composer.json`
-- ajouter vos fichiers de fonctions dans la même section
-- lancer la commande `php composer.phar install`
-- ajouter la ligne `require(__DIR__ . '/vendor/autoload.php');` dans votre contrôleur
-
-**Attention** : les dépendances seront codées avec la POO. On verra plus tard comment utiliser le tout.
----
-class: center, middle
-
-# TP2 : un site dynamique
+# TP2 : un site dynamique (épicerie)
 ---
 class: center, middle
 
@@ -860,7 +851,6 @@ class: center, middle
 
 - plusieurs types : relationnelle, document, graphe, clé/valeur...
 - permettent de stocker les données de votre application 
-- régies par le [**théorème CAP**](https://fr.wikipedia.org/wiki/Th%C3%A9or%C3%A8me_CAP)
 
 ???
 Nous allons utiliser mysql/mariadb, qui est une base relationnelle
@@ -1114,6 +1104,27 @@ dsn = mysql:host=localhost;dbname=test;charset=utf8
 user = root
 pass = 
 ```
+---
+# Séance 4 : Un peu plus loin avec la bdd
+
+---
+# Séance 5
+---
+# Séance 6
+---
+# Utiliser une bibliothèque tierse
+
+**Ne réinventez pas la roue**
+
+- télécharger [composer](https://getcomposer.org/download/)
+- ajouter votre dépendance dans la section "autoload" du fichier `composer.json`
+- ajouter vos fichiers de fonctions dans la même section
+- lancer la commande `php composer.phar install`
+- ajouter la ligne `require(__DIR__ . '/vendor/autoload.php');` dans votre contrôleur
+
+**Attention** : les dépendances seront codées avec la POO. On verra plus tard comment utiliser le tout.
+---
+class: center, middle
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
