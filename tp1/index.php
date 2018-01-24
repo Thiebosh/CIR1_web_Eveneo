@@ -21,5 +21,7 @@ if((isset($_GET['nb_generation']) && filter_var($_GET['nb_generation'], FILTER_S
 		$started = !gameIsStill($oldGame, $_SESSION['game']);
 		$_SESSION['generation']++;
 	}
+} else if ($_SESSION["generation"] == 0 ){
+	$_SESSION["generation"] = 1;
 }
 include('template.html');
