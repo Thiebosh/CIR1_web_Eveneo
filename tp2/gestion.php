@@ -14,6 +14,15 @@ function verifDonnees() {
 function enregistrement() {
 	//verifier les retours des 3 prochaines lignes
     $fichier = fopen('mesproduits.csv', 'a+');
-    fputcsv($fichier, array($_post['nom'], $_POST['prix'], $_POST['stock'], $accesImg), ';', '""'); //ecriture en fichier
+    fputcsv($fichier, array($_post['nom'], $_POST['prix'], $_POST['stock'], $accesImg), ';', '"'); //ecriture en fichier
     fclose($fichier);
+}
+
+function referencement() {
+    //$listeProduits[$nom]
+    //$listeProduits[$img]
+    //$listeProduits[$prix]
+    //$listeProduits[$nbArticle]
+
+    //return $listeProduits; //pointeur sur tableau
 }
