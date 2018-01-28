@@ -9,7 +9,7 @@
 
         <?php   foreach($listeProduits as $produit) {  ?><!--utilisation correcte??-->
             <article>
-                <h2><?php echo '$listeProduits[$nom]' ?></h2>
+                <h2><?php echo $listeProduits[$nom] ?></h2>
                 <img src="./images/<?php $listeProduits[$img] ?>" alt="miniature produit"><br>
                 Prix : <?php $listeProduits[$prix] ?><br>
                 Articles disponibles : <?php $listeProduits[$nbArticle] ?>
