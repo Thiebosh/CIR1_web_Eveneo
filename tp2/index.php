@@ -1,8 +1,7 @@
 <?php
 
-session_start();
-if (!isset($_SESSION['page'])) { //si n existe pas (initialise)
-	$_SESSION['page'] = 'liste'; //definit la page a afficher
+if (!isset($page)) { //si n existe pas (initialise)
+	$page = 'affiche'; //definit la page a afficher
 }
 require('gestion.php');
 
@@ -20,11 +19,14 @@ if (verifDonnees()) {//si recoit un produit, traite
 
 $listeProduits = referencement(); //liste tous les produits et informations relatives
 
-$_SESSION['page'] = filter_var($_GET['page'], FILTER_SANITIZE_STRING); //supprime balises, caracteres speciaux et encodages
-if ($_SESSION['page'] == 'affiche') {
+if (isset($_GET['page'])) {
+	$page = filter_var($_GET['page'], FILTER_SANITIZE_STRING); //supprime balises, caracteres speciaux et encodages
+}
+
+if ($page == 'affiche') {
 	include('liste_produits.php');
 }
-else if ($_SESSION['page'] == 'ajout') {
+else if ($page == 'ajout') {
 	include('ajout_produits.php');
 }
 else {

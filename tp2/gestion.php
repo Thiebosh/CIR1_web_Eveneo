@@ -14,7 +14,7 @@ function verifDonnees() {
 function enregistrement() {
 	//verifier les retours des 3 prochaines lignes
     $fichier = fopen('mesproduits.csv', 'a+');
-    fputcsv($fichier, array($_post['nom'], $_POST['prix'], $_POST['stock'], $accesImg), ';', '"'); //ecriture en fichier
+    fputcsv($fichier, array($_post['nom'], $_POST['prix'], $_POST['stock'], $accesImg), ';', '\n'); //ecriture en fichier
     fclose($fichier);
 }
 
