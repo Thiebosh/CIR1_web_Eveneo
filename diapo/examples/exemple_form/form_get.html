@@ -4,7 +4,7 @@
 <title>Formulaire get</title>
 </head>
 <body>
-	<?= $name?'Bonjour ' . htmlspecialchars($name) . ' ' . htmlspecialchars($lastName) ?>
+	<?= $name?'Bonjour ' . htmlspecialchars($name) . ' ' . htmlspecialchars($lastName):'' ?>
     <form action="./reponse_formulaire.php">
     <fieldset id="identity">
         <p>

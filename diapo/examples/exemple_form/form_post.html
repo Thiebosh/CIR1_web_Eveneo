@@ -4,7 +4,7 @@
 <title>Formulaire get</title>
 </head>
 <body>
-	<?php if (!isset($listHobby)) {?>
+	<?php if (!isset($listHobby)) { ?>
 	<form action="./reponse_formulaire-check.php" method="POST">
 		<fieldset id="identity">
         <p>
@@ -16,7 +16,7 @@
         <p>
             <label for="hobbies">Vos passions</label>
             <span class="errors">
-				<?= (!empty($_SESSION['errors']) && !empty(!empty($_SESSION['errors']['hobby']))?$_SESSION['errors']['hobby']:"" ?>
+				<?php echo (!empty($_SESSION['errors']) && !empty($_SESSION['errors']['hobby']))?$_SESSION['errors']['hobby']:""; ?>
 			</span>
 				
             <input type="checkbox" name="hobby[]" value="foot">foot<br/>
@@ -30,14 +30,12 @@
         <input type="submit" value="Send"/>
     </p>
 </form>
-<?php }
-else {
-	?>
+<?php }  else { ?>
 	<ul><?php
 	foreach ($listHobby as $hobby) {
-?>		<li><?= htmlspecialchars($hobby) ?></li><?php
-}?>
+?>
+		<li><?= htmlspecialchars($hobby) ?></li><?php } ?>
 	</ul>
-
+<?php } ?>
 </body>
 </html>

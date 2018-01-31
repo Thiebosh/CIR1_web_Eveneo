@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 if(!empty($_POST['hobby']) && is_array($_POST['hobby'])) {
 	$listHobby = [];
 	foreach ($_POST['hobby'] as $hobby) {
@@ -14,4 +14,5 @@ if(!empty($_POST['hobby']) && is_array($_POST['hobby'])) {
 	$_SESSION['errors'] = ['hobby' => 'Hobby is empty'];
 }
 include('form_post.html');
-unset($_SESSION['errors']); // now that errors are printed I can remove them.
+$_SESSION['errors'] = []; // now that errors are printed I can remove them.
+var_dump($_POST);
