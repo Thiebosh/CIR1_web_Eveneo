@@ -670,7 +670,7 @@ class: center, middle
 ---
 
 class: center, middle
-# Avez vous le form?
+# Avez-vous le form?
 ---
 # Envoyer des données au serveur (1/4)
 
@@ -746,10 +746,36 @@ Voir la requête http (body).
 Expliquer l'astuce => les `[]`
 Expliquer que l'astuce vaut en fait pour tous les type de champ, on peut ainsi mettre plusieurs champs texte sous le même nom.
 ---
+# Envoyer des données au serveur (3/4)
+
+```html
+&lt;form action="./reponse_formulaire-check.php" method="POST"&gt;
+    <fieldset id="identity">
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+        <p>
+            <label for="hobbies">Vos passions</label>
+*            <input type="checkbox" name="hobby[]" value="foot">foot<br/>
+*            <input type="checkbox" name="hobby[]" value="rugby">rugby<br/>
+*            <input type="checkbox" name="hobby[]" value="fifa">fifa<br/>
+*            <input type="checkbox" name="hobby[]" value="skyrim">Je suis le dovahkiin<br/>
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+&lt;/form&gt;
+```
+---
 # Envoyer des données au serveur (4/4)
 
 ```html
-&lt;form action="./reponse_formulaire-file.php" method="POST" enctype="multipart/form-data"&gt;
+&lt;form action="./reponse_formulaire-file.php" 
+*         method="POST" enctype="multipart/form-data"&gt;
     <fieldset id="identity">
         <p>
             <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
@@ -1129,7 +1155,7 @@ class: center, middle
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
     <script>
-      var slideshow = remark.create();
+      var slideshow = remark.create({highlightLines: true});
     </script>
 <script src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.js"></script>
   <script>
