@@ -9,6 +9,9 @@ function handleProductImage() {
        if (!in_array(strtolower(pathinfo($_FILES['image']['name'])['extension']), $exts)) {
            return "";
        }
+       if(!in_array($_FILES['image']['type'], ['image/svg', 'image/gif','image/jpg', 'image/jpeg', 'image/png'])) {
+           return "";
+       }
        $id = sha1(file_get_contents($_FILES['image']['tmp_name']));
        $path = './images/'. $id . "." . pathinfo($_FILES['image']['name'])['extension'];
        move_uploaded_file($_FILES['image']['tmp_name'], $path);
