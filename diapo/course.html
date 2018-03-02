@@ -77,7 +77,7 @@ class: center, middle
     - Les normes PSR et les namespace
     - Les fonctions magiques
     - Lien entre BDD et objet
-6. S6: Un code de qualité &amp; en production
+6. S6: Un code de qualité &amp;amp; en production
     - Les tests
     - Les analyses du code
     - Le concept d'intégration continue
@@ -1131,13 +1131,242 @@ user = root
 pass = 
 ```
 ---
+class: center, middle
 # Séance 4 : Un peu plus loin avec la bdd
+---
+class: center, middle
+## Rappels du cours précédent
+---
+- Il y a plusieurs types de bases de données;
+
+--
+- Les bases de données fonctionnent selon le principe client/serveur
+
+--
+- Pour discuter avec la base de données on utilise le langage SQL
+
+--
+- Pour lier PHP à MySQL on utilise `PDO`
+
+--
+- Attention aux injections SQL ! Utilisez les requêtes préparées.
 
 ---
-# Séance 5
+class: center, middle
+## Vos questions?
+
 ---
-# Séance 6
+# Les utilisateurs postent des messages
+
+<div class="mermaid height400">
+classDiagram
+    class User1 {
+       id : int
+       login : string
+      pass : string
+    }
+   class Message1 {
+      id : int
+      message : string
+     creation_date : DateTime
+   }
+   User1 "1"  --o "many" Message1 : sends
+</div>
+???
+un utilisateur possède n messages
+un message possède 1 utilisateur
+Où doit-on créer le champ qui permet d'identifier l'auteur d'un message?
+clef étrangère dans la table messages (id_user)
 ---
+# Lister les messages d'un utilisateur
+
+```sql
+SELECT m.*, u.*
+FROM messages m
+INNER JOIN users u ON m.id_user=u.id
+```
+???
+On utilise une jointure. D'abord on liste les tables puis dans la clause ON, on dit quelle est la clef étrangère
+
+---
+# Les utilisateurs sont dans des salons
+
+<div class="mermaid height400">
+classDiagram
+    User2 "1"  --o "many" Message2 : sends
+    User2 "many"  --o "many" Salon2: participates
+    Salon2 "1" --o "many" Message2: contains
+    User2 : "Integer id"
+    User2 : "String login"
+    User2 : "String pass"
+    Message2 : "Integer id"
+    Message2 : "String message"
+    Message2 : "DateTime creation_date"
+    Salon2 : "string nom"
+    Salon2 : "integer id"
+</div>
+---
+### Comment identifier les salons dans lequel un utilisateur se trouve?
+
+- une clef étrangère dans User?
+- une clef étrangère dans Salon?
+- Une clef étrangère dans chaque?
+
+---
+class: center,middle
+
+**Solution :** Créer une table intermédiaire
+
+Cette table "user_salon" aura une clef vers User et une clef vers Salon
+
+---
+### Comment identifier les salons dans lequel un utilisateur se trouve?
+
+```sql
+SELECT u.login, s.name
+FROM user u
+INNER JOIN user_salon us ON u.id = us.user_id
+INNER JOIN salon s ON s.id = us.salon_id
+WHERE u.login = 'Searched Login'
+```
+
+---
+### Comment compter le nombre de salons dans lequel se trouve chaque utilisateur?
+
+```sql
+SELECT u.login, COUNT(*) AS nbSalon
+FROM user u
+INNER JOIN user_salon us ON u.id = us.user_id
+INNER JOIN salon s ON s.id = us.salon_id
+GROUP BY u.login
+```
+---
+### Quelques autres fonctions
+
+- `AVG` : Faire une moyenne sur une colonne
+- `GROUP_CONCAT` : Permet de mettre les valeurs les unes à la suite des autres
+- `MIN`/`MAX`
+---
+### Un peu plus sur les dates
+
+- `DATETIME` et `TIMESTAMP` : vous connaissez le bug de 2038?
+- On peut utiliser `<` et `>` comme pour des entiers
+- Les dates sont lisibles au format `YYYY-MM-DD HH:mm:SS`
+- On peut sélectionner les parties de la date avec `MINUTE`, `HOUR`, `DAY`, `MONTH`, `YEAR`
+
+---
+### En PHP
+
+- `time()` envoie le nombre de secondes depuis le premier janvier 1970.
+- `strptime()` permet de transformer une date "normale" en entier.
+- `date($format, $time)` permet de créer une date lisible.
+
+---
+### Un peu de magie avec les dates
+
+```php
+<?php
+$today = strtotime('today');
+$tomorrow = strtotime('tomorrow');
+$in3days = strtotime('+3 days');
+$aWeekAgo = strtotime('1 week ago');
+$inOneDayAndThreeHours = strtotime('+1 days +1 hours');
+?>
+```
+
+---
+### Et avec la POO?
+
+```php
+<?php
+$date = new DateTime('+1 days +1 hours');
+echo $date->format('Y-m-d H:i:s');
+$dateFromDatabase = DateTime::dateFromFormat('Y-m-d H:i:s', $row['creationDate']);
+echo $date->format('Y-m-d H:i:s');
+$date->modify('+1 days'); // ajoute un jour
+
+?>
+```
+---
+### Quelques problèmes courrants avec les dates :
+
+- Attention : les timezones
+
+--
+- Attention : les heures d'été et d'hiver
+
+--
+- Attention : si vous fixez une timezone côté PHP, l'heure du serveur et du clients peuvent être différentes..
+
+--
+- Ne jamais comparer les dates sous leur forme "chaîne de caractères".
+
+---
+class: center,middle
+# Séance 5: Un peu de POO et d'organisation
+---
+class: middle,center
+Résumé du cours précédent
+---
+- Les relations 1-n grâce à une clef étrangère
+
+--
+- Les relations n-n grâce à une table intermédiaire qui a des clefs étrangères
+
+--
+- Sélection des relations grâce à INNER JOIN
+
+--
+- Compter le nombre d'entrées par utilisateur grâce à COUNT et GROUP_BY
+
+
+---
+# Les objets, comment les utiliser?
+
+- On peut voir les classes comme des "types" personnalisés;
+- `new NomDeLaClasse()`: permet de créer une instance
+- `$obj = new PDO(/* params */); $obj->methode(); $obj->attribute = "value";`: utiliser les attributs et les méthodes;
+- `DateTime::createFromFormat()`: permet d'appeler une fonction statique, c'est à dire liée à la "classe" et non à l'instance.
+---
+# Lire la documentation d'une classe
+
+[La classe DateTime](http://php.net/manual/fr/class.datetime.php)
+???
+- la fonction `__construct` est la fonction qui est appelée lorsque vous faite "new", elle initialise l'objet;
+- la liste des constantes
+- les fonctions statiques et non statiques
+- "implements"
+---
+# La magie du foreach
+
+Une classe implémente Iterator ou Traversable, elle peut alors être "parcourue" avec foreach:
+
+<div class="mermaid height400">
+graph LR
+    debut --> rewind
+    rewind --> valid{valid}
+    valid -->|yes| current[current + key]
+    current --> next
+    next --> valid
+    valid -->|no| fin
+
+</div>
+---
+# Organiser le code : les namespaces
+
+- Commencer votre fichier avec le nom du namespace, exemple `namespace \organizers\models\functions;`
+
+--
+- Pour appeler la fonction : `\organizers\models\functions\getEvents();`
+
+--
+- Pour éviter d'avoir des noms trop longs : `use`;
+
+--
+- [`PSR`](https://www.php-fig.org/psr/)
+
+---
+
 # Utiliser une bibliothèque tierse
 
 **Ne réinventez pas la roue**
@@ -1148,18 +1377,44 @@ pass =
 - lancer la commande `php composer.phar install`
 - ajouter la ligne `require(__DIR__ . '/vendor/autoload.php');` dans votre contrôleur
 
-**Attention** : les dépendances seront codées avec la POO. On verra plus tard comment utiliser le tout.
+**Attention** : les dépendances seront codées avec la POO.
 ---
+# Utiliser des objets pour obtenir les résultats de la bdd
+
+```php
+class Room {
+   private $name;
+   private $id;
+   public function getName() { return $this->name; }
+   public function setName($name) { $this->name = $name; return $this;}
+   public function getId() { return $this->id; }
+   public function setId($id) { $this->id = $id; return $this;}
+}
+$listOfRooms = $bdd->query("SELECT * FROM salons")
+                    ->fetch(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'Room');
+?>
+```
+
+---
+
 class: center, middle
+# Séance 6
+---
+
+- Les tests
+- Les analyses du code
+- Le concept d'intégration continue
+- L'opcode
+- Déployer votre site
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
     <script>
       var slideshow = remark.create({highlightLines: true});
     </script>
-<script src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.js"></script>
+<script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.js"></script>
   <script>
-    mermaid.initialize({startOnLoad: true, theme: 'forest'});
+    mermaid.initialize({startOnLoad: true, theme: 'dark'});
   </script>
   </body>
 </html>
