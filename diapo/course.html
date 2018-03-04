@@ -1391,21 +1391,44 @@ class Room {
    public function setId($id) { $this->id = $id; return $this;}
 }
 $listOfRooms = $bdd->query("SELECT * FROM salons")
-                    ->fetch(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'Room');
+                   ->fetch(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'Room');
 ?>
 ```
 
 ---
-
 class: center, middle
-# Séance 6
+## Déployer son site
+---
+# Un hébergeur
+
+- Hébergeur mutualisé
+- Serveur privé : dédié/VPS
+
+---
+## Hébergeur mutualisé
+
+- Envoyer votre code via FTP
+- Pour customiser votre site (réécriture d'url, sécurité...) utiliser les fichiers `.htaccess`
+- Connectez-vous au PHPMyAdmin de l'hébereur
+
+---
+
+## Serveur dédié
+
+- Envoyer votre code via FTP;
+- Choisissez un serveur web de production (mon conseil: nginx);
+- Configurez le serveur pour assurer la sécurité, customiser la réécriture d'url;
+- Pour utiliser MySQL, évitez phpmyadmin (sécurité)
+
+---
+class: center, middle
+# Séance 6: Un code de qualité
 ---
 
 - Les tests
 - Les analyses du code
 - Le concept d'intégration continue
-- L'opcode
-- Déployer votre site
+
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
