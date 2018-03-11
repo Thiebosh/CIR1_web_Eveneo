@@ -2,7 +2,7 @@
     <?php
     foreach ($messagesList as $messageRow ) { ?>
     <div class="message-container">
-        <?= renderMessage($messageRow['pseudo'], $messageRow['message']) ?>
+        <?= renderMessage($messageRow['message'], $messageRow['pseudo']) ?>
     </div>
     <?php
     }

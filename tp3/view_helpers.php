@@ -1,17 +1,12 @@
 <?php
 
 function renderMessage($message, $pseudo) {
-    $commands = [
-        'me' => renderMe
-    ];
     $commandName = 'default';
-    if (strpos($message, "/")) {
+    if (strpos($message, "/me") === 0) {
         // we are in command
-        $elements = explode(' ', $message); // all command arguments
-        $commandName = substr($elements[0], 1);
-        
+	return renderMe($pseudo, substr($message, 3));
     }
-    return call_user_func($commands[$commandName], array_splice($elements, 0, 1, [$pseudo]));
+    return renderDefault($pseudo, $message);
 }
 
 function renderMe($pseudo, $message) {

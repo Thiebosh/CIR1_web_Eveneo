@@ -22,8 +22,8 @@ function insertMessage(PDO $bdd, $pseudo, $message) {
 function getPageOfMessages(PDO $bdd, int $nbPerPage, int $page): array {
     $query = 'SELECT pseudo, message, date FROM messages ORDER BY date ASC LIMIT :nb OFFSET :skip';
     $prepared = $bdd->prepare($query);
-    $prepared->bindValue(':nb', $nbPerPage);
-    $prepared->bindValue(':skip', $nbPerPage * ($page - 1));
+    $prepared->bindValue(':nb', $nbPerPage, PDO::PARAM_INT);
+    $prepared->bindValue(':skip', $nbPerPage * ($page - 1), PDO::PARAM_INT);
     $prepared->execute();
     return $prepared->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -38,6 +38,7 @@ function moderatePseudo(PDO $bdd, $pseudo, $replacementMessage) {
 }
 
 function getNbPages(PDO $bdd, $nbPerPages) {
-    $count = $bdd->query('SELECT COUNT(*) as c FROM messages').fetchAll()[0]['c'];
+    $count = $bdd->query('SELECT COUNT(*) as c FROM messages');
+    $count = $count->fetchAll()[0]['c'];
     return ceil($count / $nbPerPages);
 }
