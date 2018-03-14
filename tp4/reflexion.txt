@@ -14,7 +14,7 @@ include de viewCalendar
 	-> Le calendrier affiche un mois sous forme de grille
 
 	include de part (client / organisateur)
-		-> (Tous les événements / Seuls les évènements de l'organisateur courant) sont affichés
+		-> (Tous les événements où il reste de la place / Seuls les évènements de l'organisateur courant) sont affichés
 
 redirection vers dataProcessing (rank determine l'action)
 	-> un bouton "précédent" et un bouton "suivant" vous permettent de changer de mois
