@@ -10,11 +10,11 @@ function renderMessage($message, $pseudo) {
 }
 
 function renderMe($pseudo, $message) {
-    return '<p><strong>' . htmlspecialchars($pseudo) . '</strong> <span class="message">'
+    return '<p><strong>' . htmlspecialchars($pseudo) . '</strong> <span class="message me">'
             . htmlspecialchars($message) . '</span></p>';
 }
 
 function renderDefault($pseudo, $message) {
-    return '<p><strong>' . htmlspecialchars($pseudo) . '</strong> <span class="message me">'
+    return '<p><strong>' . htmlspecialchars($pseudo) . '</strong> <span class="message">'
             . htmlspecialchars($message) . '</span></p>';
 }
