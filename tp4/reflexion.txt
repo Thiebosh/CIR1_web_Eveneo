@@ -1,0 +1,83 @@
+contraintes : 
+- code en anglais de façon lisible et sécurisé (interface graphique au choix)
+- modèle MVC
+
+
+CONNEXION :
+- Le site doit proposer un formulaire de login
+- Si le membre connecté est un (client / organisateur), il est redirigé vers la page "calendrier" (pour réserver les évènements / qui affiche les évènements de l'organisateur)
+- Si le login ou le mot de passe est incorrect, vous êtes redirigé vers le formulaire de login avec une erreur affichée.
+
+
+PAGE DE CALENDRIER (client / organisateur) :
+include de viewCalendar
+	-> Le calendrier affiche un mois sous forme de grille
+
+	include de part (client / organisateur)
+		-> (Tous les événements / Seuls les évènements de l'organisateur courant) sont affichés
+
+redirection vers dataProcessing (rank determine l'action)
+	-> un bouton "précédent" et un bouton "suivant" vous permettent de changer de mois
+	-> Cliquer sur le bouton "voir plus" vous amène à une page où tous les évènements sont affichés (non complet / même si complet)
+	-> Cliquer sur un évènement vous amène à une page (qui vous permettra de réserver votre place / de résumé où vous trouverez un bouton pour annuler)
+
+
+------------------------------------------------------------------------------------------------------
+
+deux entrées de test :
+- organisateur : organizer (login = mot de passe)
+- client       : customer (login = mot de passe)
+
+BDD :
+User
+ - id
+ - login
+ - password
+ - rank -> CUSTOMER / ORGANIZER
+
+Events
+ - id
+ - name
+ - description
+ - startDate
+ - endDate
+ - organizer_id		-> jonction
+ - nb_place
+
+User_participates_event
+ - id
+ - id_participant	-> jonction
+ - id_event		-> jonction
+
+
+------------------------------------------------------------------------------------------------------
+
+
+Découpe des fichiers (MVC) :
+ - contrôleur (gère modèle puis vue) :	controller.php
+
+
+ - modèle (gère données et BDD) :
+	- traitement connexion : 	dataLogin.php
+		se sert de BDD user
+		initialise les variables de session
+
+	- traitement données : 		dataProcessing.php
+		se sert de BDD event
+		se sert de BDD user_participates_event
+
+
+ - vue (gère affichage templates) :
+	- page de connexion :		viewLogin.php
+	- affichage calendrier :	viewCalendar.php
+		remplissage client :		partCustomer.php
+		remplissage organisateur :	partOrganizer.php
+
+------------------------------------------------------------------------------------------------------
+
+
+Fonctions :
+- 
+
+
+
