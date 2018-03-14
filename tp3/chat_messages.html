@@ -1,0 +1,10 @@
+<section class="chat-wrapper">
+    <?php
+    foreach ($messagesList as $messageRow ) { ?>
+    <div class="message-container">
+        <?= renderMessage($messageRow['message'], $messageRow['pseudo']) ?>
+    </div>
+    <?php
+    }
+    ?>
+</section>

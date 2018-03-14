@@ -38,7 +38,7 @@ foreach($_SERVER as $key => $value) {
 foreach($_GET as $key => $value) {
 ?>
 <tr>
-    <td><?= $key ?></td>
+    <td><?= htmlspecialchars($key) ?></td>
     <td><?= htmlspecialchars($value);?></td>
 </tr>
 <?php

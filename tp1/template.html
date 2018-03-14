@@ -1,29 +1,25 @@
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>Game of life</title>
-	if (isset($_GET["time"])) {
-		<meta http-equiv="refresh" content="<?= htmlspecialchars($_GET["time"]) ?>; url=./index.php?time=<?= htmlspecialchars($_GET["time"]) ?>"/>
-	}
-	else {
-		<meta http-equiv="refresh" content="$nb_seconde; url=./index.php"/>
-	}
-</head>
-<body>
-
-	<table>
-		<?php
-		for ($y = 0; $y < $_SESSION['dimensions'][1]; $y++) {
-			echo '<tr>';
-				for ($x = 0; $x < $_SESSION['dimensions'][0]; $x++) {
-					if ($_SESSION['plateau'][$x][$y]['cell']) echo '<td>' . 'O' . '</td>';
-					else echo '<td>' . ' ' . '</td>';
-				}
-			echo '</tr>';
-		}
-		?>
-	</table>
-	<?//= htmlspecialchars($_GET["name"]) ?>
-	
-</body>
+	<head>
+		<title>Game of life</title>
+		<meta charset="utf-8"/>
+	</head>
+	<body>
+		<sh1>État du jeu</h1>
+		<ul>
+			<li>Commencé : <?= $started ? 'oui': 'non' ?></li>
+			<li>Génération : <?= $_SESSION['generation'] ?></li>	
+		</ul>
+		<table>
+			<?php
+				foreach($_SESSION['game'] as $row) {
+					?><tr><?php
+					foreach($row as $col) {
+						?><td><?= $col ? 'o' : ' ' ?></td>
+					<?php }
+					?></tr>
+				<?php } ?>
+		</table>
+		<a href="/?restart">Recommencer</a><br>
+		<a href="/?nb_generation=5">Sauter 5 générations.</a>
+	</body>
 </html>

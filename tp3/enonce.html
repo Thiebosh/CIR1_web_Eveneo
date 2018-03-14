@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CIR1 : Développement Web</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-slide-container {
+    visibility: hidden;
+    display: initial;
+}
+.remark-visible {
+    visibility: visible;
+}
+.inlineimg img{
+	display: inline-block;
+	max-width: 150px;
+
+}
+
+.px300 img{
+	display: inline-block;
+	max-width: 300px;
+
+}
+.table_container td{
+	border-bottom: 1px solid black !important;
+	border-right: 1px solid black !important;
+}
+
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/mermaid@7.0.0/dist/mermaid.css" media="all"/>
+  </head>
+  <body>
+    <textarea id="source">
+class:center, middle
+# TP3: le chat
+
+---
+# Un minichat
+
+Le but de ce TP est de créer un minichat par navigateur. Vous entrez votre pseudonyme et votre texte, cela affiche le à la suite du minichat.
+
+--
+# La base
+
+- créer une base de données "chat"
+
+--
+- créer une table "messages" qui doit être capable de stocker le nom de l'auteur du message, le message et la date du message
+
+--
+- Appliquer le pattern MVC pour faire fonctionner le chat
+
+---
+# Un peu plus loin
+
+- lorsqu'un message commence par `/me ` il s'affiche en italique et en gris (utiliser une classe CSS) et le `/me ` n'apparaît pas
+
+--
+
+- Si vous entrez un message de type `/ban username cause` tous les messages de l'utilisateur qui a pour pseudo "username" sont changés en "Censuré par la modération parce que : {cause}"
+
+---
+
+	</textarea>
+	<script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+<script src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad: true, theme: 'forest'});
+  </script>
+  </body>
+</html>
