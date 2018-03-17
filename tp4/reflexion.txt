@@ -1,6 +1,6 @@
 contraintes : 
 - code en anglais de façon lisible et sécurisé (interface graphique au choix)
-- modèle MVC
+- modèle MVC -> controleur appelle les vues et des fonctions, c est tout
 
 
 CONNEXION :
@@ -39,8 +39,8 @@ Events
  - id
  - name
  - description
- - startDate
- - endDate
+ - startdate
+ - enddate
  - organizer_id		-> jonction
  - nb_place
 
@@ -53,31 +53,15 @@ User_participates_event
 ------------------------------------------------------------------------------------------------------
 
 
-Découpe des fichiers (MVC) :
- - contrôleur (gère modèle puis vue) :	controller.php
+Nom du site : Evénéo
+Fonction : gestionnaire d'événements
 
-
- - modèle (gère données et BDD) :
-	- traitement connexion : 	dataLogin.php
-		se sert de BDD user
-		initialise les variables de session
-
-	- traitement données : 		dataProcessing.php
-		se sert de BDD event
-		se sert de BDD user_participates_event
-
-
- - vue (gère affichage templates) :
-	- page de connexion :		viewLogin.php
-	- affichage calendrier :	viewCalendar.php
-		remplissage client :		partCustomer.php
-		remplissage organisateur :	partOrganizer.php
 
 ------------------------------------------------------------------------------------------------------
 
-
-Fonctions :
-- 
-
-
-
+reste à faire : 
+finir partie controller
+finir partie view (CSS...)
+finir partie model (requetes)
+partie routeur
+ajuster noms de variable
