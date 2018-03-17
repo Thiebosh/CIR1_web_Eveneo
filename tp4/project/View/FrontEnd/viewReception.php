@@ -27,9 +27,10 @@ ob_start(); ?>
 ob_start(); ?>
     <?php //changer les requetes : mettre truc correct et mettre en fetchall
     while ($dataDay = $postsMonth->fetch()) {
-        while ($data = $postsDay->fetch())     {
+        echo '<div class="jour">';
+        while ($data = $postsDay->fetch()) {
         ?>
-            <div class="eventReception">
+            <div class="event">
                 <h3>
                     <?= htmlspecialchars($data['title']) ?>
                 </h3>
@@ -45,6 +46,7 @@ ob_start(); ?>
             </form>
             <?php
         }
+        echo '</div>';
     }
     $postsMonth->closeCursor();
     ?>

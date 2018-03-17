@@ -27,7 +27,7 @@ ob_start(); ?>
     <?php //changer la requete : mettre truc correct et mettre en fetchall
     while ($data = $postsDay->fetch()) {
     ?>
-        <div class="eventReception">
+        <div class="event">
             <h3>
                 <?= htmlspecialchars($data['title']) ?>
             </h3>
