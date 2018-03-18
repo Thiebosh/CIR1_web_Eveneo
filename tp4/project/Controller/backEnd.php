@@ -5,6 +5,8 @@ function OrganizerReception($infoPage) {
     $listEvents = getAllEvents($infoPage);
 
     require('View/BackEnd/viewReception.php');
+
+    $listEventsMonth->closeCursor();//bien placé?
 }
 
 function OrganizerAllEvents($infoPage) {
@@ -18,12 +20,16 @@ function OrganizerAllEvents($infoPage) {
     $listEvents = getAllEvents($infoPage);
 
     require('View/BackEnd/viewAllEvents.php');
+
+    $listEventsDay->closeCursor();//bien placé?
 }
 
 function OrganizerEvent($infoPage) {
     $dataEvent = getEvent($infoPage['idEvent']);
     
     require('View/BackEnd/viewEvent.php');
+
+    $dataEvent->closeCursor();//bien placé?
 }
 
 function OrganizerNewEvent($infoPage) {

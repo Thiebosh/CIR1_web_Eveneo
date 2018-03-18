@@ -5,23 +5,28 @@ function dbConnect() {//modifier champs
     return $dataBase;
 }
 
-function getAllEvents($infoPage) {
+function getAllEvents($infoPage) {//faire jointure pour ne prendre que les conf de organizer
     $dataBase = dbConnect();
 
-    //modifier requete
-    $nbEvent = $infoPage['nbEvent'];
-    $month = $infoPage['month'];
-    $request = $dataBase->query('SELECT id, title, content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM posts ORDER BY creation_date DESC LIMIT 0, 5');
+    if ($infoPage['showEventFull']) {
+        $request = $dataBase->query('SELECT id, `name` FROM Events WHERE DATEDIFF($infoPage[\'`date`\'] - startdate) == 0 ORDER BY startdate');
+    }
+    else {
+        $request = $dataBase->query('SELECT id, `name` FROM Events WHERE DATEDIFF($infoPage[\'`date`\'] - startdate) == 0 ORDER BY startdate LIMIT 0, 6');//si plus de 5, affiche le bouton
+    }
+    $listEvent = $request->fetchAll();
 
-    return $request;
+    return $listEvent;
 }
 
-function getEvent($idEvent) {
+function getEvent($idEvent) {//verifier champs
     $dataBase = dbConnect();
-    //modifier champs
-    $request = $dataBase->query('SELECT id, title, content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM posts ORDER BY creation_date DESC LIMIT 0, 5');
+    
+    $request = $dataBase->query('SELECT e.name nameConf, e.description describeConf, e.startdate startDate, e.enddate endDate, e.nb_place places
+        FROM Events e INNER JOIN User u ON u.id = e.organizer_id WHERE e.id = $idEvent');
+    $event = $request->fetchAll();
 
-    return $request;
+    return $event;
 }
 
 function postEvent($infoEvent) {

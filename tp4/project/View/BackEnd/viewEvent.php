@@ -31,22 +31,16 @@ ob_start(); ?>
 
 
 ob_start(); ?>
-    <?php
-    $data = $postsDay->fetch()
-    ?>
-        <div class="eventDetail">
-            <h3>
-                <?= htmlspecialchars($data['title']) ?>
-            </h3>
-            <?= htmlspecialchars($data['dateDebut']) ?>
-            <?= htmlspecialchars($data['dateFin']) ?>
-            <?= htmlspecialchars($data['nbPlace']) ?>
-            <?= htmlspecialchars($data['description']) ?>
-        </div>
-    <?php
-    $postsDay->closeCursor();//necessaire?
-    ?>
+    <div class="eventDetail">
+        <h3>
+            <?= htmlspecialchars($dataEvent['nameConf']) ?>
+        </h3>
+        <?= htmlspecialchars($dataEvent['startDate']) ?>
+        <?= htmlspecialchars($dataEvent['endDate']) ?>
+        <?= htmlspecialchars($dataEvent['organizer']) ?>
+        <?= htmlspecialchars($dataEvent['place']) ?>
+        <?= htmlspecialchars($dataEvent['describeConf']) ?>
+    </div>
 <?php $articleContent = ob_get_clean();
-
 
 require('View/template.php');

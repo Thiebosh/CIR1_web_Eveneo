@@ -19,23 +19,19 @@ ob_start(); ?>
 $asideContent = '';
 
 
-ob_start(); ?>
-    <?php //changer la requete : mettre truc correct et mettre en fetchall
-    while ($data = $postsDay->fetch()) {
+ob_start();
+    foreach($listEventsDay as $event) {
     ?>
         <div class="event">
             <h3>
-                <?= htmlspecialchars($data['title']) ?>
+                <?= htmlspecialchars($event['name']) ?>
             </h3>
-            <form method="post" action="index.php?action=detailEvent&amp;id=<?= $data['id'] ?>">
+            <form method="post" action="index.php?action=detailEvent&amp;id=<?= $event['id'] ?>">
                 <input type="submit" value="Plus d'infos">
             </form>
         </div>
     <?php
     }
-    $postsDay->closeCursor();
-    ?>
-<?php $articleContent = ob_get_clean();
-
+$articleContent = ob_get_clean();
 
 require('View/template.php');

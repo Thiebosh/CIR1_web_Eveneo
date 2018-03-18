@@ -28,33 +28,41 @@ ob_start(); ?>
 <?php $asideContent = ob_get_clean();
 
 
-ob_start(); ?>
-    <?php //changer les requetes : mettre truc correct et mettre en fetchall
-    while ($dataDay = $postsMonth->fetch()) {
+ob_start();
+    foreach($listEventsMonth as $listEventsDay) {
         echo '<div class="jour">';
-        while ($data = $postsDay->fetch()) {
-        ?>
-            <div class="eventReception">
-                <h3>
-                    <?= htmlspecialchars($data['title']) ?>
-                </h3>
-            </div>
-        <?php
+        if (!$listEventsDay) {
+            echo 'Pas de conférence ce jour';
         }
-        $postsDay->closeCursor();
-        
-        if ($infoPage['nbEvent'] > 5) {//ajoute bouton au template
-            ?>
-            <form method="post" action="index.php?action=allEvent">
-                <input type="submit" value="Voir plus de conférences">
-            </form>
-            <?php
+        else {
+            foreach($listEventsDay as $event) {
+                $compteur = 0;
+                ?>
+                <div class="event">
+                    <h3>
+                        <?= htmlspecialchars($event['name']) ?>
+                    </h3>
+                    <form method="post" action="index.php?action=deleteEvents&amp;id=<?= $event['id'] ?>"><!--valide?-->
+                        <input type="submit" value="Supprimer l'événement">
+                    </form>
+                </div>
+                <?php
+                $compteur++;
+                if (compteur == 5) {
+                    break;
+                }
+            }
+            
+            if (count($listEventsDay) > 5) {//au moins 6 : ajoute bouton au template
+                ?>
+                <form method="post" action="index.php?action=allEvent">
+                    <input type="submit" value="Voir plus de conférences">
+                </form>
+                <?php
+            }
         }
         echo '</div>';
     }
-    $postsMonth->closeCursor();
-    ?>
-<?php $articleContent = ob_get_clean();
-
+$articleContent = ob_get_clean();
 
 require('View/template.php');
