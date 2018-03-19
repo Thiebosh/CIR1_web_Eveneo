@@ -1,33 +1,17 @@
 <?php 
-$title = 'Eveneo - Inscription';
-
-
-ob_start(); ?>
-    <h1>Page d'inscription</h1>
-<?php $headerContent = ob_get_clean();
-
+$pageName = 'Inscription';
 
 $menuContent = '';
 
-
-if (isset($infoPage['login'])) {
-    $asideContent = '';
+$legendContent = 'Inscription';
 
 
-    ob_start(); ?>
-        <p>Inscription réussie!</p>
-        <form method="post" action="index.php?action=login">
-            <input type="submit" value="Se connecter">
-        </form>
-    <?php $articleContent = ob_get_clean();
-}
-else {
+if (!isset($infoPage['login'])) {
     ob_start(); ?>
         <form method="post" action="index.php?action=login">
             <input type="submit" value="Connexion">
         </form>
     <?php $asideContent = ob_get_clean();
-
 
     ob_start(); ?>
         <fieldset><legend>Inscription</legend>
@@ -46,6 +30,15 @@ else {
         </fieldset>
     <?php $articleContent = ob_get_clean();
 }
+else {
+    $asideContent = '';
 
+    ob_start(); ?>
+        <p>Inscription réussie!</p>
+        <form method="post" action="index.php?action=login">
+            <input type="submit" value="Se connecter">
+        </form>
+    <?php $articleContent = ob_get_clean();
+}
 
 require('View/template.php');

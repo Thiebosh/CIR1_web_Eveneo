@@ -39,3 +39,9 @@ function postEvent($infoEvent) {
     $nbPlaces = infoEvent['nbPlace'];
     $description = infoEvent['description'];
 }
+
+function updateEvent($infoEvent) {
+    $dataBase = dbConnect();
+
+    //requete update
+}

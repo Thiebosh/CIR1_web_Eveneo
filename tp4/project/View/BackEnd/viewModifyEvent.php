@@ -1,5 +1,5 @@
 <?php 
-$pageName = 'Création';
+$pageName = 'Modification';
 
 
 ob_start(); ?>
@@ -15,10 +15,15 @@ ob_start(); ?>
         </form>
     </li>
     -->
+    <li>
+        <form method="post" action="index.php?action=detailEvents&amp;id=< ?= $data['id']">
+            <input type="submit" value="Evénement">
+        </form>
+    </li>
 <?php $menuContent = ob_get_clean();
 
 
-$legendContent = 'Informations du nouvel événement';
+$legendContent = 'Nouvelles informations de $data[\'title\']';
 
 
 ob_start();
@@ -30,11 +35,9 @@ $asideContent = ob_get_clean();
 
 ob_start(); ?>
     <form method="post" action="index.php?action=saveEvent">
-        <input type="text" id="nameEvent" name="nameEvent" placeholder="nom">
-        <input type="text" id="nbPlaces" name="nbPlaces" placeholder="nbPlaces">
-        <input type="text" id="dateDebut" name="dateDebut" placeholder="dateDebut"><!--liste deroulante préremplie si infos (sauf heure)-->
-        <input type="text" id="duree" name="duree" placeholder="duree"><!--liste deroulante / bouton pour choisir de mettre une durée ou une date de fin-->
-        <textarea id="description" name="description" placeholder="description"></textarea>
+        <input type="text" id="nbPlaces" name="nbPlaces" placeholder="nbPlaces"><!--preremplie-->
+        <input type="text" id="duree" name="duree" placeholder="duree"><!--liste deroulante preremplie / bouton pour choisir de mettre une durée ou une date de fin-->
+        <textarea id="description" name="description" placeholder="description"></textarea><!--prerempli-->
         
         <input type="submit" value="Enregistrer">
     </form>

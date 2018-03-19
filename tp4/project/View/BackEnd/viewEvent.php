@@ -1,10 +1,5 @@
 <?php 
-$title = 'Eveneo - Evénement';
-
-
-ob_start(); ?>
-    <h1><?= htmlspecialchars($data['title']) ?></h1>
-<?php $headerContent = ob_get_clean();
+$pageName = 'Détails';
 
 
 ob_start(); ?>
@@ -13,34 +8,40 @@ ob_start(); ?>
             <input type="submit" value="Accueil">
         </form>
     </li>
-    <!--si envoie date
-    <li>
-        <form method="post" action="index.php?action=allEvents&amp;date=< ?= $data['id']">
-            <input type="submit" value="Liste des événements de < ?= htmlspecialchars($data['day']) ?>">
-        </form>
-    </li>
-    -->
 <?php $menuContent = ob_get_clean();
 
 
+$legendContent = 'Détails de l\'événement';
+
+
 ob_start(); ?>
-    <form method="post" action="index.php?action=deleteEvents&amp;id=<?= $data['id'] ?>"><!--valide?-->
-        <input type="submit" value="Supprimer l'événement">
+    <form method="post" action="index.php?action=lastEvent">
+        <input type="submit" value="Evénement précédent">
+    </form>
+
+    <?= $data['title'] ?>
+
+    <form method="post" action="index.php?action=nextEvent">
+        <input type="submit" value="Evénement suivant">
     </form>
 <?php $asideContent = ob_get_clean();
 
 
 ob_start(); ?>
-    <div class="eventDetail">
-        <h3>
-            <?= htmlspecialchars($dataEvent['nameConf']) ?>
-        </h3>
-        <?= htmlspecialchars($dataEvent['startDate']) ?>
-        <?= htmlspecialchars($dataEvent['endDate']) ?>
-        <?= htmlspecialchars($dataEvent['organizer']) ?>
-        <?= htmlspecialchars($dataEvent['place']) ?>
-        <?= htmlspecialchars($dataEvent['describeConf']) ?>
-    </div>
+initialisation1 : setlocale(LC_TIME, 'fr_FR');
+initialisation2 : date_default_timezone_set('UTC');
+    <h3>
+        <?= $dataEvent['nameConf'] ?>
+    </h3>
+    Organisateur : <?= $dataEvent['organizer'] ?>
+    durée : <?= $dureeEvent ?>
+    de <?= strftime('%A %e %B %Y, %Hheures %i', strtotime($event['datestart'])) ?> à <?= strftime('%A %e %B %Y, %Hheures %i', strtotime($event['dateend'])) ?>
+    <?= $dataEvent['place'] ?>
+    <?= $dataEvent['describeConf'] ?>
+
+    <form method="post" action="index.php?action=deleteEvents&amp;id=<?= $data['id'] ?>"><!--valide?-->
+        <input type="submit" value="Supprimer l'événement">
+    </form>
 <?php $articleContent = ob_get_clean();
 
 require('View/template.php');

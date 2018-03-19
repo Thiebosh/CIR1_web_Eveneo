@@ -1,33 +1,17 @@
 <?php 
-$title = 'Eveneo - Connexion';
-
-
-ob_start(); ?>
-    <h1>Page de connexion</h1>
-<?php $headerContent = ob_get_clean();
-
+$pageName = 'Connexion';
 
 $menuContent = '';
 
-
-if (isset($_SESSION['login'])) {
-    $asideContent = '';
+$legendContent = 'Connexion';
 
 
-    ob_start(); ?>
-        <p>Connexion réussie!</p>
-        <form method="post" action="index.php">
-            <input type="submit" value="Aller vers l'accueil">
-        </form>
-    <?php $articleContent = ob_get_clean();
-}
-else {
+if (!isset($_SESSION['login'])) {
     ob_start(); ?>
         <form method="post" action="index.php?action=entry">
             <input type="submit" value="Inscription">
         </form>
     <?php $asideContent = ob_get_clean();
-
 
     ob_start(); ?>
         <fieldset><legend>Connexion</legend>
@@ -39,6 +23,15 @@ else {
         </fieldset>
     <?php $articleContent = ob_get_clean();
 }
+else {
+    $asideContent = '';
 
+    ob_start(); ?>
+        <p>Connexion réussie!</p>
+        <form method="post" action="index.php">
+            <input type="submit" value="Aller vers l'accueil">
+        </form>
+    <?php $articleContent = ob_get_clean();
+}
 
 require('View/template.php');

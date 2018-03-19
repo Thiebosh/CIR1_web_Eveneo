@@ -35,3 +35,14 @@ function OrganizerEvent($infoPage) {
 function OrganizerNewEvent($infoPage) {
     require('View/BackEnd/viewNewEvent.php');
 }
+
+function OrganizerModifyEvent($infoPage) {
+    if (isset($infoPage['modify'])) {
+        updateEvent($infoPage);
+    }
+    $dataEvent = getEvent($infoPage['idEvent']);
+
+    require('View/BackEnd/viewModifyEvent.php');
+
+    $dataEvent->closeCursor();//bien placé?
+}

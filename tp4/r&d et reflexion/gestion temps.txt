@@ -1,3 +1,63 @@
+utilisation de tout dans projet :
+extraction de année et mois, calcul du nombre de jour du mois, extraction de jour et events du jour, pour gérer les affichages de l'accueil et de la liste des événements d'une journée {
+    SELECT EXTRACT(YEAR FROM datestart); => $_SESSION['year'];
+    SELECT EXTRACT(MONTH FROM datestart); => $_SESSION['month'];
+
+    int date('t, gmmktime(0, 0, 0, $_SESSION['month'], 1, $_SESSION['year'])'); => $nbDay; pour l'affichage de l'accueil
+
+    SELECT EXTRACT(DAY FROM datestart); => $requête['day']; => pour l'affichage de la liste des événements d'une journée
+    (WHERE) YEAR(datestart) = $_SESSION[year] AND MONTH(datestart) = $_SESSION['month'] AND DAY(datestart) = $day;//compare date de event et date desiree
+}
+
+extraction de heure et minute pour gérer les affichages des événements détaillés {
+    SELECT TIME(datestart); => $_SESSION['timeBegin'];
+    SELECT TIME(dateend); => $_SESSION['timeEnd'];
+}
+
+vérification d'un datetime et d'une durée passé par formulaire, ajout d'une durée, et injection d'un datetime, pour gérer l'ajout d'évent {
+    function checktime($_POST['hour'], $_POST['min']) {
+        if ($hour < 0 || $hour > 23 || !is_numeric($hour)) {
+            return false;
+        }
+        if ($min < 0 || $min > 59 || !is_numeric($min)) {
+            return false;
+        }
+        return true;
+    }
+
+    checkdate($_POST['month'], $_POST['day'], $_POST['year']);
+    checktime($_POST['hour'], $_POST['min']);
+    checktime($_POST['hourEvent']), $_POST['minEvent']);
+
+	//peut enregistrer date dans un autre format
+    date('Y-m-d H:i, gmmktime($_POST['hour'], $_POST['min'], 0, $_POST['month'], $_POST['day'], $_POST['year'])'); =>$dateBegin
+    date('Y-m-d H:i, gmmktime($_POST['hour'] + $_POST['hourEvent'], $_POST['min'] + $_POST['minEvent'], 0, $_POST['month'], $_POST['day'], $_POST['year'])'); =>$dateEnd
+
+	$dateBegin = date_create_from_format('Y-m-d H:i', dateBegin);//mettre les % dans l'ordre du format de date (si date(d Y m), date_create_from_format('%d %Y %m', date))
+	$dateEnd = date_create_from_format('Y-m-d H:i', dateEnd);
+    $req = $db->prepare('INSERT INTO tableName(col_date_time) VALUES(:begin, :end)');
+    $req->bindValue('begin' => dateBegin, 'end' => dateEnd);
+}
+
+affichage d'un datetime, pour gérer l'affichage de l'accueil, de la liste des événements d'une journée, des événements détaillés, et la confirmation d'ajout d'évent {
+    //avec jour et mois en alphabétique (français)
+    initialisation1 : setlocale(LC_TIME, 'fr_FR');
+    initialisation2 : date_default_timezone_set('UTC');
+    actuelle : strftime('%A %e %B %Y', strtotime(date('d m Y')));
+    variable : strftime('%A %e %B %Y', strtotime(dateBegin));//ou dateEnd ou n'importe quelle autre déjà construite
+    variable : strftime('%A %e %B %Y', gmmktime(0, 0, 0, $month, $day, $year));
+
+    ou
+
+    //avec jour et mois en numérique
+    $madate = explode('-', $madate); 
+    echo $madate[2].'/'.$madate[1].'/'.$madate[0];
+}
+
+
+***************************
+
+
 détail des fonctions
 {
     ***
@@ -10,6 +70,9 @@ détail des fonctions
     -> echo date("d m Y", gmmktime(0, 0, 0, 7, 1, 2000)); => numéroJour, numéroMois, année (valeurs définies par mktime) ici : 01 07 2000
         -> d pour avoir le jour avec 0 initial
         -> j pour avoir le jour sans 0 initial
+        -> l pour avoir le jour en version texte
+        -> D pour avoir le jour en version texte 3 lettres
+        -> N pour avoir le jour de la semaine (1 = lundi, 7 = dimanche)
 
         -> m pour avoir le mois avec 0 initial
         -> n pour avoir le mois sans 0 initial
@@ -126,6 +189,23 @@ fonctions MySql {
     SELECT DATE_SUB('2004-01-05', INTERVAL 31 DAY);=> 2003-12-05
     SELECT DATE_SUB('2006-10-01', INTERVAL '6-5' YEAR_MONTH);=> 2000-05-01
 
+    SELECT EXTRACT(MONTH FROM "2017-06-15");
+    SELECT EXTRACT(YEAR FROM "2017-06-15");
+
+    SELECT CASE MONTH('1999-07-07')
+        WHEN 1 THEN 'janvier'
+        WHEN 2 THEN 'février'
+        WHEN 3 THEN 'mars'
+        WHEN 4 THEN 'avril'
+        WHEN 5 THEN 'mai'
+        WHEN 6 THEN 'juin'
+        WHEN 7 THEN 'juillet'
+        WHEN 8 THEN 'août'
+        WHEN 9 THEN 'septembre'
+        WHEN 10 THEN 'octobre'
+        WHEN 11 THEN 'novembre'
+        ELSE 'décembre'
+    END;
 }
 
 ***************************
@@ -259,7 +339,7 @@ factorisation maximale style orienté objet
 {
     *gestion dates (boutons / requêtes)
     actuelle : $date = new DateTime('now', new DateTimeZone('Paris/Europe'));
-    variable : $date = new DateTime($year.$month.day, new DateTimeZone('Paris/Europe'));//verifier mise en string
+    variable : $date = new DateTime($year.' '.$month.' '.day, new DateTimeZone('Paris/Europe'));//verifier mise en string
     modifier : $date->modify('+'.$nbMonth.' month');//positif ou negatif (attention : risque des problèmes sur le jour)
     nbJours/mois : echo $date->format('t');
 
