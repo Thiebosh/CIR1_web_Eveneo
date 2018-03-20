@@ -7,28 +7,27 @@ $legendContent = 'Evènements du mois';
 
 
 ob_start(); ?>
-    <form method="post" action="index.php?action=lastMonth">
+    <form method="post" action="index.php?action=reception">
+        <input type="hidden" name="date" value=<?= $lastMonth ?>>
         <input type="submit" value="Mois précédent">
     </form>
 
-    <?= $infoPage['month'].' '.$infoPage['year'] ?>
+    <?= $showDate ?>
 
-    <form method="post" action="index.php?action=nextMonth">
+    <form method="post" action="index.php?action=reception">
+        <input type="hidden" name="date" value=<?= $nextMonth ?>>
         <input type="submit" value="Mois suivant">
     </form>
 <?php $asideContent = ob_get_clean();
 
 
-ob_start(); 
-    $dayName[0] = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
-    $dayName[1] = array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
-    ?>
+ob_start(); ?>
     <table>
         <thead>
             <tr>
                 <?php
-                for ($jour = 0; $jour < 7; $jour++) {
-                    echo '<th colspan="2">'.$dayName[1][$i].'</th>';
+                for ($weekDay = 0; $weekDay < 7; $weekDay++) {
+                    echo '<th colspan="2">' . $dayName['fr'][$i] . '</th>';
                 }
                 ?>
             </tr>
@@ -43,54 +42,57 @@ ob_start();
         <tbody>
             <tr>
                 <?php
-                $jour = 1;
-                while ($dayName[0][$jour - 1] != date('D, gmmktime(0, 0, 0, $infoPage[\'month\'], 1, $infoPage[\'year\'])')) {
+                $weekDay = 1;
+                while ($dayName['ang'][$weekDay - 1] != $dayStartMonth) {
                     echo '<td colspan="2"></td>';
-                    $jour++;
+                    $weekDay++;
                 }
-                foreach($listEventsMonth as $listEventsDay) {
+                foreach($eventsMonth as $eventsDay) {
                 ?>
                     <td>
-                        <a href="index.php?action=newEvent" style="display: block; height: 100%; width: 100%; cursor: hand;">
-                            <?= $jour ?>
-                        </a>
+                        <form method="post" action="index.php?action=new">
+                            <input type="hidden" name="date" value=<?= date('Y-m-d', gmmktime(0, 0, 0, $split[1], $weekDay, $split[0])) ?>>
+                            <input type="submit" value="<?= $weekDay ?>">
+                        </form>
                     </td>
                     <td>
                         <?php
-                        if ($listEventsDay) {
-                            $compteur = 0;
-                            foreach($listEventsDay as $event) {
-                                $compteur++;
+                        if ($eventsDay) {
+                            $nbEvent = 0;
+                            foreach($eventsDay as $event) {
                                 ?>
-                                <a href="index.php?action=detailEvent&amp;id=<?= $event['id'] ?>">
-                                    <?= htmlspecialchars($event['name']) ?>
-                                    <form method="post" action="index.php?action=deleteEvents&amp;id=<?= $event['id'] ?>"><!--valide?-->
+                                <div>
+                                    <a href="index.php?action=detailEvent&amp;id=<?= $event['id'] ?>">
+                                        <?= htmlspecialchars($event['name']) ?>
+                                    </a>
+                                    <form method="post" action="index.php?action=delete">
+                                        <input type="hidden" name="id" value=<?= $event['id'] ?>>
                                         <input type="submit" value="Supprimer l'événement">
                                     </form>
-                                </a>
+                                </div>
                                 <?php
-                                if (compteur == MAX_LIST) {
+                                $nbEvent++;
+                                if ($nbEvent == MAX_LIST) {
                                     break;
                                 }
                             }
                             
-                            if (count($listEventsDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template
-                                echo '<a href="index.php?action=allEvent">Voir plus de conférences</a>';
+                            if (count($eventsDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template
+                                echo '<a href="index.php?action=list">Plus de conférences</a>';
                             }
                         }
                         ?>
                     </td>
                     <?php
-                    if ($jour % 7 == 0) {
-                        echo '</tr><tr>';
+                    if ($weekDay % 7 == 0 && $weekDay < $nbDayMonth) {//si egal a nbDayMonth, est fermé par le dernier
+                        echo '</tr><tr>';//nouvelle semaine
                     }
                 }
 
-                if ($jour % 7 != 0) {//ne s est pas arreté sur dimanche  (necessaire?)
-                    $jour = date('N, gmmktime(0, 0, 0, $infoPage[\'month\'], $jour, $infoPage[\'year\'])');
-                    while ($dayName[0][$jour - 1] != 'Sun') {
+                if ($weekDay % 7 != 0) {//ne s est pas arreté sur dimanche  (necessaire?)
+                    while ($dayName['ang'][$dayEndMonth - 1] != 'Sun') {
                         echo '<td colspan="2"></td>';
-                        $jour++;
+                        $dayEndMonth++;
                     }
                 }
                 ?>
@@ -98,5 +100,6 @@ ob_start();
         </tbody>
     </table>
 <?php $articleContent = ob_get_clean();
+
 
 require('View/template.php');

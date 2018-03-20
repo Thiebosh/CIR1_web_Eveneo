@@ -1,18 +1,28 @@
 <?php
 require('Model/mFrontEnd.php');
 
-function CustomerReception($dataForm) {
-    if ($dataForm['empty']) {
-        $date = date();//mettre aujourd'huits
+function CustomerReception($dataPage) {//ok
+    if ($dataPage['empty']) {
+        $dataPage['date'] = date('Y-m');
     }
-    //avancée
-    $dataForms['showEventFull'] = false;
 
-    $nbDayInMonth = date('t, strtotime($dataForms[\'date\'])');//verifier
-    for ($day = 1; $day <= $nbDayInMonth; $day++) {
-        $listEventsMonth[] = getAllEvents($infoPage);//si vide, listEventsMonth[] vaudra false
+    $timeStamp = strtotime($dataPage['date']);
+    $showDate = strftime('%B %Y', $timeStamp);
+    $nbDayMonth = date('t', $timeStamp);
+
+    $split = explode('-', $dataPage['date']);
+    $lastMonth = date('Y-m', gmmktime(0, 0, 0, $split[1] - 1, 0, $split[0]));
+    $nextMonth = date('Y-m', gmmktime(0, 0, 0, $split[1] + 1, 0, $split[0]));
+
+    $dayName['ang'] = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
+    $dayName['fr'] = array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
+    $dayStartMonth = date('D', gmmktime(0, 0, 0, $split[1], 1, $split[0]));//pour commencer le tableau d affichage
+    $dayEndMonth = date('N', gmmktime(0, 0, 0, $split[1], $nbDay, $split[0]));//pour finir le tableau d affichage
+
+    for ($day = 1; $day <= $nbDayMonth; $day++) {
+        $eventsMonth[] = getAllEvents($dataPage);//si vide, listEventsMonth[] vaudra false ->verifier requete
     }
-    
+
     require('View/FrontEnd/vReception.php');
 
     $listEventsMonth->closeCursor();//bien placé?

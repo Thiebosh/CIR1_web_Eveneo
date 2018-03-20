@@ -7,6 +7,10 @@ require('Controller/backEnd.php');
 
 define('MAX_LIST', 5);
 
+//affichage des datetimes en francais
+setlocale(LC_TIME, 'fr_FR');
+date_default_timezone_set('UTC');
+
 try {
     if (!isset($_GET['action'])) {
         throw new Exception('Pas d\'action définie');
@@ -59,8 +63,7 @@ try {
                 if (isset($_POST['date'])){
                     $date = $_POST['date'];
 
-                    $dataForm = array('date' => $date);
-
+                    $dataForm['date'] = $date;
                     $dataForm['empty'] = false;
                 }
 
@@ -113,8 +116,7 @@ try {
                 if (isset($_POST['date'])){
                     $date = $_POST['date'];
 
-                    $dataForm = array('date' => $date);
-
+                    $dataForm['date'] = $date;//Y-m
                     $dataForm['empty'] = false;
                 }
 
@@ -186,13 +188,27 @@ try {
 
                 OrganizerEditEvent($dataForm);
                 break;
+            case 'delete':
+                if (isset($_POST['id'])){
+                    $id = $_POST['id'];
+
+                    $dataForm = array('id' => $id);
+
+                    $dataForm['empty'] = false;
+                }
+                else {
+                    throw new Exception('Information manquante');
+                }
+
+                OrganizerDeleteEvent($dataForm);
+                break;
             default:
                 throw new Exception('Action indéfinie');
                 break;
         }
     }
 }
-catch(Exception $error) { // S'il y a eu une erreur, alors...
+catch(Exception $error) {
     $errorMessage = $error->getMessage();
     require('View/vError.php');
 }
