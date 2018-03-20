@@ -39,9 +39,18 @@ initialisation2 : date_default_timezone_set('UTC');
     <?= $dataEvent['place'] ?>
     <?= $dataEvent['describeConf'] ?>
 
-    <form method="post" action="index.php?action=deleteEvents&amp;id=<?= $data['id'] ?>"><!--valide?-->
-        <input type="submit" value="Supprimer l'événement">
+    <form method="post" action="index.php?action=statusEvents&amp;id=<?= $data['id'] ?>">
+        <?php
+        if (!$current) {
+            echo '<input type="submit" value="S\'inscrire à l\'événement">';
+        }
+        else {
+            echo '<input type="submit" value="Se désinscrire de l\'événement">';
+        }
+        ?>
     </form>
 <?php $articleContent = ob_get_clean();
 
 require('View/template.php');
+
+//<time><?= $billet['date'] ? ></time>

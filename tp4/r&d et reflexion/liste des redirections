@@ -1,0 +1,58 @@
+page inscription {
+    connexion                       redirige vers connexion             (pas de parametre : controleur detruit session actuelle)
+    valider                         redirige vers inscription avec :    data (post contient : login & rank & password & passwordCheck)
+    [confirmation] se connecter     redirige vers connexion             (pas de parametre : controleur detruit session actuelle)
+}
+
+page connexion {
+    inscription                     redirige vers inscription           (pas de parametre)
+    valider                         redirige vers connexion avec :      data (post contient : login & password)
+    [confirm] aller à l'accueil     redirige vers accueil               (pas de parametre : controleur prend date actuelle)
+}
+
+***
+
+page accueil (mois) {
+    déconnexion                     redirige vers connexion             (pas de parametre : controleur detruit session actuelle)
+    mois en cours                   redirige vers accueil               (pas de parametre : controleur prend date actuelle)
+    changer de mois                 redirige vers accueil avec :        date (year & month)
+    voir liste événements           redirige vers listEvent avec :      date (year & month & day)
+    voir détail événement           redirige vers detailEvent avec :    idEvent
+    [orga] créer événement          redirige vers newEvent avec :       date (year & month & day)
+}
+
+page listEvent (jour) {
+    déconnexion                     redirige vers connexion             (pas de parametre : controleur detruit session actuelle)
+    accueil (dates courantes)       redirige vers accueil               (pas de parametre : controleur prend date actuelle)
+    revenir au mois                 redirige vers accueil avec :        date (year & month)
+    changer de jour                 redirige vers listEvent avec :      date (year & month & day)
+    voir détail événement           redirige vers detailEvent avec :    idEvent
+    [orga] créer événement          redirige vers newEvent avec :       date (year & month & day)
+}
+
+page detailEvent {
+    déconnexion                     redirige vers connexion             (pas de parametre : controleur detruit session actuelle)
+    accueil (dates courantes)       redirige vers accueil               (pas de parametre : controleur prend date actuelle)
+    revenir au mois                 redirige vers accueil avec :        date (year & month)
+    revenir au jour                 redirige vers listEvent avec :      date (year & month & day)
+    changer d'événement             redirige vers listEvent avec :      date (year & month & day) & time (hour & minute)
+    [client] se (dés)inscrire       redirige vers listEvent avec :      data (post content : idEvent & actualStatus (plugged / unplugged))
+    [orga] éditer l'événement       redirige vers editEvent avec :      idEvent
+    [orga] supprimer l'événement    redirige vers listEvent avec :      date (year & month & day) (-> revient à revenir au jour)
+}
+
+[orga] page newEvent {
+    déconnexion                     redirige vers connexion             (pas de parametre : controleur detruit session actuelle)
+    accueil (dates courantes)       redirige vers accueil               (pas de parametre : controleur prend date actuelle)
+    annuler creation                redirige vers listEvent avec :      date (year & month & day)
+    confirmer creation              redirige vers newEvent avec :       data (post contient : title & nbPlaces & datestart & dateend & duree & description)
+    [confirm] voir l'événement      redirige vers detailEvent avec :    idEvent
+}
+
+[orga] page editEvent {
+    déconnexion                     redirige vers connexion             (pas de parametre : controleur detruit session actuelle)
+    accueil (dates courantes)       redirige vers accueil               (pas de parametre : controleur prend date actuelle)
+    annuler modifs                  redirige vers detailEvent avec :    idEvent
+    confirmer modifs                redirige vers detailEvent avec :    data (post contient : nbPlaces & dateend & duree & description)
+    [confirm] voir l'événement      redirige vers detailEvent avec :    idEvent (-> revient à annuler modifs)
+}

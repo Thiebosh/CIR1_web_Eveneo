@@ -1,10 +1,10 @@
 <?php
-require('model/BackEnd.php');
+require('model/mBackEnd.php');
 
 function OrganizerReception($infoPage) {
     $listEvents = getAllEvents($infoPage);
 
-    require('View/BackEnd/viewReception.php');
+    require('View/BackEnd/vReception.php');
 
     $listEventsMonth->closeCursor();//bien placé?
 }
@@ -19,7 +19,7 @@ function OrganizerAllEvents($infoPage) {
 
     $listEvents = getAllEvents($infoPage);
 
-    require('View/BackEnd/viewAllEvents.php');
+    require('View/BackEnd/vAllEvents.php');
 
     $listEventsDay->closeCursor();//bien placé?
 }
@@ -27,22 +27,22 @@ function OrganizerAllEvents($infoPage) {
 function OrganizerEvent($infoPage) {
     $dataEvent = getEvent($infoPage['idEvent']);
     
-    require('View/BackEnd/viewEvent.php');
+    require('View/BackEnd/vEvent.php');
 
     $dataEvent->closeCursor();//bien placé?
 }
 
 function OrganizerNewEvent($infoPage) {
-    require('View/BackEnd/viewNewEvent.php');
+    require('View/BackEnd/vNewEvent.php');
 }
 
-function OrganizerModifyEvent($infoPage) {
+function OrganizerEditEvent($infoPage) {
     if (isset($infoPage['modify'])) {
         updateEvent($infoPage);
     }
     $dataEvent = getEvent($infoPage['idEvent']);
 
-    require('View/BackEnd/viewModifyEvent.php');
+    require('View/BackEnd/vEditEvent.php');
 
     $dataEvent->closeCursor();//bien placé?
 }

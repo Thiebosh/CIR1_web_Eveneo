@@ -33,13 +33,6 @@ ob_start();
                 ?>
             </tr>
         </thead>
-        <tfoot>
-            <tr>
-                <td colspan="14"><!--7jours * 2-->
-                    Sélectionnez un jour pour y créer un événement!
-                </td>
-            </tr>
-        </tfoot>
         <tbody>
             <tr>
                 <?php
@@ -51,9 +44,7 @@ ob_start();
                 foreach($listEventsMonth as $listEventsDay) {
                 ?>
                     <td>
-                        <a href="index.php?action=newEvent" style="display: block; height: 100%; width: 100%; cursor: hand;">
-                            <?= $jour ?>
-                        </a>
+                        <?= $jour ?>
                     </td>
                     <td>
                         <?php
@@ -64,17 +55,14 @@ ob_start();
                                 ?>
                                 <a href="index.php?action=detailEvent&amp;id=<?= $event['id'] ?>">
                                     <?= htmlspecialchars($event['name']) ?>
-                                    <form method="post" action="index.php?action=deleteEvents&amp;id=<?= $event['id'] ?>"><!--valide?-->
-                                        <input type="submit" value="Supprimer l'événement">
-                                    </form>
                                 </a>
                                 <?php
-                                if (compteur == 5) {
+                                if (compteur == MAX_LIST) {
                                     break;
                                 }
                             }
                             
-                            if (count($listEventsDay) > 5) {//au moins 6 : ajoute bouton au template
+                            if (count($listEventsDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template
                                 echo '<a href="index.php?action=allEvent">Voir plus de conférences</a>';
                             }
                         }
@@ -98,5 +86,6 @@ ob_start();
         </tbody>
     </table>
 <?php $articleContent = ob_get_clean();
+
 
 require('View/template.php');

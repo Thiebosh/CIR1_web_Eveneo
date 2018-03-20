@@ -8,17 +8,19 @@ function dbConnect() {//modifier champs
 function postDataUser($infoPage) {
     $dataBase = dbConnect();
 
+    //avancée
     //requete post
     $rank = $infoPage['rank'];
     $login = $infoPage['login'];
     $password = $infoPage['password'];
 }
 
-function getDataUser($login) {
+function getDataUser($login) {//ok
     $dataBase = dbConnect();
 
     $request = $dataBase->prepare('SELECT id, `password`, rank FROM Users WHERE `login` = :login');
     $request->execute(array('login' => $login));
+    $dataUser = $request->fetch();
 
-    return $request;
+    return $dataUser;
 }
