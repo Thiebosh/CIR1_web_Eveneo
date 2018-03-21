@@ -27,8 +27,17 @@ function CustomerReception($dataPage) {//ok (customerEventMonth?)
     }
 
     require('View/FrontEnd/vReception.php');
-    $eventsMonth->closeCursor();//bien placé?
 }
+/*
+close cursor que si récupère des données et ne fait qu'un fetch simple
+fetchall ferme le curseur tout seul
+
+
+password_hash("string") pour hasher un pasword
+
+*/
+
+
 
 function CustomerAllEvents($infoPage) {//customerEventsDay
     $showDate = strftime('%A %e %B %Y', strtotime($dataPage['date']));
@@ -40,8 +49,9 @@ function CustomerAllEvents($infoPage) {//customerEventsDay
     $eventsDay = getEventsDay($dataPage, false);
 
     require('View/FrontEnd/vAllEvents.php');
-    $eventsDay->closeCursor();//bien placé?
 }
+
+
 
 function CustomerEvent($infoPage) {
     if ($dataForm['empty']) {
@@ -49,6 +59,7 @@ function CustomerEvent($infoPage) {
     }
     //avancée
 
+    /*
     if ($infoPage['changeStatus']) {
         //current indique la relation actuelle (vrai = inscrit ou faux = non inscrit)
         $current = getEventStatus($infoPage['idEvent']);
@@ -59,10 +70,9 @@ function CustomerEvent($infoPage) {
             changeEvent(false);
         }
     }
+    */
     
     $dataEvent = getEvent($infoPage['idEvent']);
     
     require('View/FrontEnd/vEvent.php');
-
-    $dataEvent->closeCursor();//bien placé?
 }

@@ -10,6 +10,8 @@ function Register($dataForm) {
     require('View/RegisterLogin/vRegister.php');
 }
 
+
+
 function Login($dataForm) {
     if (!$dataForm['empty']) {
         $dataUser = getDataUser($dataForm['login']);

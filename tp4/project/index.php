@@ -10,7 +10,7 @@ define('MAX_LIST', 5);
 //affichage des datetimes en francais
 setlocale(LC_TIME, 'fr_FR');
 date_default_timezone_set('UTC');
-
+//pour chaque post, inclure un parametre caché "receptionPost", si vide passe, sinon verifie valeurs et envoie une erreur si non definie ou che pas quoi
 try {
     if (!isset($_GET['action'])) {
         throw new Exception('Pas d\'action définie');
@@ -20,36 +20,44 @@ try {
 
     if ($_GET['action'] != 'register' && $_GET['action'] != 'login' && $_GET['action'] != 'logout' &&
         $_GET['action'] != 'reception' && $_GET['action'] != 'list' && $_GET['action'] != 'detail' &&
-        $_GET['action'] != 'new' && $_GET['action'] != 'edit' && $_GET['action'] != 'delete') {
+        $_GET['action'] != 'new' && $_GET['action'] != 'edit' && $_GET['action'] != 'delete')
+    {
         throw new Exception('Action indéfinie');
     }
 
     if (!isset($_SESSION['rank'])) {
         if ($action == 'register') {
-            if (isset($_POST['data'])) {
-                //verifier valeurs de post
-                $rank = $_POST['data']['rank'];
-                $login = $_POST['data']['login'];
-                $password = $_POST['data']['password'];
-                $passwordVerif = $_POST['data']['passwordVerif'];
+            if (isset($_POST['rank']) && isset($_POST['login']) &&
+                isset($_POST['password']) && isset($_POST['passwordVerif'])) {
+                //verifier existence de chaque post et leur type
+                $rank = $_POST['rank'];
+                $login = $_POST['login'];
+                $password = $_POST['password'];
+                $passwordVerif = $_POST['passwordVerif'];
 
-                $dataForm = array('login' => $login, 'rank' => $rank,
+                $dataForm['dataPost'] = array('login' => $login, 'rank' => $rank,
                     'password' => $password, 'passwordVerif' => $passwordVerif);
                 
                 $dataForm['empty'] = false;
+            }
+            else {
+                throw new Exception('Information manquante');
             }
 
             Register($dataForm);
         }
         
         else {
-            if (isset($_POST['data'])) {
-                $login = $_POST['data']['login'];
-                $password = $_POST['data']['password'];
+            if (isset($_POST['login']) && isset($_POST['password'])) {
+                $login = $_POST['login'];
+                $password = $_POST['password'];
 
-                $dataForm = array('login' => $login, 'password' => $password);
+                $dataForm['dataPost'] = array('login' => $login, 'password' => $password);
                 
                 $dataForm['empty'] = false;
+            }
+            else {
+                throw new Exception('Information manquante');
             }
 
             Login($dataForm);
@@ -70,10 +78,10 @@ try {
                     $dataForm['date'] = $date;
                     $dataForm['empty'] = false;
                 }
-                if (isset($_POST['data'])) {
-                    $id = $_POST['data']['id'];
-                    $status = $_POST['data']['status'];//follow / unfollow
-                    $dataForm['data'] = array('id' => $id, 'status' => $status);
+                if (isset($_POST['id']) && isset($_POST['status'])) {
+                    $id = $_POST['id'];
+                    $status = $_POST['status'];//follow / unfollow
+                    $dataForm['dataPost'] = array('id' => $id, 'status' => $status);
                 }
 
                 CustomerReception($dataForm);
@@ -98,13 +106,14 @@ try {
 
             case 'detail';
                 if (isset($_POST['id'])){
-                    if (isset($_POST['data'])){
-                        $duree = $_POST['data']['duree'];
-                        $dateend = $_POST['data']['dateend'];
-                        $nbPlaces = $_POST['data']['nbPlaces'];
-                        $description = $_POST['data']['description'];
+                    if (isset($_POST['duree']) && isset($_POST['dateend']) &&
+                        isset($_POST['nbPlaces']) && isset($_POST['description'])){
+                        $duree = $_POST['duree'];
+                        $dateend = $_POST['dateend'];
+                        $nbPlaces = $_POST['nbPlaces'];
+                        $description = $_POST['description'];
 
-                        $dataForm = array('duree' => $duree, 'dateend' => $dateend,
+                        $dataForm['dataPost'] = array('duree' => $duree, 'dateend' => $dateend,
                             'nbPlaces' => $nbPlaces, 'description' => $description);
                     }
 
@@ -159,12 +168,12 @@ try {
             case 'detail';
                 if (isset($_POST['id'])){
                     if (isset($_POST['data'])){
-                        $duree = $_POST['data']['duree'];
-                        $dateend = $_POST['data']['dateend'];
-                        $nbPlaces = $_POST['data']['nbPlaces'];
-                        $description = $_POST['data']['description'];
+                        $duree = $_POST['duree'];
+                        $dateend = $_POST['dateend'];
+                        $nbPlaces = $_POST['nbPlaces'];
+                        $description = $_POST['description'];
 
-                        $dataForm = array('duree' => $duree, 'dateend' => $dateend,
+                        $dataForm['dataPost'] = array('duree' => $duree, 'dateend' => $dateend,
                             'nbPlaces' => $nbPlaces, 'description' => $description);
                     }
 
@@ -182,14 +191,14 @@ try {
             case 'new':
                 if (isset($_POST['date'])){
                     if (isset($_POST['data'])){
-                        $title = $_POST['data']['title'];
-                        $nbPlaces = $_POST['data']['nbPlaces'];
-                        $dateend = $_POST['data']['datestart'];
-                        $dateend = $_POST['data']['dateend'];
-                        $duree = $_POST['data']['duree'];
-                        $description = $_POST['data']['description'];
+                        $title = $_POST['title'];
+                        $nbPlaces = $_POST['nbPlaces'];
+                        $dateend = $_POST['datestart'];
+                        $dateend = $_POST['dateend'];
+                        $duree = $_POST['duree'];
+                        $description = $_POST['description'];
 
-                        $dataForm = array('title' => $title, 'nbPlaces' => $nbPlaces, 'duree' => $duree,
+                        $dataForm['dataPost'] = array('title' => $title, 'nbPlaces' => $nbPlaces, 'duree' => $duree,
                             'datestart' => $datestart, 'dateend' => $dateend, 'description' => $description);
                     }
 

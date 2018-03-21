@@ -1,6 +1,8 @@
 <?php
 require('model/mBackEnd.php');
 
+
+
 function OrganizerReception($infoPage) {//ok
     if ($dataPage['empty']) {
         $dataPage['date'] = date('Y-m');
@@ -28,6 +30,8 @@ function OrganizerReception($infoPage) {//ok
     $listEventsMonth->closeCursor();//bien placé?
 }
 
+
+
 function OrganizerAllEvents($infoPage) {
     /* code client
     $showDate = strftime('%A %e %B %Y', strtotime($dataPage['date']));
@@ -53,21 +57,23 @@ function OrganizerAllEvents($infoPage) {
     $listEvents = getAllEvents($infoPage);
 
     require('View/BackEnd/vAllEvents.php');
-
-    $listEventsDay->closeCursor();//bien placé?
 }
+
+
 
 function OrganizerEvent($infoPage) {
     $dataEvent = getEvent($infoPage['idEvent']);
     
     require('View/BackEnd/vEvent.php');
-
-    $dataEvent->closeCursor();//bien placé?
 }
+
+
 
 function OrganizerNewEvent($infoPage) {
     require('View/BackEnd/vNewEvent.php');
 }
+
+
 
 function OrganizerEditEvent($infoPage) {
     if (isset($infoPage['modify'])) {
@@ -76,9 +82,9 @@ function OrganizerEditEvent($infoPage) {
     $dataEvent = getEvent($infoPage['idEvent']);
 
     require('View/BackEnd/vEditEvent.php');
-
-    $dataEvent->closeCursor();//bien placé?
 }
+
+
 
 function OrganizerDeleteEvent($dataForm) {
 
