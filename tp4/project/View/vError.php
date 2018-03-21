@@ -8,7 +8,12 @@
         
     <body>
         <fieldset><legend>Erreur</legend>
-            <?= htmlspecialchars($errorMessage) ?>
+            <p>
+                <?= htmlspecialchars($errorMessage) ?>
+            </p>
+            <a href="index.php?ation=<?= $redirection['link'] ?>">
+                Retours à <?= $redirection['text'] ?><br>
+            </a>
         </fieldset>
     </body>
 </html>

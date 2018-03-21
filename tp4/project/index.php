@@ -18,6 +18,11 @@ try {
     $action = $_GET['action'];
     $dataForm['empty'] = true;
 
+    if ($_GET['action'] != 'register' && $_GET['action'] != 'login' && $_GET['action'] != 'logout' &&
+        $_GET['action'] != 'reception' && $_GET['action'] != 'list' && $_GET['action'] != 'detail' &&
+        $_GET['action'] != 'new' && $_GET['action'] != 'edit' && $_GET['action'] != 'delete') {
+        throw new Exception('Action indéfinie');
+    }
 
     if (!isset($_SESSION['rank'])) {
         if ($action == 'register') {
@@ -37,18 +42,18 @@ try {
             Register($dataForm);
         }
         
-        
-        //else
-        if (isset($_POST['data'])) {
-            $login = $_POST['data']['login'];
-            $password = $_POST['data']['password'];
+        else {
+            if (isset($_POST['data'])) {
+                $login = $_POST['data']['login'];
+                $password = $_POST['data']['password'];
 
-            $dataForm = array('login' => $login, 'password' => $password);
-            
-            $dataForm['empty'] = false;
+                $dataForm = array('login' => $login, 'password' => $password);
+                
+                $dataForm['empty'] = false;
+            }
+
+            Login($dataForm);
         }
-
-        Login($dataForm);
     }
     
 
@@ -69,6 +74,7 @@ try {
 
                 CustomerReception($dataForm);
                 break;
+            
             case 'list':
                 if (isset($_POST['date'])){
                     $date = $_POST['date'];
@@ -84,6 +90,7 @@ try {
 
                 CustomerAllEvents($dataForm);
                 break;
+
             case 'detail';
                 if (isset($_POST['id'])){
                     $id = $_POST['id'];
@@ -103,8 +110,9 @@ try {
 
                 CustomerEvent($dataForm);
                 break;
+
             default:
-                throw new Exception('Action indéfinie');
+                CustomerReception($dataForm);
                 break;
         }
     }
@@ -122,6 +130,7 @@ try {
 
                 OrganizerReception($dataForm);
                 break;
+
             case 'list':
                 if (isset($_POST['date'])){
                     $date = $_POST['date'];
@@ -137,6 +146,7 @@ try {
 
                 OrganizerAllEvents($dataForm);
                 break;
+
             case 'detail';
                 if (isset($_POST['id'])){
                     $id = $_POST['id'];
@@ -156,6 +166,7 @@ try {
 
                 OrganizerEvent($dataForm);
                 break;
+
             case 'new':
                 if (isset($_POST['date'])){
                     $date = $_POST['date'];
@@ -177,6 +188,7 @@ try {
 
                 OrganizerNewEvent($dataForm);
                 break;
+
             case 'edit':
                 if (isset($_POST['id'])){
                     $id = $_POST['id'];
@@ -188,6 +200,7 @@ try {
 
                 OrganizerEditEvent($dataForm);
                 break;
+
             case 'delete':
                 if (isset($_POST['id'])){
                     $id = $_POST['id'];
@@ -202,30 +215,24 @@ try {
 
                 OrganizerDeleteEvent($dataForm);
                 break;
+
             default:
-                throw new Exception('Action indéfinie');
+                OrganizerReception($dataForm);
                 break;
         }
     }
 }
 catch(Exception $error) {
     $errorMessage = $error->getMessage();
+    $redirection['text'] = 'l\'accueil';
+    $redirection['link'] = 'reception';
+    if (!isset($_SESSION['rank'])) {
+        $redirection['text'] = 'l\'écran de  connexion';
+        $redirection['link'] = 'login';
+    }
+    
     require('View/vError.php');
 }
-
-
-
-
-/*preparer nouvelles dates dans controleur et inclure dans le post de view
-lastMonth
-nextMonth
-
-lastDay
-nextDay
-
-lastEvent
-nextEvent
-
 
 //htmlspecialchars() à chaque affichage, et affichage seulement
 //$formPassword = (string)filter_input(INPUT_POST, 'password');//prend le champ password du formulaire
