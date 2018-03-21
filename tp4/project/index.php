@@ -10,7 +10,7 @@ define('MAX_LIST', 5);
 //affichage des datetimes en francais
 setlocale(LC_TIME, 'fr_FR');
 date_default_timezone_set('UTC');
-//pour chaque post, inclure un parametre caché "receptionPost", si vide passe, sinon verifie valeurs et envoie une erreur si non definie ou che pas quoi
+
 try {
     if (!isset($_GET['action'])) {
         throw new Exception('Action manquante');
@@ -70,29 +70,15 @@ try {
         }
     }
 
-    //apply changes
+
     if ($_SESSION['rank'] == 'CUSTOMER') {
         switch ($action) {
             case 'reception':
-                if (isset($_POST['date'])){
+                if (isset($_POST['date'])) {
                     $dataPage['date'] = $_POST['date'];
                 }
 
-                if (!isset($_POST['exist'])) {
-                    $dataPage['empty'] = true;
-                }
-                else {
-                    if (isset($_POST['idEvent']) && isset($_POST['eventJoined'])) {
-    
-                        $dataPage['idEvent'] = $_POST['idEvent'];
-                        $dataPage['eventJoined'] = $_POST['eventJoined'];//true / false
-                    }
-                    else {
-                        throw new Exception('Données formulaire incomplètes');
-                    }
-                }
-
-                cEventsMonth($dataForm);
+                cEventsMonth($dataPage);
                 break;
             
             case 'list':
@@ -103,7 +89,7 @@ try {
                     throw new Exception('Données absentes');
                 }
 
-                cEventsDay($dataForm);
+                cEventsDay($dataPage);
                 break;
 
             case 'detail';
@@ -114,7 +100,19 @@ try {
                     throw new Exception('Données absentes');
                 }
 
-                cEvent($dataForm);
+                if (!isset($_POST['exist'])) {
+                    $dataPage['empty'] = true;
+                }
+                else {
+                    if (isset($_POST['eventJoined'])) {
+                        $dataPage['eventJoined'] = $_POST['eventJoined'];//true / false
+                    }
+                    else {
+                        throw new Exception('Données formulaire incomplètes');
+                    }
+                }
+
+                cEvent($dataPage);
                 break;
 
             default:
@@ -131,7 +129,7 @@ try {
                     $dataPage['date'] = $_POST['date'];
                 }
 
-                oEventsMonth($dataForm);
+                oEventsMonth($dataPage);
                 break;
 
             case 'list':
@@ -146,15 +144,15 @@ try {
                     $dataPage['empty'] = true;
                 }
                 else {
-                    if (isset($_POST['idEvent'])) {
-                        $dataPage['idEvent'] = $_POST['idEvent'];
+                    if (isset($_POST['deleteId'])) {
+                        $dataPage['deleteId'] = $_POST['deleteId'];
                     }
                     else {
-                        throw new Exception('Donnée formulaire absente');
+                        throw new Exception('Données formulaire incomplètes');
                     }
                 }
 
-                oEventsDay($dataForm);
+                oEventsDay($dataPage);
                 break;
 
             case 'detail';
@@ -169,65 +167,69 @@ try {
                     $dataPage['empty'] = true;
                 }
                 else {
-                    if (isset($_POST['nbPlaces']) && isset($_POST['dateend']) && isset($_POST['description'])) {
-                    
-                        $dataPage['dateend'] = $_POST['dateend'];
-                        $dataPage['nbPlaces'] = $_POST['nbPlaces'];
-                        $dataPage['description'] = $_POST['description'];
+                    $typeForm = $_POST['exist'];
+
+                    if ($typeForm == 'new') {
+                        if (isset($_POST['name']) && isset($_POST['nbPlace']) && isset($_POST['description']) &&
+                            isset($_POST['startDate']) && isset($_POST['endDate'])) {
+
+                            $dataPage['name'] = $_POST['name'];
+                            $dataPage['nbPlace'] = $_POST['nbPlace'];
+                            $dataPage['description'] = $_POST['description'];
+                            $dataPage['startDate'] = $_POST['startDate'];
+                            $dataPage['endDate'] = $_POST['endDate'];
+                        }
+                        else {
+                            throw new Exception('Données formulaire incomplètes');
+                        }
                     }
-                    else {
-                        throw new Exception('Donnée formulaire absente');
+                    else {//typeForm = edit
+                        if (isset($_POST['nbPlaces']) && isset($_POST['description']) && isset($_POST['endDate'])) {
+
+                            $dataPage['nbPlaces'] = $_POST['nbPlaces'];
+                            $dataPage['description'] = $_POST['description'];
+                            $dataPage['endDate'] = $_POST['endDate'];
+                        }
+                        else {
+                            throw new Exception('Données formulaire incomplètes');
+                        }
                     }
                 }
 
-                oEvent($dataForm);
+                oEvent($dataPage);
                 break;
 
             case 'new':
-                if (isset($_POST['date'])){
-                    if (isset($_POST['data'])){
-                        $title = $_POST['title'];
-                        $nbPlaces = $_POST['nbPlaces'];
-                        $dateend = $_POST['datestart'];
-                        $dateend = $_POST['dateend'];
-                        $description = $_POST['description'];
-
-                        $dataForm['dataPost'] = array('title' => $title, 'nbPlaces' => $nbPlaces,
-                            'datestart' => $datestart, 'dateend' => $dateend, 'description' => $description);
-                    }
-
-                    $date = $_POST['date'];
-                    $dataForm['date'] = $date;
-                    $dataForm['empty'] = false;
+                if (isset($_POST['date'])) {
+                    $dataPage['date'] = $_POST['date'];
+                }
+                else {
+                    throw new Exception('Données absentes');
                 }
 
-                oEventsNew($dataForm);
+                oEventsNew($dataPage);
                 break;
 
             case 'edit':
                 if (isset($_POST['id'])){
-                    $id = $_POST['id'];
-                    $dataForm['id'] = $id;
-                    $dataForm['empty'] = false;
+                    $dataPage['id'] = $_POST['id'];
                 }
                 else {
                     throw new Exception('Information manquante');
                 }
 
-                oEventsEdit($dataForm);
+                oEventsEdit($dataPage);
                 break;
 
             case 'delete':
                 if (isset($_POST['id'])){
-                    $id = $_POST['id'];
-                    $dataForm['id'] = $id;
-                    $dataForm['empty'] = false;
+                    $dataPage['id'] = $_POST['id'];
                 }
                 else {
                     throw new Exception('Information manquante');
                 }
 
-                oEventsDelete($dataForm);
+                oEventsDelete($dataPage);
                 break;
 
             default:
@@ -237,7 +239,7 @@ try {
     }
 }
 
-catch(Exception $error) {
+catch(Exception $error) {//apply changes
     $errorMessage = $error->getMessage();
     $redirection['text'] = 'l\'accueil';
     $redirection['link'] = 'reception';

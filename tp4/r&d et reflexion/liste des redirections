@@ -21,7 +21,7 @@ page eventsMonth (accueil) {
     [orga] créer événement          redirige vers newEvent avec :       date (y-m-d)
 }
 
-page eventsDay (jour) {
+page eventsDay {
     déconnexion                     redirige vers login
     accueil                         redirige vers eventsMonth
     revenir au mois                 redirige vers eventsMonth avec :    date (y-m)
@@ -38,7 +38,7 @@ page event {
     revenir au jour                 redirige vers eventsDay avec :      date (y-m-d)
     changer d'événement             redirige vers event avec :          idEvent (-> trouve l'event juste avant)
 
-    [client] se (dés)inscrire       redirige vers event avec :          idEvent (post : idEvent & actualStatus)
+    [client] se (dés)inscrire       redirige vers event avec :          idEvent (post : eventJoined)
 
     [orga] éditer l'événement       redirige vers editEvent avec :      idEvent
     [orga] supprimer l'événement    redirige vers deleteEvent avec :    idEvent
@@ -48,19 +48,19 @@ page event {
     déconnexion                     redirige vers login
     accueil                         redirige vers eventsMonth
     annuler creation                redirige vers eventsMonth avec :    date (y-m)
-    valider creation                redirige vers event avec :          idEvent (post : title & nbPlaces & datestart & dateend & description)
+    valider creation                redirige vers event avec :          idEvent (post : name & nbPlace & datestart & dateend & description)
 }                            
 
 [orga] page editEvent {
     déconnexion                     redirige vers login
     accueil                         redirige vers eventsMonth
     annuler modifs                  redirige vers event avec :          idEvent
-    valider modifs                  redirige vers event avec :          idEvent (post contient : nbPlaces & dateend & description)
+    valider modifs                  redirige vers event avec :          idEvent (post : nbPlaces & dateend & description)
 }
 
 [orga] page deleteEvent {
     déconnexion                     redirige vers login
     accueil                         redirige vers eventsMonth
     annuler suppression             redirige vers event avec :          idEvent
-    valider suppression             redirige vers eventsDay avec :      date (y-m-d)
+    valider suppression             redirige vers eventsDay avec :      date (y-m-d) (post : idEvent)
 }
