@@ -1,11 +1,11 @@
 <?php
 require('Model/mFrontEnd.php');
 
-function CustomerReception($dataPage) {//ok (customerEventMonth?)
-    if ($dataPage['empty']) {
+function cEventsMonth($dataPage) {//ok (customerEventMonth?)
+    if (!isset($dataPage['date'])) {
         $dataPage['date'] = date('Y-m');
     }
-    if ($dataPage['data']) {
+    if (!$dataPage['empty']) {
         changeStatusEvent($dataPage['data']);
     }
 
@@ -39,7 +39,7 @@ password_hash("string") pour hasher un pasword
 
 
 
-function CustomerAllEvents($infoPage) {//customerEventsDay
+function cEventsDay($infoPage) {//customerEventsDay
     $showDate = strftime('%A %e %B %Y', strtotime($dataPage['date']));
 
     $split = explode('-', $dataPage['date']);
@@ -53,7 +53,7 @@ function CustomerAllEvents($infoPage) {//customerEventsDay
 
 
 
-function CustomerEvent($infoPage) {
+function cEvent($infoPage) {
     if ($dataForm['empty']) {
         throw new Exception('Manque d\'information');
     }

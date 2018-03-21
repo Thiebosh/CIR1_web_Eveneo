@@ -1,7 +1,7 @@
 <?php
 require('Model/mRegisterLogin.php');
 
-function Register($dataForm) {
+function register($dataForm) {
     if (!$dataForm['empty']) {
         $dataUser = postDataUser($dataForm);
     }
@@ -12,7 +12,7 @@ function Register($dataForm) {
 
 
 
-function Login($dataForm) {
+function login($dataForm) {
     if (!$dataForm['empty']) {
         $dataUser = getDataUser($dataForm['login']);
 
