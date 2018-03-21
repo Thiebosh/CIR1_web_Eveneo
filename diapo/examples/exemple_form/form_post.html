@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Formulaire get</title>
+</head>
+<body>
+	<?php if (!isset($listHobby)) { ?>
+	<form action="./reponse_formulaire-check.php" method="POST">
+		<fieldset id="identity">
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+        <p>
+            <label for="hobbies">Vos passions</label>
+            <span class="errors">
+				<?php echo (!empty($_SESSION['errors']) && !empty($_SESSION['errors']['hobby']))?$_SESSION['errors']['hobby']:""; ?>
+			</span>
+				
+            <input type="checkbox" name="hobby[]" value="foot">foot<br/>
+            <input type="checkbox" name="hobby[]" value="rugby">rugby<br/>
+            <input type="checkbox" name="hobby[]" value="fifa">fifa<br/>
+            <input type="checkbox" name="hobby[]" value="skyrim">Je suis le dovahkiin<br/>
+            <input type="text" placeholder="Autre" name="hobby[]"/>
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+</form>
+<?php }  else { ?>
+	<ul><?php
+	foreach ($listHobby as $hobby) {
+?>
+		<li><?= htmlspecialchars($hobby) ?></li><?php } ?>
+	</ul>
+<?php } ?>
+</body>
+</html>
