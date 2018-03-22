@@ -1,66 +1,75 @@
+protip : pages contenant un formulaire : s'appellent avec les données du formulaire et se redirigent ensuite vers la page finale
+dans les controleurs à formulaire : verifier l'existence de $_POST['exist']
+
 page register {
-    connexion                       redirige vers login                 (pas de parametre : controleur detruit session actuelle)
-    valider                         redirige vers login                 (post : login & rank & password & passwordCheck)
+    connexion                                                                                   redirige vers login                 (pas de parametre : controleur detruit session actuelle)
+    valider                   traite POST (login, rank, password, passwordCheck)                redirige vers login
 }
 
 page login {
-    inscription                     redirige vers register
-    valider                         redirige vers login                 (post : login & password)
-    [confirm] aller à l'accueil     redirige vers eventsMonth
+    inscription                                                                                 redirige vers register
+    valider                   traite POST (login, password)                                     redirige vers login
+    [confirm] accueil                                                                           redirige vers eventsMonth
 }
 
 ***
 
 page eventsMonth (accueil) {
-    déconnexion                     redirige vers login                 (pas de parametre : controleur detruit session actuelle)
-    mois en cours                   redirige vers eventsMonth           (pas de parametre : mois actuel)
-    changer de mois                 redirige vers eventsMonth avec :    date (y-m)
-    voir liste événements           redirige vers eventsDay avec :      date (y-m-d)
-    voir détail événement           redirige vers event avec :          idEvent
+    déconnexion                                                                                 redirige vers login                 (pas de parametre : controleur detruit session actuelle)
+    mois en cours                                                                               redirige vers eventsMonth           (pas de parametre : mois actuel)
 
-    [orga] créer événement          redirige vers newEvent avec :       date (y-m-d)
+    changer de mois                                                                             redirige vers eventsMonth avec :    date (y-m)
+    voir liste events                                                                           redirige vers eventsDay avec :      date (y-m-d)
+    voir détail event                                                                           redirige vers event avec :          idEvent
+
+    [orga] créer event                                                                          redirige vers newEvent avec :       date (y-m-d)
 }
 
 page eventsDay {
-    déconnexion                     redirige vers login
-    accueil                         redirige vers eventsMonth
-    revenir au mois                 redirige vers eventsMonth avec :    date (y-m)
-    changer de jour                 redirige vers eventsDay avec :      date (y-m)
-    voir détail événement           redirige vers event avec :          idEvent
+    déconnexion                                                                                 redirige vers login
+    accueil                                                                                     redirige vers eventsMonth
 
-    [orga] créer événement          redirige vers newEvent avec :       date (y-m)
+    revenir au mois                                                                             redirige vers eventsMonth avec :    date (y-m)
+    changer de jour                                                                             redirige vers eventsDay avec :      date (y-m)
+    voir détail event                                                                           redirige vers event avec :          idEvent
+
+    [orga] créer event                                                                          redirige vers newEvent avec :       date (y-m)
 }
 
 page event {
-    déconnexion                     redirige vers login
-    accueil                         redirige vers eventsMonth
-    revenir au mois                 redirige vers eventsMonth avec :    date (y-m)
-    revenir au jour                 redirige vers eventsDay avec :      date (y-m-d)
-    changer d'événement             redirige vers event avec :          idEvent (-> trouve l'event juste avant)
+    déconnexion                                                                                 redirige vers login
+    accueil                                                                                     redirige vers eventsMonth
 
-    [client] se (dés)inscrire       redirige vers event avec :          idEvent (post : eventJoined)
+    revenir au mois                                                                             redirige vers eventsMonth avec :    date (y-m)
+    revenir au jour                                                                             redirige vers eventsDay avec :      date (y-m-d)
+    changer d'event                                                                             redirige vers event avec :          idEvent (-> trouve event juste avant)
 
-    [orga] éditer l'événement       redirige vers editEvent avec :      idEvent
-    [orga] supprimer l'événement    redirige vers deleteEvent avec :    idEvent
+    [client] (un)follow       traite POST (eventJoined)                                         redirige vers event avec :          idEvent
+
+    [orga] éditer event                                                                         redirige vers editEvent avec :      idEvent
+    [orga] supprimer event                                                                      redirige vers deleteEvent avec :    idEvent
 }
 
 [orga] page newEvent {
-    déconnexion                     redirige vers login
-    accueil                         redirige vers eventsMonth
-    annuler creation                redirige vers eventsMonth avec :    date (y-m)
-    valider creation                redirige vers event avec :          idEvent (post : name & nbPlace & datestart & dateend & description)
+    déconnexion                                                                                 redirige vers login
+    accueil                                                                                     redirige vers eventsMonth
+
+    annuler creation                                                                            redirige vers eventsMonth avec :    date (y-m)
+    valider creation          traite POST (name, nbPlace, startdate, enddate, description)      redirige vers event avec :          idEvent
 }                            
 
 [orga] page editEvent {
-    déconnexion                     redirige vers login
-    accueil                         redirige vers eventsMonth
-    annuler modifs                  redirige vers event avec :          idEvent
-    valider modifs                  redirige vers event avec :          idEvent (post : nbPlaces & dateend & description)
+    déconnexion                                                                                 redirige vers login
+    accueil                                                                                     redirige vers eventsMonth
+
+    annuler modifs                                                                              redirige vers event avec :          idEvent
+    valider modifs            traite POST (nbPlace, enddate, description)                       redirige vers event avec :          idEvent
 }
 
 [orga] page deleteEvent {
-    déconnexion                     redirige vers login
-    accueil                         redirige vers eventsMonth
-    annuler suppression             redirige vers event avec :          idEvent
-    valider suppression             redirige vers eventsDay avec :      date (y-m-d) (post : idEvent)
+    déconnexion                                                                                 redirige vers login
+    accueil                                                                                     redirige vers eventsMonth
+
+    annuler suppression                                                                         redirige vers event avec :          idEvent
+    valider suppression       traite POST (idEvent)                                             redirige vers eventsDay avec :      date (y-m-d)
 }

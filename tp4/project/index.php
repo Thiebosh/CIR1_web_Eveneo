@@ -33,41 +33,35 @@ try {
 
     if (!isset($_SESSION['rank'])) {
         if ($action == 'register') {
-            register();
-        }
-        else {//action = login
-            if (!isset($_POST['exist'])) {
-                $dataPage['empty'] = true;
+
+            if (isset($_POST['exist'])) {
+                if (isset($_POST['login']) && isset($_POST['rank']) &&
+                isset($_POST['password']) && isset($_POST['passwordVerif'])) {
+                    $dataPage['rank'] = $_POST['rank'];
+                    $dataPage['login'] = $_POST['login'];
+                    $dataPage['password'] = $_POST['password'];
+                    $dataPage['passwordVerif'] = $_POST['passwordVerif'];
+                }
+                else throw new Exception('Données formulaire incomplètes');
             }
-            else {
-                $typeForm = $_POST['exist'];
+            register($dataPage);
 
-                if ($typeForm == 'login') {
-                    if (isset($_POST['login']) && isset($_POST['password'])) {
+        }
+        else if ($action == 'login') {
 
-                        $dataPage['login'] = $_POST['login'];
-                        $dataPage['password'] = $_POST['password'];
-                    }
-                    else {
-                        throw new Exception('Données formulaire incomplètes');
-                    }
+            if (isset($_POST['exist'])) {
+                if (isset($_POST['login']) && isset($_POST['password'])) {
+
+                    $dataPage['login'] = $_POST['login'];
+                    $dataPage['password'] = $_POST['password'];
                 }
-                else {//typeForm = register
-                    if (isset($_POST['login'])  && isset($_POST['password']) &&
-                        isset($_POST['rank'])   && isset($_POST['passwordVerif'])) {
-
-                        $dataPage['rank'] = $_POST['rank'];
-                        $dataPage['login'] = $_POST['login'];
-                        $dataPage['password'] = $_POST['password'];
-                        $dataPage['passwordVerif'] = $_POST['passwordVerif'];
-                    }
-                    else {
-                        throw new Exception('Données formulaire incomplètes');
-                    }
-                }
+                else throw new Exception('Données formulaire incomplètes');
             }
             login($dataPage);
+
         }
+
+        else login();//peut ne rien passer?
     }
 
 
@@ -85,9 +79,7 @@ try {
                 if (isset($_POST['date'])) {
                     $dataPage['date'] = $_POST['date'];
                 }
-                else {
-                    throw new Exception('Données absentes');
-                }
+                else throw new Exception('Evénements du jour : donnée absente');
 
                 cEventsDay($dataPage);
                 break;
@@ -96,20 +88,13 @@ try {
                 if (isset($_POST['idEvent'])) {
                     $dataPage['idEvent'] = $_POST['idEvent'];
                 }
-                else {
-                    throw new Exception('Données absentes');
-                }
+                else throw new Exception('Evénement : Donnée absente');
 
-                if (!isset($_POST['exist'])) {
-                    $dataPage['empty'] = true;
-                }
-                else {
+                if (isset($_POST['exist'])) {
                     if (isset($_POST['eventJoined'])) {
                         $dataPage['eventJoined'] = $_POST['eventJoined'];//true / false
                     }
-                    else {
-                        throw new Exception('Données formulaire incomplètes');
-                    }
+                    else throw new Exception('Evénement : Donnée formulaire absente');
                 }
 
                 cEvent($dataPage);
@@ -125,32 +110,18 @@ try {
     if ($_SESSION['rank'] == 'ORGANIZER') {
         switch ($action) {
             case 'reception':
-                if (isset($_POST['date'])){
+                if (isset($_POST['date'])) {
                     $dataPage['date'] = $_POST['date'];
                 }
 
                 oEventsMonth($dataPage);
                 break;
-
+            
             case 'list':
                 if (isset($_POST['date'])) {
                     $dataPage['date'] = $_POST['date'];
                 }
-                else {
-                    throw new Exception('Données absentes');
-                }
-
-                if (!isset($_POST['exist'])) {
-                    $dataPage['empty'] = true;
-                }
-                else {
-                    if (isset($_POST['deleteId'])) {
-                        $dataPage['deleteId'] = $_POST['deleteId'];
-                    }
-                    else {
-                        throw new Exception('Données formulaire incomplètes');
-                    }
-                }
+                else throw new Exception('Evénements du jour : donnée absente');
 
                 oEventsDay($dataPage);
                 break;
@@ -159,41 +130,13 @@ try {
                 if (isset($_POST['idEvent'])) {
                     $dataPage['idEvent'] = $_POST['idEvent'];
                 }
-                else {
-                    throw new Exception('Données absentes');
-                }
+                else throw new Exception('Evénement : Donnée absente');
 
-                if (!isset($_POST['exist'])) {
-                    $dataPage['empty'] = true;
-                }
-                else {
-                    $typeForm = $_POST['exist'];
-
-                    if ($typeForm == 'new') {
-                        if (isset($_POST['name']) && isset($_POST['nbPlace']) && isset($_POST['description']) &&
-                            isset($_POST['startDate']) && isset($_POST['endDate'])) {
-
-                            $dataPage['name'] = $_POST['name'];
-                            $dataPage['nbPlace'] = $_POST['nbPlace'];
-                            $dataPage['description'] = $_POST['description'];
-                            $dataPage['startDate'] = $_POST['startDate'];
-                            $dataPage['endDate'] = $_POST['endDate'];
-                        }
-                        else {
-                            throw new Exception('Données formulaire incomplètes');
-                        }
+                if (isset($_POST['exist'])) {
+                    if (isset($_POST['eventJoined'])) {
+                        $dataPage['eventJoined'] = $_POST['eventJoined'];//true / false
                     }
-                    else {//typeForm = edit
-                        if (isset($_POST['nbPlaces']) && isset($_POST['description']) && isset($_POST['endDate'])) {
-
-                            $dataPage['nbPlaces'] = $_POST['nbPlaces'];
-                            $dataPage['description'] = $_POST['description'];
-                            $dataPage['endDate'] = $_POST['endDate'];
-                        }
-                        else {
-                            throw new Exception('Données formulaire incomplètes');
-                        }
-                    }
+                    else throw new Exception('Evénement : Donnée formulaire absente');
                 }
 
                 oEvent($dataPage);
@@ -203,33 +146,55 @@ try {
                 if (isset($_POST['date'])) {
                     $dataPage['date'] = $_POST['date'];
                 }
-                else {
-                    throw new Exception('Données absentes');
+                else throw new Exception('Nouvel événement : Donnée absente');//peut autoriser l'absence
+
+                if (isset($_POST['exist'])) {
+                    if (isset($_POST['name']) && isset($_POST['nbPlace']) && isset($_POST['description']) &&
+                    isset($_POST['startDate']) && isset($_POST['endDate'])) {
+                        $dataPage['name'] = $_POST['name'];
+                        $dataPage['nbPlace'] = $_POST['nbPlace'];
+                        $dataPage['description'] = $_POST['description'];
+                        $dataPage['startDate'] = $_POST['startDate'];
+                        $dataPage['endDate'] = $_POST['endDate'];
+                    }
+                    else throw new Exception('Nouvel événement : Données formulaires incomplètes ou absentes');
                 }
 
-                oEventsNew($dataPage);
+                oEventNew($dataPage);
                 break;
 
             case 'edit':
                 if (isset($_POST['id'])){
                     $dataPage['id'] = $_POST['id'];
                 }
-                else {
-                    throw new Exception('Information manquante');
+                else throw new Exception('Modifier l\'événement : Donnée absente');
+
+                if (isset($_POST['exist'])) {
+                    if (isset($_POST['nbPlaces']) && isset($_POST['description']) && isset($_POST['endDate'])) {
+                        $dataPage['nbPlaces'] = $_POST['nbPlaces'];
+                        $dataPage['description'] = $_POST['description'];
+                        $dataPage['endDate'] = $_POST['endDate'];
+                    }
+                    else throw new Exception('Modifier l\'événement : Données formulaires incomplètes ou absentes');
                 }
 
-                oEventsEdit($dataPage);
+                oEventEdit($dataPage);
                 break;
 
             case 'delete':
                 if (isset($_POST['id'])){
                     $dataPage['id'] = $_POST['id'];
                 }
-                else {
-                    throw new Exception('Information manquante');
+                else throw new Exception('Supprimer l\'événement : Donnée absente');
+
+                if (isset($_POST['exist'])) {
+                    if (isset($_POST['deleteId'])) {
+                        $dataPage['deleteId'] = $_POST['deleteId'];
+                    }
+                    else throw new Exception('Supprimer l\'événement : Donnée formulaire absente');
                 }
 
-                oEventsDelete($dataPage);
+                oEventDelete($dataPage);
                 break;
 
             default:
