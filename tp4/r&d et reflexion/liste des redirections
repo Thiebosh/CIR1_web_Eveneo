@@ -1,75 +1,79 @@
 protip : pages contenant un formulaire : s'appellent avec les données du formulaire et se redirigent ensuite vers la page finale
 dans les controleurs à formulaire : verifier l'existence de $_POST['exist']
+accueil : mois en cours (IRL)
 
-page register {
-    connexion                                                                                   redirige vers login                 (pas de parametre : controleur detruit session actuelle)
-    valider                   traite POST (login, rank, password, passwordCheck)                redirige vers login
+***
+
+page login {                reçoit : rien ou (login, password)
+    script login                dirige vers eventsMonth         action : compare données (login, password) et initie session (login, rank, id(?))
+
+    inscription                 dirige vers register
+    confirm connexion           dirige vers script login        avec POST : login, password
 }
 
-page login {
-    inscription                                                                                 redirige vers register
-    valider                   traite POST (login, password)                                     redirige vers login
-    [confirm] accueil                                                                           redirige vers eventsMonth
+page register {             reçoit : rien ou (login, rank, password, passwordCheck)
+    script register             dirige vers login               action : enregistre données (login, rank, password (hashé))
+
+    connexion                   dirige vers login
+    confirm inscription         dirige vers script register     avec POST : login, rank, password, passwordCheck
 }
 
 ***
 
-page eventsMonth (accueil) {
-    déconnexion                                                                                 redirige vers login                 (pas de parametre : controleur detruit session actuelle)
-    mois en cours                                                                               redirige vers eventsMonth           (pas de parametre : mois actuel)
+page eventsMonth (accueil) {reçoit : rien ou date (y-m)
+    script logout               dirige vers login               action : vide session
 
-    changer de mois                                                                             redirige vers eventsMonth avec :    date (y-m)
-    voir liste events                                                                           redirige vers eventsDay avec :      date (y-m-d)
-    voir détail event                                                                           redirige vers event avec :          idEvent
+    retour accueil              dirige vers eventsMonth
+    changer de mois             dirige vers eventsMonth         avec POST : date (y-m)
+    voir liste events           dirige vers eventsDay           avec POST : date (y-m-d)
+    voir détail event           dirige vers event               avec POST : idEvent
 
-    [orga] créer event                                                                          redirige vers newEvent avec :       date (y-m-d)
+    [orga] créer event          dirige vers newEvent            avec POST : date (y-m-d)
 }
 
-page eventsDay {
-    déconnexion                                                                                 redirige vers login
-    accueil                                                                                     redirige vers eventsMonth
+page eventsDay {            reçoit : date (y-m-d)
+    script logout               dirige vers login               action : vide session
 
-    revenir au mois                                                                             redirige vers eventsMonth avec :    date (y-m)
-    changer de jour                                                                             redirige vers eventsDay avec :      date (y-m)
-    voir détail event                                                                           redirige vers event avec :          idEvent
+    retour accueil              dirige vers eventsMonth
+    retour mois de session      dirige vers eventsMonth         avec POST : date (y-m)
+    changer de jour             dirige vers eventsDay           avec POST : date (y-m-d)
+    voir détail event           dirige vers event               avec POST : idEvent
 
-    [orga] créer event                                                                          redirige vers newEvent avec :       date (y-m)
+    [orga] créer event          dirige vers newEvent            avec POST : date (y-m-d)
 }
 
-page event {
-    déconnexion                                                                                 redirige vers login
-    accueil                                                                                     redirige vers eventsMonth
+page event {                reçoit : idEvent et [(eventJoined) ou (idDeleteEvent)]
+    script logout               dirige vers login               action : vide session
+    [client]script joined       dirige vers event               action : modifie données (eventJoined)      nouveau POST : idEvent
+    [orga] script delete        dirige vers eventsMonth         action : supprime données (idDeleteEvent)         nouveau POST : date (y-m)
 
-    revenir au mois                                                                             redirige vers eventsMonth avec :    date (y-m)
-    revenir au jour                                                                             redirige vers eventsDay avec :      date (y-m-d)
-    changer d'event                                                                             redirige vers event avec :          idEvent (-> trouve event juste avant)
+    retour accueil              dirige vers eventsMonth
+    retour mois de session      dirige vers eventsMonth         avec POST : date (y-m)
+    retour jour de session      dirige vers eventsDay           avec POST : date (y-m-d)
+    changer d'event             dirige vers event               avec POST : idEvent
 
-    [client] (un)follow       traite POST (eventJoined)                                         redirige vers event avec :          idEvent
-
-    [orga] éditer event                                                                         redirige vers editEvent avec :      idEvent
-    [orga] supprimer event                                                                      redirige vers deleteEvent avec :    idEvent
+    [client]join/quit           dirige vers script joined       avec POST : idEvent
+    [orga] éditer event         dirige vers editEvent           avec POST : idEvent
+    [orga] supprimer event      dirige vers script delete       avec POST : idDeleteEvent, date (y-m)
 }
 
-[orga] page newEvent {
-    déconnexion                                                                                 redirige vers login
-    accueil                                                                                     redirige vers eventsMonth
+***
 
-    annuler creation                                                                            redirige vers eventsMonth avec :    date (y-m)
-    valider creation          traite POST (name, nbPlace, startdate, enddate, description)      redirige vers event avec :          idEvent
-}                            
+[orga] page editEvent {     reçoit : idEvent et (name(?), nbPlace, enddate, description)
+    script logout               dirige vers login               action : vide session
+    script edit                 dirige vers event               action : modifie données (name(?), nbPlace, enddate, description)    nouveau POST : idEvent
 
-[orga] page editEvent {
-    déconnexion                                                                                 redirige vers login
-    accueil                                                                                     redirige vers eventsMonth
-
-    annuler modifs                                                                              redirige vers event avec :          idEvent
-    valider modifs            traite POST (nbPlace, enddate, description)                       redirige vers event avec :          idEvent
+    retour accueil              dirige vers eventsMonth
+    retour mois de session      dirige vers eventsMonth         avec POST : date (y-m)
+    annuler modifs              dirige vers event               avec POST : idEvent
+    confirm modifs              dirige vers script edit         avec POST : name(?), nbPlace, enddate, description
 }
 
-[orga] page deleteEvent {
-    déconnexion                                                                                 redirige vers login
-    accueil                                                                                     redirige vers eventsMonth
+[orga] page newEvent {      reçoit : date (y-m-d) et (name, nbPlace, startDate, endDate, description)
+    script logout               dirige vers login               action : vide session
+    script new                  dirige vers event               action : enregistre données (name, nbPlace, startdate, enddate, description)    nouveau POST : idEvent
 
-    annuler suppression                                                                         redirige vers event avec :          idEvent
-    valider suppression       traite POST (idEvent)                                             redirige vers eventsDay avec :      date (y-m-d)
+    retour accueil              dirige vers eventsMonth
+    annuler creation            dirige vers eventsMonth         avec POST : date (y-m)
+    confirm creation            dirige vers script new          avec POST : name, nbPlace, startdate, enddate, description
 }

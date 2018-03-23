@@ -1,7 +1,7 @@
 <?php
 require('Model/mFrontEnd.php');
 
-function cEventsMonth($date) {//ok
+function cEventsMonth($date) {
     if (!isset($date)) {
         $date = date('Y-m');
     }
@@ -46,18 +46,18 @@ function cEventsDay($date) {
 
 
 
-function cEvent($dataPage) {
+function cEvent($received) {
     if (isset($_POST['exist'])) {
         //traite les infos recues
-        if ($dataPage['eventJoined']) {
-            $dataPage['newStateJoin'] = false;
+        if ($received['eventJoined']) {
+            $received['newStateJoin'] = false;
         }
         else {
-            $dataPage['newStateJoin'] = true;
+            $received['newStateJoin'] = true;
         }
         
         //verifier que renvoi d'un post est true ou false
-        if (!changeStatusEvent($dataPage)) throw new Exception('Echec d\'enregistrement des données');
+        if (!changeStatusEvent($received)) throw new Exception('Echec d\'enregistrement des données');
 
         //affiche message de confirmation?
     }

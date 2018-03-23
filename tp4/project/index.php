@@ -12,55 +12,62 @@ setlocale(LC_TIME, 'fr_FR');
 date_default_timezone_set('UTC');
 
 try {
-    if (!isset($_GET['action'])) {
-        throw new Exception('Action manquante');
-    }
+    if (!isset($_GET['action'])) throw new Exception('Page cible inconnue');
+
     $action = $_GET['action'];
-    if ($action != 'register'   && $action != 'login'   && $action != 'logout' &&
-        $action != 'reception'  && $action != 'list'    && $action != 'detail' &&
-        $action != 'new'        && $action != 'edit'    && $action != 'delete') {
-        
+    if ($action != 'login' && $action != 'logout' && $action != 'register' &&
+    $action != 'reception' && $action != 'list'   && $action != 'detail' &&
+    $action != 'delete'    && $action != 'new'    && $action != 'edit') {
         throw new Exception('Action indéfinie');
     }
     
-    /* BEGINNING OF TREATMENT  */
-
+    /* BEGINNING */
     if ($action == 'logout') {
         $_SESSION = array();//nettoie la variable
-        login();
+        header('Location: index.php?action=login');//redirige vers la page de connexion
     }
 
 
-    else if (!isset($_SESSION['rank'])) {
-        if ($action == 'register') {
+    if (!isset($_SESSION['rank'])) {
+        switch ($action) {
+            case 'login':
+                if (isset($_POST['script_login'])) {
+                    if (!isset($_POST['login']) || !isset($_POST['password'])) {
+                        throw new Exception('Connexion : Données formulaire incomplètes');
+                    }
 
-            if (isset($_POST['exist'])) {
-                if (isset($_POST['login']) && isset($_POST['rank']) &&
-                isset($_POST['password']) && isset($_POST['passwordVerif'])) {
-                    $dataPage['rank'] = $_POST['rank'];
-                    $dataPage['login'] = $_POST['login'];
-                    $dataPage['password'] = $_POST['password'];
-                    $dataPage['passwordVerif'] = $_POST['passwordVerif'];
+                    $received['login'] = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
+                    $received['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+
+                    if (!$received['login'] || !$received['password']) {
+                        throw new Exception('Connexion : Donnée(s) formulaire invalide(s)');
+                    }
                 }
-                else throw new Exception('Données formulaire incomplètes');
-            }
-            register($dataPage);
 
-        }
-        else if ($action == 'login') {
+                login($received);
+            break;
 
-            if (isset($_POST['exist'])) {
-                if (isset($_POST['login']) && isset($_POST['password'])) {
-                    $dataPage['login'] = $_POST['login'];
-                    $dataPage['password'] = $_POST['password'];
+            case 'register':
+                if (isset($_POST['script_register'])) {
+                    if (!isset($_POST['login']) || !isset($_POST['rank']) ||
+                    !isset($_POST['password']) || !isset($_POST['passwordVerif'])) {
+                        throw new Exception('Inscription : Données formulaire incomplètes');
+                    }
+
+                    $received['rank'] = filter_input(INPUT_POST, 'rank', FILTER_SANITIZE_STRING);
+                    $received['login'] = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
+                    $received['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+                    $received['passwordVerif'] = filter_input(INPUT_POST, 'passwordVerif', FILTER_SANITIZE_STRING);
+
+                    if (!$received['login'] || !$received['rank'] || !$received['login'] ||
+                     !$received['password'] || !$received['passwordVerif']) {
+                        throw new Exception('Inscription : Donnée(s) formulaire invalide(s)');
+                    }
                 }
-                else throw new Exception('Données formulaire incomplètes');
-            }
-            login($dataPage);
 
+                register($received);
+            break;
         }
-
-        else login();//peut ne rien passer?
     }
 
 
@@ -68,40 +75,48 @@ try {
         switch ($action) {
             case 'reception':
                 if (isset($_POST['date'])) {
-                    $date = $_POST['date'];
+                    $date = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
+                    if (!$date) throw new Exception('Accueil : Donnée invalide');
                 }
+
 
                 cEventsMonth($date);
-                break;
+            break;
             
             case 'list':
-                if (isset($_POST['date'])) {
-                    $date = $_POST['date'];
+                if (!isset($_POST['date'])) {
+                    throw new Exception('Evénements du jour : Donnée manquante');
                 }
-                else throw new Exception('Evénements du jour : donnée absente');
+                $date = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
+                if (!$date) throw new Exception('Evénements du jour : Donnée invalide');
+
 
                 cEventsDay($date);
-                break;
+            break;
 
             case 'detail';
-                if (isset($_POST['idEvent'])) {
-                    $dataPage['idEvent'] = $_POST['idEvent'];
+                if (!isset($_POST['idEvent'])) {
+                    throw new Exception('Evénement : Donnée manquante');
                 }
-                else throw new Exception('Evénement : Donnée absente');
+                $received['idEvent'] = filter_input(INPUT_POST, 'idEvent', FILTER_VALIDATE_INT);
+                if (!$received['idEvent']) throw new Exception('Evénement : Donnée invalide');
 
-                if (isset($_POST['exist'])) {
-                    if (isset($_POST['eventJoined'])) {
-                        $dataPage['eventJoined'] = $_POST['eventJoined'];//true / false
+
+                if (isset($_POST['script_joined'])) {
+                    if (!isset($_POST['eventJoined'])) {
+                        throw new Exception('Evénement : Donnée formulaire absente');
                     }
-                    else throw new Exception('Evénement : Donnée formulaire absente');
+                    $received['eventJoined'] = filter_input(INPUT_POST, 'eventJoined', FILTER_VALIDATE_BOOLEAN);
+                    if (!$received['eventJoined']) throw new Exception('Evénement : Donnée formulaire invalide');
                 }
 
-                cEvent($dataPage);
-                break;
+
+                cEvent($received);
+            break;
 
             default:
                 cEventsMonth();
-                break;
+            break;
         }
     }
 
@@ -110,89 +125,112 @@ try {
         switch ($action) {
             case 'reception':
                 if (isset($_POST['date'])) {
-                    $date = $_POST['date'];
+                    $date = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
+                    if (!$date) throw new Exception('Accueil : Donnée invalide');
                 }
 
-                oEventsMonth($date);
-                break;
+
+                cEventsMonth($date);
+            break;
             
             case 'list':
-                if (isset($_POST['date'])) {
-                    $date = $_POST['date'];
+                if (!isset($_POST['date'])) {
+                    throw new Exception('Evénements du jour : Donnée manquante');
                 }
-                else throw new Exception('Evénements du jour : donnée absente');
+                $date = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
+                if (!$date) throw new Exception('Evénements du jour : Donnée invalide');
 
-                oEventsDay($date);
-                break;
+
+                cEventsDay($date);
+            break;
 
             case 'detail';
-                if (isset($_POST['idEvent'])) {
-                    $idEvent = $_POST['idEvent'];
+                if (!isset($_POST['idEvent'])) {
+                    throw new Exception('Evénement : Donnée manquante');
                 }
-                else throw new Exception('Evénement : Donnée absente');
+                $received['idEvent'] = filter_input(INPUT_POST, 'idEvent', FILTER_VALIDATE_INT);
+                if (!$received['idEvent']) throw new Exception('Evénement : Donnée invalide');
 
-                oEvent($idEvent);
-                break;
 
-            case 'new':
-                if (isset($_POST['date'])) {
-                    $dataPage['date'] = $_POST['date'];
-                }
-                else throw new Exception('Nouvel événement : Donnée absente');//peut autoriser l'absence
-
-                if (isset($_POST['exist'])) {
-                    if (isset($_POST['name']) && isset($_POST['nbPlace']) && isset($_POST['description']) &&
-                    isset($_POST['startDate']) && isset($_POST['endDate'])) {
-                        $dataPage['name'] = $_POST['name'];
-                        $dataPage['nbPlace'] = $_POST['nbPlace'];
-                        $dataPage['description'] = $_POST['description'];
-                        $dataPage['startDate'] = $_POST['startDate'];
-                        $dataPage['endDate'] = $_POST['endDate'];
+                if (isset($_POST['script_delete'])) {
+                    if (!isset($_POST['idDeleteEvent'])) {
+                        throw new Exception('Evénement : Donnée formulaire absente');
                     }
-                    else throw new Exception('Nouvel événement : Données formulaires incomplètes ou absentes');
+                    $received['idDeleteEvent'] = filter_input(INPUT_POST, 'idDeleteEvent', FILTER_VALIDATE_INT);
+                    if (!$received['idDeleteEvent']) throw new Exception('Evénement : Donnée formulaire invalide');
                 }
 
-                oEventNew($dataPage);
-                break;
+
+                cEvent($received);
+            break;
 
             case 'edit':
-                if (isset($_POST['id'])){
-                    $dataPage['id'] = $_POST['id'];
+                if (!isset($_POST['idEvent'])) {
+                    throw new Exception('Modification : Donnée manquante');
                 }
-                else throw new Exception('Modifier l\'événement : Donnée absente');
+                $received['idEvent'] = filter_input(INPUT_POST, 'idEvent', FILTER_VALIDATE_INT);
+                if (!$received['idEvent']) throw new Exception('Modification : Donnée invalide');
 
-                if (isset($_POST['exist'])) {
-                    if (isset($_POST['nbPlaces']) && isset($_POST['description']) && isset($_POST['endDate'])) {
-                        $dataPage['nbPlaces'] = $_POST['nbPlaces'];
-                        $dataPage['description'] = $_POST['description'];
-                        $dataPage['endDate'] = $_POST['endDate'];
+
+                if (isset($_POST['script_edit'])) {
+                    if (!isset($_POST['nbPlaces']) || !isset($_POST['description']) || !isset($_POST['endDate'])) {
+                        throw new Exception('Modification : Donnée(s) formulaire absente(s)');
                     }
-                    else throw new Exception('Modifier l\'événement : Données formulaires incomplètes ou absentes');
+
+                    $received['nbPlaces'] = filter_input(INPUT_POST, 'nbPlaces', FILTER_VALIDATE_INT);
+                    $received['endDate'] = filter_input(INPUT_POST, 'endDate', FILTER_SANITIZE_STRING);
+                    $received['description'] = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+
+                    if (!$received['nbPlaces'] || !$received['endDate'] || !$received['description']) {
+                        throw new Exception('Modification : Donnée(s) formulaire invalide(s)');
+                    }
                 }
 
-                oEventEdit($dataPage);
-                break;
 
-            case 'delete'://juste un controleur et modele
-                if (isset($_POST['idEvent'])){
-                    $idEvent = $_POST['idEvent'];
+                oEventEdit($received);
+            break;
+
+            case 'new':
+                if (!isset($_POST['date'])) {
+                    throw new Exception('Nouveau : Donnée manquante');
                 }
-                else throw new Exception('Supprimer l\'événement : Donnée absente');
+                $received['date'] = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
+                if (!$received['date']) throw new Exception('Nouveau : Donnée invalide');
 
-                oEventDelete($idEvent);
-                break;
+
+                if (isset($_POST['script_new'])) {
+                    if (!isset($_POST['name']) || !isset($_POST['nbPlace']) || !isset($_POST['description']) ||
+                    !isset($_POST['startDate']) || !isset($_POST['endDate'])) {
+                        throw new Exception('Nouveau : Donnée(s) formulaire absente(s)');
+                    }
+
+                    $received['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+                    $received['nbPlaces'] = filter_input(INPUT_POST, 'nbPlaces', FILTER_VALIDATE_INT);
+                    $received['startDate'] = filter_input(INPUT_POST, 'startDate', FILTER_SANITIZE_STRING);
+                    $received['endDate'] = filter_input(INPUT_POST, 'endDate', FILTER_SANITIZE_STRING);
+                    $received['description'] = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+
+                    if (!$received['name'] || !$received['nbPlaces'] || !$received['description'] ||
+                    !$received['startDate']|| !$received['endDate']) {
+                        throw new Exception('Nouveau : Donnée(s) formulaire invalide(s)');
+                    }
+                }
+
+
+                oEventNew($received);
+            break;
 
             default:
                 oEventsMonth();
-                break;
+            break;
         }
     }
 
 
-    else throw new Exception('Rank : problème de définition');
+    else throw new Exception('Rang : problème de définition');
 }
 
-catch(Exception $error) {//apply changes
+catch(Exception $error) {//rediriger vers la page en affichant par dessus un bloc erreur, qu'on peut "fermer" en appuyant sur un bouton
     $errorMessage = $error->getMessage();
     $redirection['text'] = 'l\'accueil';
     $redirection['link'] = 'reception';
@@ -203,6 +241,3 @@ catch(Exception $error) {//apply changes
     
     require('View/vError.php');
 }
-
-//htmlspecialchars() à chaque affichage, et affichage seulement
-//$formPassword = (string)filter_input(INPUT_POST, 'password');//prend le champ password du formulaire

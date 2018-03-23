@@ -1,47 +1,45 @@
 <?php
 require('Model/mRegisterLogin.php');
 
-function register($dataPage) {
-    if (!isset($_POST['exist'])) {
-        //affiche formulaire
-    }
-    else {
+function login($received) {
+    if (isset($received)) {//fonctionne? gère script_login
         //traite les infos recues
-        if ($dataPage['password'] != $dataPage['passwordVerif']) {
-            //infos incorrectes
+        $dataUser = getDataUser($received['login']);
+        if (!$dataUser) throw new Exception('Connexion : Echec de récupération des données');
+
+        else if (!password_verify($received['password'], $dataUser['password'])) {//compare les hash (utile de verifier retours de dataUser?)
+            throw new Exception('Connexion : Identifiant ou mot de passe erronné');
         }
+
         else {
-            //enregistre infos
-            $dataPage['password'] = password_hash($dataPage['password']);
-            
-            //verifier que renvoi d'un post est true ou false
-            if (!postDataUser($dataPage)) throw new Exception('Echec d\'enregistrement des données');
+            $_SESSION['login'] = $dataUser['login'];
+            $_SESSION['rank'] = $dataUser['rank'];
+            $_SESSION['id'] = $dataUser['id'];
+            header('Location: index.php?action=reception');//redirige vers l'accueil
         }
     }
 
-    require('View/RegisterLogin/vRegister.php');
+    //finir de préparer variables
+
+    require('View/RegisterLogin/vLogin.php');
 }
 
 
 
-function login($dataPage) {
-    if (!isset($_POST['exist'])) {
-        //affiche formulaire
-    }
-    else {
+function register($received) {
+    if (isset($received)) {//fonctionne? gère script_register
         //traite les infos recues
-        $dataUser = getDataUser($dataPage['login']);
-        if (!$dataUser) throw new Exception('Echec de récupération des données');
+        if ($received['password'] != $received['passwordVerif']) {
+            throw new Exception('Inscription : les mots de passe ne sont pas identiques');
+        }
 
-        if (password_verify($dataPage['password'], $dataUser['password'])) {//compare les hash (utile de verifier retours de dataUser?)
-            $_SESSION['login'] = $dataUser['login'];
-            $_SESSION['rank'] = $dataUser['rank'];
-            $_SESSION['id'] = $dataUser['id'];
-        }
-        else {
-            $message = 'identifiant ou mot de passe erronné';
-        }
+        $received['password'] = password_hash($received['password']);
+        if (!postDataUser($received)) throw new Exception('Inscription : Echec d\'enregistrement des données');//verifier que renvoi d'un post est true ou false
+
+        header('Location: index.php?action=login');//redirige vers la page de connexion
     }
 
-    require('View/RegisterLogin/vLogin.php');
+    //finir de préparer variables
+
+    require('View/RegisterLogin/vRegister.php');
 }

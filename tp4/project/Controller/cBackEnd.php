@@ -50,18 +50,18 @@ function oEvent($idEvent) {
 
 
 
-function oEventNew($dataPage) {
+function oEventNew($received) {
     if (!isset($_POST['exist'])) {
         //affiche formulaire
     }
     else {
         //traite les infos recues
-        if ($dataPage['startDate'] != $dataPage['endDate']) {//appliquer checkdate et checktime sur les dates, etc...
+        if ($received['startDate'] != $received['endDate']) {//appliquer checkdate et checktime sur les dates, etc...
             //infos incorrectes
         }
         else {
             //enregistre infos (verifier que renvoi d'un post est true ou false)
-            if (!postDataEvent($dataPage)) throw new Exception('Echec d\'enregistrement des données');
+            if (!postDataEvent($received)) throw new Exception('Echec d\'enregistrement des données');
         }
     }
 
@@ -72,18 +72,18 @@ function oEventNew($dataPage) {
 
 
 
-function oEventEdit($dataPage) {
+function oEventEdit($received) {
     if (!isset($_POST['exist'])) {
         //affiche formulaire
     }
     else {
         //traite les infos recues
-        if ($dataPage['startDate'] != $dataPage['endDate']) {//appliquer checkdate et checktime sur les dates, etc...
+        if ($received['startDate'] != $received['endDate']) {//appliquer checkdate et checktime sur les dates, etc...
             //infos incorrectes
         }
         else {
             //enregistre infos (verifier que renvoi d'un post est true ou false)
-            if (!updateEvent($dataPage)) throw new Exception('Echec d\'enregistrement des données');
+            if (!updateEvent($received)) throw new Exception('Echec d\'enregistrement des données');
         }
     }
 
@@ -99,6 +99,5 @@ function oEventDelete($idEvent) {
     if (!deleteEvent($idEvent)) throw new Exception('Echec d\'enregistrement des données');
 
     //redirige vers eventsDay
-
-    require('View/BackEnd/vEditEvent.php');//?
+    header('Location: index.php?action=reception');
 }
