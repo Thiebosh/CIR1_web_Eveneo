@@ -2,8 +2,8 @@
 session_start();
 
 require('Controller/cRegisterLogin.php');
-require('Controller/frontEnd.php');
-require('Controller/backEnd.php');
+require('Controller/cFrontEnd.php');
+require('Controller/cBackEnd.php');
 
 define('MAX_LIST', 5);
 
@@ -31,7 +31,7 @@ try {
     }
 
 
-    if (!isset($_SESSION['rank'])) {
+    else if (!isset($_SESSION['rank'])) {
         if ($action == 'register') {
 
             if (isset($_POST['exist'])) {
@@ -51,7 +51,6 @@ try {
 
             if (isset($_POST['exist'])) {
                 if (isset($_POST['login']) && isset($_POST['password'])) {
-
                     $dataPage['login'] = $_POST['login'];
                     $dataPage['password'] = $_POST['password'];
                 }
@@ -65,23 +64,23 @@ try {
     }
 
 
-    if ($_SESSION['rank'] == 'CUSTOMER') {
+    else if ($_SESSION['rank'] == 'CUSTOMER') {
         switch ($action) {
             case 'reception':
                 if (isset($_POST['date'])) {
-                    $dataPage['date'] = $_POST['date'];
+                    $date = $_POST['date'];
                 }
 
-                cEventsMonth($dataPage);
+                cEventsMonth($date);
                 break;
             
             case 'list':
                 if (isset($_POST['date'])) {
-                    $dataPage['date'] = $_POST['date'];
+                    $date = $_POST['date'];
                 }
                 else throw new Exception('Evénements du jour : donnée absente');
 
-                cEventsDay($dataPage);
+                cEventsDay($date);
                 break;
 
             case 'detail';
@@ -107,7 +106,7 @@ try {
     }
 
 
-    if ($_SESSION['rank'] == 'ORGANIZER') {
+    else if ($_SESSION['rank'] == 'ORGANIZER') {
         switch ($action) {
             case 'reception':
                 if (isset($_POST['date'])) {
@@ -202,6 +201,9 @@ try {
                 break;
         }
     }
+
+
+    else throw new Exception('Rank : problème de définition');
 }
 
 catch(Exception $error) {//apply changes
