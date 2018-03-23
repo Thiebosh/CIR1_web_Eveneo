@@ -54,8 +54,12 @@ function cEvent($dataPage) {
         }
         else {
             $dataPage['newStateJoin'] = true;
-        }//verifier que renvoi d'un post est true ou false
+        }
+        
+        //verifier que renvoi d'un post est true ou false
         if (!changeStatusEvent($dataPage)) throw new Exception('Echec d\'enregistrement des données');
+
+        //affiche message de confirmation?
     }
 
     $dataEvent = getEvent($infoPage['idEvent']);

@@ -1,16 +1,16 @@
 <?php
 require('model/mBackEnd.php');
 
-function oEventsMonth($infoPage) {//ok
-    if ($dataPage['empty']) {
-        $dataPage['date'] = date('Y-m');
+function oEventsMonth($date) {//ok
+    if (!isset($date)) {
+        $date = date('Y-m');
     }
 
-    $timeStamp = strtotime($dataPage['date']);
+    $timeStamp = strtotime($date);
     $showDate = strftime('%B %Y', $timeStamp);
     $nbDayMonth = date('t', $timeStamp);
 
-    $split = explode('-', $dataPage['date']);
+    $split = explode('-', $date);
     $lastMonth = date('Y-m', gmmktime(0, 0, 0, $split[1] - 1, 0, $split[0]));
     $nextMonth = date('Y-m', gmmktime(0, 0, 0, $split[1] + 1, 0, $split[0]));
 
@@ -20,70 +20,85 @@ function oEventsMonth($infoPage) {//ok
     $dayEndMonth = date('N', gmmktime(0, 0, 0, $split[1], $nbDay, $split[0]));//pour finir le tableau d affichage
 
     for ($day = 1; $day <= $nbDayMonth; $day++) {
-        $eventsMonth[] = getAllEvents($dataPage);//si vide, listEventsMonth[] vaudra false ->verifier requete
+        $eventsMonth[] = getEventsDay($date, true);//si vide, listEventsMonth[] vaudra false ->verifier requete
     }
 
     require('View/BackEnd/vReception.php');
-
-    $listEventsMonth->closeCursor();//bien placé?
 }
 
 
 
-function oEventsDay($infoPage) {
-    /* code client
-    $showDate = strftime('%A %e %B %Y', strtotime($dataPage['date']));
+function oEventsDay($date) {
+    $showDate = strftime('%A %e %B %Y', strtotime($date));
 
-    $split = explode('-', $dataPage['date']);
+    $split = explode('-', $date);
     $lastDay = date('Y-m-d', gmmktime(0, 0, 0, $split[1], $split[2] - 1, $split[0]));
     $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $split[1], $split[2] + 1, $split[0]));
 
-    $eventsDay = getEventsDay($dataPage, false);
-
-    require('View/FrontEnd/vAllEvents.php');
-    $eventsDay->closeCursor();//bien placé?
-    */
-
-    
-    if ($infoPage['addEvent']) {//si vrai
-        postEvent($infoPage['infoEvent']);
-    }
-    else if ($infoPage['removeEvent']) {//si vrai
-        deleteEvent($infoPage['idEvent']);
-    }
-
-    $listEvents = getAllEvents($infoPage);
+    $eventsDay = getEventsDay($date, false);
 
     require('View/BackEnd/vAllEvents.php');
 }
 
 
 
-function oEvent($infoPage) {
-    $dataEvent = getEvent($infoPage['idEvent']);
+function oEvent($idEvent) {
+    $dataEvent = getEvent($idEvent);
     
     require('View/BackEnd/vEvent.php');
 }
 
 
 
-function oEventNew($infoPage) {
+function oEventNew($dataPage) {
+    if (!isset($_POST['exist'])) {
+        //affiche formulaire
+    }
+    else {
+        //traite les infos recues
+        if ($dataPage['startDate'] != $dataPage['endDate']) {//appliquer checkdate et checktime sur les dates, etc...
+            //infos incorrectes
+        }
+        else {
+            //enregistre infos (verifier que renvoi d'un post est true ou false)
+            if (!postDataEvent($dataPage)) throw new Exception('Echec d\'enregistrement des données');
+        }
+    }
+
+    //redirige vers
+
     require('View/BackEnd/vNewEvent.php');
 }
 
 
 
-function oEventEdit($infoPage) {
-    if (isset($infoPage['modify'])) {
-        updateEvent($infoPage);
+function oEventEdit($dataPage) {
+    if (!isset($_POST['exist'])) {
+        //affiche formulaire
     }
-    $dataEvent = getEvent($infoPage['idEvent']);
+    else {
+        //traite les infos recues
+        if ($dataPage['startDate'] != $dataPage['endDate']) {//appliquer checkdate et checktime sur les dates, etc...
+            //infos incorrectes
+        }
+        else {
+            //enregistre infos (verifier que renvoi d'un post est true ou false)
+            if (!updateEvent($dataPage)) throw new Exception('Echec d\'enregistrement des données');
+        }
+    }
+
+    //redirige vers
 
     require('View/BackEnd/vEditEvent.php');
 }
 
 
 
-function oEventDelete($dataForm) {
+function oEventDelete($idEvent) {
+    //verifier le retours de deleteEvent
+    if (!deleteEvent($idEvent)) throw new Exception('Echec d\'enregistrement des données');
 
+    //redirige vers eventsDay
+
+    require('View/BackEnd/vEditEvent.php');//?
 }

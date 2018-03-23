@@ -110,35 +110,28 @@ try {
         switch ($action) {
             case 'reception':
                 if (isset($_POST['date'])) {
-                    $dataPage['date'] = $_POST['date'];
+                    $date = $_POST['date'];
                 }
 
-                oEventsMonth($dataPage);
+                oEventsMonth($date);
                 break;
             
             case 'list':
                 if (isset($_POST['date'])) {
-                    $dataPage['date'] = $_POST['date'];
+                    $date = $_POST['date'];
                 }
                 else throw new Exception('Evénements du jour : donnée absente');
 
-                oEventsDay($dataPage);
+                oEventsDay($date);
                 break;
 
             case 'detail';
                 if (isset($_POST['idEvent'])) {
-                    $dataPage['idEvent'] = $_POST['idEvent'];
+                    $idEvent = $_POST['idEvent'];
                 }
                 else throw new Exception('Evénement : Donnée absente');
 
-                if (isset($_POST['exist'])) {
-                    if (isset($_POST['eventJoined'])) {
-                        $dataPage['eventJoined'] = $_POST['eventJoined'];//true / false
-                    }
-                    else throw new Exception('Evénement : Donnée formulaire absente');
-                }
-
-                oEvent($dataPage);
+                oEvent($idEvent);
                 break;
 
             case 'new':
@@ -180,20 +173,13 @@ try {
                 oEventEdit($dataPage);
                 break;
 
-            case 'delete':
-                if (isset($_POST['id'])){
-                    $dataPage['id'] = $_POST['id'];
+            case 'delete'://juste un controleur et modele
+                if (isset($_POST['idEvent'])){
+                    $idEvent = $_POST['idEvent'];
                 }
                 else throw new Exception('Supprimer l\'événement : Donnée absente');
 
-                if (isset($_POST['exist'])) {
-                    if (isset($_POST['deleteId'])) {
-                        $dataPage['deleteId'] = $_POST['deleteId'];
-                    }
-                    else throw new Exception('Supprimer l\'événement : Donnée formulaire absente');
-                }
-
-                oEventDelete($dataPage);
+                oEventDelete($idEvent);
                 break;
 
             default:
