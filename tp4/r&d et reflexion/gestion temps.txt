@@ -1,3 +1,13 @@
+
+*****************EXEMPLE UTILISE******************
+$format = new intldateformatter('fr_FR', intldateformatter::LONG, intldateformatter::NONE, "Europe/Paris", intldateformatter::GREGORIAN);
+    ->mettre la date a la place du none. sinon, prend date actu
+$date = new datetime();
+$fomat->format($date);
+echo $format->format($date);
+
+
+********************RECHERCHES********************
 utilisation de tout dans projet :
 extraction de année et mois, calcul du nombre de jour du mois, extraction de jour et events du jour, pour gérer les affichages de l'accueil et de la liste des événements d'une journée {
     SELECT EXTRACT(YEAR FROM datestart); => $_SESSION['year'];

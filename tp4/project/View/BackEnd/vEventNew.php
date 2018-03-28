@@ -1,14 +1,14 @@
 <?php 
 $pageName = 'Création';
 
+$legendContent = 'Informations du nouvel événement';
+
 
 ob_start(); ?>
     <li>
-        <form method="post" action="index.php">
-            <input type="submit" value="Accueil">
-        </form>
+        <a href="index.php?action=reception"><button>Accueil</button></a>
     </li>
-    <!--envoie date
+    <!--si recoit date
     <li>
         <form method="post" action="index.php?action=allEvents&amp;date=< ?= $data['id']">
             <input type="submit" value="Liste des événements de < ?= htmlspecialchars($data['day']) ?>">
@@ -16,9 +16,6 @@ ob_start(); ?>
     </li>
     -->
 <?php $menuContent = ob_get_clean();
-
-
-$legendContent = 'Informations du nouvel événement';
 
 
 ob_start();

@@ -1,50 +1,35 @@
 <?php 
 $pageName = 'Détails';
 
-
-ob_start(); ?>
-    <li>
-        <form method="post" action="index.php">
-            <input type="submit" value="Accueil">
-        </form>
-    </li>
-<?php $menuContent = ob_get_clean();
-
-
 $legendContent = 'Détails de l\'événement';
 
 
 ob_start(); ?>
-    <form method="post" action="index.php?action=lastEvent">
-        <input type="submit" value="Evénement précédent">
-    </form>
+    <li>
+        <a href="index.php?action=reception"><button>Accueil</button></a>
+    </li>
+<?php $menuContent = ob_get_clean();
 
-    <?= $data['title'] ?>
 
-    <form method="post" action="index.php?action=nextEvent">
-        <input type="submit" value="Evénement suivant">
-    </form>
+ob_start(); ?>
+    <a href="index.php?action=lastEvent"><button>Evénement précédent</button></a>
+
+    <?= htmlspecialchars($data['title']) ?>
+
+    <a href="index.php?action=nextEvent"><button>Evénement suivant</button></a>
 <?php $asideContent = ob_get_clean();
 
 
 ob_start(); ?>
-initialisation1 : setlocale(LC_TIME, 'fr_FR');
-initialisation2 : date_default_timezone_set('UTC');
-    <h3>
-        <?= $dataEvent['nameConf'] ?>
-    </h3>
+    <h3><?= $dataEvent['nameConf'] ?></h3>
     Organisateur : <?= $dataEvent['organizer'] ?>
     durée : <?= $dureeEvent ?>
-    de <?= strftime('%A %e %B %Y, %Hheures %i', strtotime($event['datestart'])) ?> à <?= strftime('%A %e %B %Y, %Hheures %i', strtotime($event['dateend'])) ?>
-    <?= $dataEvent['place'] ?>
-    <?= $dataEvent['describeConf'] ?>
+    de <?= htmlspecialchars(strftime('%A %e %B %Y, %Hheures %i', strtotime($event['datestart']))) ?> à <?= htmlspecialchars(strftime('%A %e %B %Y, %Hheures %i', strtotime($event['dateend']))) ?>
+    <?= htmlspecialchars($dataEvent['place']) ?>
+    <?= htmlspecialchars($dataEvent['describeConf']) ?>
 
-    <form method="post" action="index.php?action=modifyEvents&amp;id=<?= $data['id'] ?>"><!--valide?-->
-        <input type="submit" value="Modifier l'événement">
-    </form>
-    <form method="post" action="index.php?action=deleteEvents&amp;id=<?= $data['id'] ?>"><!--valide?-->
-        <input type="submit" value="Supprimer l'événement">
-    </form>
+    <a href="index.php?action=modifyEvents&amp;id=<?= htmlspecialchars($data['id']) ?>"><button>Modifier l'événement</button></a>
+    <a href="index.php?action=deleteEvents&amp;id=<?= htmlspecialchars($data['id']) ?>"><button>Supprimer l'événement</button></a>
 <?php $articleContent = ob_get_clean();
 
 require('View/template.php');

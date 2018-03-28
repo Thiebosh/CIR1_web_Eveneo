@@ -1,56 +1,48 @@
 <?php 
 $pageName = 'Détails';
 
-
-ob_start(); ?>
-    <li>
-        <form method="post" action="index.php">
-            <input type="submit" value="Accueil">
-        </form>
-    </li>
-<?php $menuContent = ob_get_clean();
-
-
 $legendContent = 'Détails de l\'événement';
 
 
 ob_start(); ?>
-    <form method="post" action="index.php?action=lastEvent">
-        <input type="submit" value="Evénement précédent">
-    </form>
+    <li>
+        <a href="index.php?action=reception"><button>Accueil</button></a>
+    </li>
+<?php $menuContent = ob_get_clean();
 
-    <?= $data['title'] ?>
 
-    <form method="post" action="index.php?action=nextEvent">
-        <input type="submit" value="Evénement suivant">
-    </form>
+ob_start(); ?>
+    <a href="index.php?action=lastEvent"><button>Evénement précédent</button></a>
+
+    <?= htmlspecialchars($data['title']) ?>
+
+    <a href="index.php?action=nextEvent"><button>Evénement suivant</button></a>
 <?php $asideContent = ob_get_clean();
 
 
 ob_start(); ?>
-initialisation1 : setlocale(LC_TIME, 'fr_FR');
-initialisation2 : date_default_timezone_set('UTC');
     <h3>
-        <?= $dataEvent['nameConf'] ?>
+        <?= htmlspecialchars($dataEvent['nameConf']) ?>
     </h3>
-    Organisateur : <?= $dataEvent['organizer'] ?>
-    durée : <?= $dureeEvent ?>
-    de <?= strftime('%A %e %B %Y, %Hheures %i', strtotime($event['datestart'])) ?> à <?= strftime('%A %e %B %Y, %Hheures %i', strtotime($event['dateend'])) ?>
-    <?= $dataEvent['place'] ?>
-    <?= $dataEvent['describeConf'] ?>
+    Organisateur : <?= htmlspecialchars($dataEvent['organizer']) ?>
+    durée : <?= htmlspecialchars($dureeEvent) ?>
+    de <?= htmlspecialchars($dateStart) ?> à <?= htmlspecialchars($dateEnd) ?>
+    <?= htmlspecialchars($dataEvent['place']) ?>
+    <?= htmlspecialchars($dataEvent['describeConf']) ?>
 
-    <form method="post" action="index.php?action=statusEvents&amp;id=<?= $data['id'] ?>">
+
+    <a href="index.php?action=statusEvents&amp;id=<?= htmlspecialchars($data['id']) ?>"><button>
         <?php
         if (!$current) {
-            echo '<input type="submit" value="S\'inscrire à l\'événement">';
+            echo 'S\'inscrire à l\'événement';
         }
         else {
-            echo '<input type="submit" value="Se désinscrire de l\'événement">';
+            echo 'Se désinscrire de l\'événement';
         }
         ?>
-    </form>
+    </button></a>
 <?php $articleContent = ob_get_clean();
 
 require('View/template.php');
 
-//<time><?= $billet['date'] ? ></time>
+//<time><?= $billet['date'] ? ></time>//a voir

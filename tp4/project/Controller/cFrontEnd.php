@@ -2,7 +2,7 @@
 require('Model/mFrontEnd.php');
 
 function cEventsMonth($date) {
-    if (!isset($date)) {
+    if (empty($date)) {
         $date = date('Y-m');
     }
 
@@ -10,14 +10,14 @@ function cEventsMonth($date) {
     $showDate = strftime('%B %Y', $timeStamp);
     $nbDayMonth = date('t', $timeStamp);
 
-    $split = explode('-', $date);
-    $lastMonth = date('Y-m', gmmktime(0, 0, 0, $split[1] - 1, 0, $split[0]));
-    $nextMonth = date('Y-m', gmmktime(0, 0, 0, $split[1] + 1, 0, $split[0]));
+    $dateSplit = explode('-', $date);
+    $lastMonth = date('Y-m', gmmktime(0, 0, 0, $dateSplit[1] - 1, 0, $dateSplit[0]));
+    $nextMonth = date('Y-m', gmmktime(0, 0, 0, $dateSplit[1] + 1, 0, $dateSplit[0]));
 
     $dayName['ang'] = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
     $dayName['fr'] = array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
-    $dayStartMonth = date('D', gmmktime(0, 0, 0, $split[1], 1, $split[0]));//pour commencer le tableau d affichage
-    $dayEndMonth = date('N', gmmktime(0, 0, 0, $split[1], $nbDay, $split[0]));//pour finir le tableau d affichage
+    $dayStartMonth = date('D', gmmktime(0, 0, 0, $dateSplit[1], 1, $dateSplit[0]));//pour commencer le tableau d affichage
+    $dayEndMonth = date('N', gmmktime(0, 0, 0, $dateSplit[1], $nbDay, $dateSplit[0]));//pour finir le tableau d affichage
 
     for ($day = 1; $day <= $nbDayMonth; $day++) {
         $eventsMonth[] = getEventsDay($date, true);//si vide, listEventsMonth[] vaudra false ->verifier requete
@@ -35,9 +35,9 @@ fetchall ferme le curseur tout seul
 function cEventsDay($date) {
     $showDate = strftime('%A %e %B %Y', strtotime($date));
 
-    $split = explode('-', $date);
-    $lastDay = date('Y-m-d', gmmktime(0, 0, 0, $split[1], $split[2] - 1, $split[0]));
-    $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $split[1], $split[2] + 1, $split[0]));
+    $dateSplit = explode('-', $date);
+    $lastDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] - 1, $dateSplit[0]));
+    $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] + 1, $dateSplit[0]));
 
     $eventsDay = getEventsDay($date, false);
     
@@ -47,22 +47,21 @@ function cEventsDay($date) {
 
 
 function cEvent($received) {
-    if (isset($_POST['exist'])) {
+    if (isset($_POST['exist'])) {//active script_joined
         //traite les infos recues
-        if ($received['eventJoined']) {
-            $received['newStateJoin'] = false;
-        }
-        else {
-            $received['newStateJoin'] = true;
-        }
+        $received['eventJoined'] = !$received['eventJoined'];//change l etat de eventJoined
         
         //verifier que renvoi d'un post est true ou false
-        if (!changeStatusEvent($received)) throw new Exception('Echec d\'enregistrement des données');
+        if (!changeStatusEvent($received)) throw new Exception('Echec d\'enregistrement des données');//applique changement d etat
 
-        //affiche message de confirmation?
+        header('Location: index.php?action=detail&id='.'$event[\'id\']');//recharge la page
+        exit();
     }
 
     $dataEvent = getEvent($infoPage['idEvent']);
+    
+    $dateStart = strftime('%A %e %B %Y, %Hheures %i', strtotime($event['datestart']));
+    $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($event['dateend']));
     
     require('View/FrontEnd/vEvent.php');
 }

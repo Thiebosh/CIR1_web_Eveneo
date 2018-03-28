@@ -1,21 +1,21 @@
 <?php 
 $pageName = 'Accueil';
 
-$menuContent = '';
-
 $legendContent = 'Evènements du mois';
+
+$menuContent = '';
 
 
 ob_start(); ?>
     <form method="post" action="index.php?action=reception">
-        <input type="hidden" name="date" value=<?= $lastMonth ?>>
+        <input type="hidden" name="date" value=<?= htmlspecialchars($lastMonth) ?>>
         <input type="submit" value="Mois précédent">
     </form>
 
     <?= $showDate ?>
 
     <form method="post" action="index.php?action=reception">
-        <input type="hidden" name="date" value=<?= $nextMonth ?>>
+        <input type="hidden" name="date" value=<?= htmlspecialchars($nextMonth) ?>>
         <input type="submit" value="Mois suivant">
     </form>
 <?php $asideContent = ob_get_clean();
@@ -51,8 +51,8 @@ ob_start(); ?>
                 ?>
                     <td>
                         <form method="post" action="index.php?action=new">
-                            <input type="hidden" name="date" value=<?= date('Y-m-d', gmmktime(0, 0, 0, $split[1], $weekDay, $split[0])) ?>>
-                            <input type="submit" value="<?= $weekDay ?>">
+                            <input type="hidden" name="date" value=<?= htmlspecialchars(date('Y-m-d', gmmktime(0, 0, 0, $split[1], $weekDay, $split[0]))) ?>>
+                            <input type="submit" value="<?= htmlspecialchars($weekDay) ?>">
                         </form>
                     </td>
                     <td>
@@ -62,19 +62,15 @@ ob_start(); ?>
                             foreach($eventsDay as $event) {
                                 ?>
                                 <div>
-                                    <a href="index.php?action=detailEvent&amp;id=<?= $event['id'] ?>">
-                                        <?= htmlspecialchars($event['name']) ?>
-                                    </a>
+                                    <a href="index.php?action=detailEvent&amp;id=<?= htmlspecialchars($event['id']) ?>"><?= htmlspecialchars($event['name']) ?></a>
                                     <form method="post" action="index.php?action=delete">
-                                        <input type="hidden" name="id" value=<?= $event['id'] ?>>
+                                        <input type="hidden" name="id" value=<?= htmlspecialchars($event['id']) ?>>
                                         <input type="submit" value="Supprimer l'événement">
                                     </form>
                                 </div>
                                 <?php
                                 $nbEvent++;
-                                if ($nbEvent == MAX_LIST) {
-                                    break;
-                                }
+                                if ($nbEvent == MAX_LIST) break;
                             }
                             
                             if (count($eventsDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template

@@ -2,7 +2,7 @@
 require('model/mBackEnd.php');
 
 function oEventsMonth($date) {//ok
-    if (!isset($date)) {
+    if (empty($date)) {
         $date = date('Y-m');
     }
 
@@ -10,14 +10,14 @@ function oEventsMonth($date) {//ok
     $showDate = strftime('%B %Y', $timeStamp);
     $nbDayMonth = date('t', $timeStamp);
 
-    $split = explode('-', $date);
-    $lastMonth = date('Y-m', gmmktime(0, 0, 0, $split[1] - 1, 0, $split[0]));
-    $nextMonth = date('Y-m', gmmktime(0, 0, 0, $split[1] + 1, 0, $split[0]));
+    $dateSplit = explode('-', $date);
+    $lastMonth = date('Y-m', gmmktime(0, 0, 0, $dateSplit[1] - 1, 0, $dateSplit[0]));
+    $nextMonth = date('Y-m', gmmktime(0, 0, 0, $dateSplit[1] + 1, 0, $dateSplit[0]));
 
     $dayName['ang'] = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
     $dayName['fr'] = array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
-    $dayStartMonth = date('D', gmmktime(0, 0, 0, $split[1], 1, $split[0]));//pour commencer le tableau d affichage
-    $dayEndMonth = date('N', gmmktime(0, 0, 0, $split[1], $nbDay, $split[0]));//pour finir le tableau d affichage
+    $dayStartMonth = date('D', gmmktime(0, 0, 0, $dateSplit[1], 1, $dateSplit[0]));//pour commencer le tableau d affichage
+    $dayEndMonth = date('N', gmmktime(0, 0, 0, $dateSplit[1], $nbDay, $dateSplit[0]));//pour finir le tableau d affichage
 
     for ($day = 1; $day <= $nbDayMonth; $day++) {
         $eventsMonth[] = getEventsDay($date, true);//si vide, listEventsMonth[] vaudra false ->verifier requete
@@ -31,9 +31,9 @@ function oEventsMonth($date) {//ok
 function oEventsDay($date) {
     $showDate = strftime('%A %e %B %Y', strtotime($date));
 
-    $split = explode('-', $date);
-    $lastDay = date('Y-m-d', gmmktime(0, 0, 0, $split[1], $split[2] - 1, $split[0]));
-    $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $split[1], $split[2] + 1, $split[0]));
+    $dateSplit = explode('-', $date);
+    $lastDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] - 1, $dateSplit[0]));
+    $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] + 1, $dateSplit[0]));
 
     $eventsDay = getEventsDay($date, false);
 
@@ -48,7 +48,9 @@ function oEvent($idEvent) {
     require('View/BackEnd/vEvent.php');
 }
 
-
+/*
+requete préparée ne convertit pas bien en entier pour OFFSET ET STRING seulement
+*/
 
 function oEventNew($received) {
     if (!isset($_POST['exist'])) {
@@ -100,4 +102,5 @@ function oEventDelete($idEvent) {
 
     //redirige vers eventsDay
     header('Location: index.php?action=reception');
+    exit();
 }

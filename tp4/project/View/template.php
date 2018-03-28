@@ -36,7 +36,3 @@
         </footer>
     </body>
 </html>
-
-<?php
-    exit();//mets fin au script courant
-?>

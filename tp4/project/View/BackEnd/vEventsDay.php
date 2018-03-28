@@ -1,52 +1,39 @@
 <?php 
 $pageName = 'Liste';
 
-
-ob_start(); ?>
-    <li>
-        <form method="post" action="index.php">
-            <input type="submit" value="Accueil">
-        </form>
-    </li>
-<?php $menuContent = ob_get_clean();
-
-
 $legendContent = 'Evènements du jour';
 
 
 ob_start(); ?>
-    <form method="post" action="index.php?action=lastDay">
-        <input type="submit" value="Jour précédent">
-    </form>
+    <li>
+        <a href="index.php?action=reception"><button>Accueil</button></a>
+    </li>
+<?php $menuContent = ob_get_clean();
 
-    <?= $infoPage['date'].' '.$infoPage['month'].' '.$infoPage['year'] ?>
 
-    <form method="post" action="index.php?action=nextDay">
-        <input type="submit" value="Jour suivant">
-    </form>
+ob_start(); ?>
+    <a href="index.php?action=lastDay"><button>Jour précédent</button></a>
+
+    <?= htmlspecialchars($infoPage['date'].' '.$infoPage['month'].' '.$infoPage['year']) ?>
+
+    <a href="index.php?action=nextDay"><button>Jour suivant</button></a>
 <?php $asideContent = ob_get_clean();
 
 
 ob_start();
-initialisation1 : setlocale(LC_TIME, 'fr_FR');
-initialisation2 : date_default_timezone_set('UTC');
     foreach($listEventsDay as $event) {
     ?>
         <div class="event">
-        <h3>
-            <?= $event['name'] ?>
-        </h3>
-        début : <?= strftime('%A %e %B %Y', strtotime($event['datestart'])) ?>
-            <form method="post" action="index.php?action=detailEvent&amp;id=<?= $event['id'] ?>">
-                <input type="submit" value="Plus d'infos">
-            </form>
+            <h3>
+                <?= htmlspecialchars($event['name']) ?>
+            </h3>
+            début : <?= htmlspecialchars(strftime('%A %e %B %Y', strtotime($event['datestart']))) ?>
+            <a href="index.php?action=detailEvent&amp;id=<?= htmlspecialchars($event['id']) ?>"><button>Plus d'infos</button></a>
         </div>
     <?php
     }
     ?>
-    <form method="post" action="index.php?action=newEvent"><!--Préremplir le jour-->
-        <input type="submit" value="Ajouter une conférence">
-    </form>
+    <a href="index.php?action=newEvent"><button>Ajouter une conférence</button></a><!--Préremplir le jour-->
     <?php
 $articleContent = ob_get_clean();
 

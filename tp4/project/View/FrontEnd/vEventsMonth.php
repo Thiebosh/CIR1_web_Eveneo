@@ -1,21 +1,21 @@
 <?php 
 $pageName = 'Accueil';
 
-$menuContent = '';
-
 $legendContent = 'Evènements du mois';
+
+$menuContent = '';
 
 
 ob_start(); ?>
-    <form method="post" action="index.php?action=reception">
-        <input type="hidden" name="date" value=<?= $lastMonth ?>>
+    <form method="post" action="index.php?action=reception"><!--remplacer index.php par ./ ?-->
+        <input type="hidden" name="date" value=<?= htmlspecialchars($lastMonth) ?>>
         <input type="submit" value="Mois précédent">
     </form>
 
-    <?= $showDate ?>
+    <?= htmlspecialchars($showDate) ?>
 
     <form method="post" action="index.php?action=reception">
-        <input type="hidden" name="date" value=<?= $nextMonth ?>>
+        <input type="hidden" name="date" value=<?= htmlspecialchars($nextMonth) ?>>
         <input type="submit" value="Mois suivant">
     </form>
 <?php $asideContent = ob_get_clean();
@@ -43,7 +43,7 @@ ob_start(); ?>
                 foreach($eventsMonth as $eventsDay) {
                 ?>
                     <td>
-                        <?= $weekDay ?>
+                        <?= htmlspecialchars($weekDay) ?>
                     </td>
                     <td>
                         <?php
@@ -52,7 +52,7 @@ ob_start(); ?>
                             foreach($eventsDay as $event) {
                                 ?>
                                 <div>
-                                    <a href="index.php?action=detail&amp;id=<?= $event['id'] ?>">
+                                    <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($event['id']) ?>">
                                         <?= htmlspecialchars($event['name']) ?>
                                     </a>
                                 </div>

@@ -2,7 +2,7 @@
 require('Model/mRegisterLogin.php');
 
 function login($received) {
-    if (isset($received)) {//fonctionne? gère script_login
+    if (!empty($received)) {//active script_login
         //traite les infos recues
         $dataUser = getDataUser($received['login']);
         if (!$dataUser) throw new Exception('Connexion : Echec de récupération des données');
@@ -16,10 +16,9 @@ function login($received) {
             $_SESSION['rank'] = $dataUser['rank'];
             $_SESSION['id'] = $dataUser['id'];
             header('Location: index.php?action=reception');//redirige vers l'accueil
+            exit();
         }
     }
-
-    //finir de préparer variables
 
     require('View/RegisterLogin/vLogin.php');
 }
@@ -27,7 +26,7 @@ function login($received) {
 
 
 function register($received) {
-    if (isset($received)) {//fonctionne? gère script_register
+    if (!empty($received)) {//active script_register
         //traite les infos recues
         if ($received['password'] != $received['passwordVerif']) {
             throw new Exception('Inscription : les mots de passe ne sont pas identiques');
@@ -37,9 +36,8 @@ function register($received) {
         if (!postDataUser($received)) throw new Exception('Inscription : Echec d\'enregistrement des données');//verifier que renvoi d'un post est true ou false
 
         header('Location: index.php?action=login');//redirige vers la page de connexion
+        exit();
     }
-
-    //finir de préparer variables
 
     require('View/RegisterLogin/vRegister.php');
 }
