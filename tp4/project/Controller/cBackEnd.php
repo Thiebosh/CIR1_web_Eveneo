@@ -42,10 +42,41 @@ function oEventsDay($date) {
 
 
 
-function oEvent($idEvent) {
-    $dataEvent = getEvent($idEvent);
+function oEvent($received) {
+    if (isset($_POST['script_delete'])) {
+        //traite les infos recues
+        $dateRedirection = getDateEvent($received);
+
+        //verifier que renvoi d'un delete est true ou false
+        if (!deleteEvent($received['deleteId'])) throw new Exception('Echec de suppression des données');//applique suppression
+
+        header('Location: index.php?action=reception&date='.'$dateRedirection');//recharge la page
+        exit();
+    }
+
+    $dataEvent = getEvent($infoPage['idEvent']);
+    
+    //$lastEvent = ;
+    //$nextEvent = ;
+    $dateStart = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['datestart']));
+    $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['dateend']));
     
     require('View/BackEnd/vEvent.php');
+}
+
+
+
+function oEventEdit($received) {
+    if (isset($_POST['script_edit'])) {
+        if (!modifyDataEvent($received)) throw new Exception('Modification d\'événement : Echec d\'enregistrement des données');
+        
+        header('Location: index.php?action=detail&id='.'$received[\'idEvent\']');//recharge la page
+        exit();
+    }
+
+    $dateSplit = explode('-', $received['endDate']);
+
+    require('View/BackEnd/vEditEvent.php');
 }
 
 /*
@@ -53,54 +84,25 @@ requete préparée ne convertit pas bien en entier pour OFFSET ET STRING seuleme
 */
 
 function oEventNew($received) {
-    if (!isset($_POST['exist'])) {
-        //affiche formulaire
-    }
-    else {
-        //traite les infos recues
-        if ($received['startDate'] != $received['endDate']) {//appliquer checkdate et checktime sur les dates, etc...
-            //infos incorrectes
-        }
-        else {
-            //enregistre infos (verifier que renvoi d'un post est true ou false)
-            if (!postDataEvent($received)) throw new Exception('Echec d\'enregistrement des données');
-        }
+    if (isset($_POST['script_new'])) {
+        if (!postDataEvent($received)) throw new Exception('Création d\'événement : Echec d\'enregistrement des données');
+        $idEvent = getDataEvent($received);//checker retours de requete
+
+        header('Location: index.php?action=detail&id='.'$idEvent');//recharge la page
+        exit();
     }
 
-    //redirige vers
+    $dateSplit = explode('-', $received['date']);
 
     require('View/BackEnd/vNewEvent.php');
 }
 
 
 
-function oEventEdit($received) {
-    if (!isset($_POST['exist'])) {
-        //affiche formulaire
-    }
-    else {
-        //traite les infos recues
-        if ($received['startDate'] != $received['endDate']) {//appliquer checkdate et checktime sur les dates, etc...
-            //infos incorrectes
-        }
-        else {
-            //enregistre infos (verifier que renvoi d'un post est true ou false)
-            if (!updateEvent($received)) throw new Exception('Echec d\'enregistrement des données');
-        }
-    }
-
-    //redirige vers
-
-    require('View/BackEnd/vEditEvent.php');
-}
-
-
-
 function oEventDelete($idEvent) {
-    //verifier le retours de deleteEvent
-    if (!deleteEvent($idEvent)) throw new Exception('Echec d\'enregistrement des données');
-
-    //redirige vers eventsDay
-    header('Location: index.php?action=reception');
+    $date = getDataEvent($idEvent);
+    if (!deleteDataEvent($idEvent)) throw new Exception('Création d\'événement : Echec d\'enregistrement des données');
+    
+    header('Location: index.php?action=reception&date='.'$date');//recharge la page
     exit();
 }

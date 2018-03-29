@@ -47,7 +47,7 @@ function cEventsDay($date) {
 
 
 function cEvent($received) {
-    if (isset($_POST['exist'])) {//active script_joined
+    if (isset($_POST['script_joined'])) {
         //traite les infos recues
         $received['eventJoined'] = !$received['eventJoined'];//change l etat de eventJoined
         
@@ -60,8 +60,10 @@ function cEvent($received) {
 
     $dataEvent = getEvent($infoPage['idEvent']);
     
-    $dateStart = strftime('%A %e %B %Y, %Hheures %i', strtotime($event['datestart']));
-    $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($event['dateend']));
+    //$lastEvent = ;
+    //$nextEvent = ;
+    $dateStart = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['datestart']));
+    $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['dateend']));
     
     require('View/FrontEnd/vEvent.php');
 }

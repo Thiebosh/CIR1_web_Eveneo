@@ -59,9 +59,9 @@ page event {                reçoit : idEvent et [(eventJoined) ou (idDeleteEven
 
 ***
 
-[orga] page editEvent {     reçoit : idEvent et (name(?), nbPlace, enddate, description)
+[orga] page editEvent {     reçoit : idEvent et (nbPlace, enddate, description)
     script logout               dirige vers login               action : vide session
-    script edit                 dirige vers event               action : modifie données (name(?), nbPlace, enddate, description)    nouveau GET : idEvent
+    script edit                 dirige vers event               action : modifie données (nbPlace, enddate, description)    nouveau GET : idEvent
 
     retour accueil              dirige vers eventsMonth
     retour mois de session      dirige vers eventsMonth         avec GET : date (y-m)

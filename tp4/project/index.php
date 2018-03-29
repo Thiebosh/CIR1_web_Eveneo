@@ -95,8 +95,8 @@ try {
                 if (!isset($_GET['id'])) {
                     throw new Exception('Evénement : Donnée manquante');
                 }
-                $received['idEvent'] = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-                if (!$received['idEvent']) throw new Exception('Evénement : Donnée invalide');
+                $received['id'] = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+                if (!$received['id']) throw new Exception('Evénement : Donnée invalide');
 
 
                 if (isset($_POST['script_joined'])) {
@@ -115,7 +115,7 @@ try {
             break;
         }
     }
-    else if ($_SESSION['rank'] == 'ORGANIZER') {
+    else if ($_SESSION['rank'] == 'ORGANIZER') {//ok
         switch ($action) {
             case 'reception':
                 if (isset($_GET['date'])) {
@@ -126,7 +126,6 @@ try {
 
                 cEventsMonth($date);
             break;
-            
             case 'list':
                 if (!isset($_GET['date'])) {
                     throw new Exception('Evénements du jour : Donnée manquante');
@@ -137,33 +136,32 @@ try {
 
                 cEventsDay($date);
             break;
-
             case 'detail';
                 if (!isset($_GET['id'])) {
                     throw new Exception('Evénement : Donnée manquante');
                 }
-                $received['idEvent'] = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-                if (!$received['idEvent']) throw new Exception('Evénement : Donnée invalide');
+                $received['id'] = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+                if (!$received['id']) throw new Exception('Evénement : Donnée invalide');
 
 
                 if (isset($_POST['script_delete'])) {
-                    if (!isset($_POST['idDeleteEvent'])) {
+                    if (!isset($_POST['deleteIdEvent'])) {
                         throw new Exception('Evénement : Donnée formulaire absente');
                     }
-                    $received['idDeleteEvent'] = filter_input(INPUT_POST, 'idDeleteEvent', FILTER_VALIDATE_INT);
-                    if (!$received['idDeleteEvent']) throw new Exception('Evénement : Donnée formulaire invalide');
+                    $received['deleteId'] = filter_input(INPUT_POST, 'deleteIdEvent', FILTER_VALIDATE_INT);
+                    if (!$received['deleteId']) throw new Exception('Evénement : Donnée formulaire invalide');
+                    oEventDelete($received['deleteId']);
                 }
 
 
-                cEvent($received);
+                oEvent($received);
             break;
-
             case 'edit':
                 if (!isset($_GET['id'])) {
                     throw new Exception('Modification : Donnée manquante');
                 }
-                $received['idEvent'] = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-                if (!$received['idEvent']) throw new Exception('Modification : Donnée invalide');
+                $received['id'] = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+                if (!$received['id']) throw new Exception('Modification : Donnée invalide');
 
 
                 if (isset($_POST['script_edit'])) {
@@ -183,7 +181,6 @@ try {
 
                 oEventEdit($received);
             break;
-
             case 'new':
                 if (!isset($_GET['date'])) {
                     throw new Exception('Nouveau : Donnée manquante');
@@ -213,7 +210,6 @@ try {
 
                 oEventNew($received);
             break;
-
             default:
                 oEventsMonth();
             break;
