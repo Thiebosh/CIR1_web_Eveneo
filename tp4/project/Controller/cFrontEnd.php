@@ -25,10 +25,6 @@ function cEventsMonth($date) {
 
     require('View/FrontEnd/vReception.php');
 }
-/*
-close cursor que si récupère des données et ne fait qu'un fetch simple
-fetchall ferme le curseur tout seul
-*/
 
 
 
@@ -48,17 +44,16 @@ function cEventsDay($date) {
 
 function cEvent($received) {
     if (isset($_POST['script_joined'])) {
-        //traite les infos recues
         $received['eventJoined'] = !$received['eventJoined'];//change l etat de eventJoined
         
-        //verifier que renvoi d'un post est true ou false
-        if (!changeStatusEvent($received)) throw new Exception('Echec d\'enregistrement des données');//applique changement d etat
+        changeStatusEvent($received);//throw new Exception('Echec d\'enregistrement des données');//applique changement d etat (UPDATE renvoie quelque chose pour echec?)
 
         header('Location: index.php?action=detail&id='.'$event[\'id\']');//recharge la page
         exit();
     }
 
     $dataEvent = getEvent($infoPage['idEvent']);
+    if (!$dataEvent) throw new Exception('Evénement : Echec de récupération des données');
     
     //$lastEvent = ;
     //$nextEvent = ;

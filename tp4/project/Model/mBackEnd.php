@@ -1,9 +1,6 @@
 <?php
 
-function dbConnect() {//modifier champs
-    $dataBase = new PDO('mysql:host=localhost;dbname=eventCalendar;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-    return $dataBase;
-}
+require('Model/mCommon.php');
 
 function getAllEvents($infoPage) {//faire jointure pour ne prendre que les conf de organizer
     $dataBase = dbConnect();

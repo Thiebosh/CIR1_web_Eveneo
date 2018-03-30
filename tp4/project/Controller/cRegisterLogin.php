@@ -1,43 +1,38 @@
 <?php
 require('Model/mRegisterLogin.php');
 
-function login($received) {
-    if (!empty($received)) {//active script_login
-        //traite les infos recues
-        $dataUser = getDataUser($received['login']);
-        if (!$dataUser) throw new Exception('Connexion : Echec de récupération des données');
+function login($dataPage) {
+    if (empty($dataPage)) require('View/RegisterLogin/vLogin.php');
 
-        else if (!password_verify($received['password'], $dataUser['password'])) {//compare les hash (utile de verifier retours de dataUser?)
-            throw new Exception('Connexion : Identifiant ou mot de passe erronné');
-        }
+    //else : active script_login
+    $dataUser = getDataUser($dataPage['login']);
 
-        else {
-            $_SESSION['login'] = $dataUser['login'];
-            $_SESSION['rank'] = $dataUser['rank'];
-            $_SESSION['id'] = $dataUser['id'];
-            header('Location: index.php?action=reception');//redirige vers l'accueil
-            exit();
-        }
+    if (!$dataUser) throw new Exception('Connexion : Echec de récupération des données');
+    else if (!password_verify($dataPage['password'], $dataUser['password'])) {
+        throw new Exception('Connexion : Identifiant ou mot de passe erronné');
     }
+    
+    $_SESSION['login'] = $dataPage['login'];
+    $_SESSION['rank'] = $dataUser['rank'];
+    $_SESSION['id'] = $dataUser['id'];
 
-    require('View/RegisterLogin/vLogin.php');
+    header('Location: index.php?action=reception');//redirige vers l'accueil
+    exit();
 }
 
 
 
-function register($received) {
-    if (!empty($received)) {//active script_register
-        //traite les infos recues
-        if ($received['password'] != $received['passwordVerif']) {
-            throw new Exception('Inscription : les mots de passe ne sont pas identiques');
-        }
+function register($dataPage) {
+    if (empty($dataPage)) require('View/RegisterLogin/vRegister.php');
 
-        $received['password'] = password_hash($received['password']);
-        if (!postDataUser($received)) throw new Exception('Inscription : Echec d\'enregistrement des données');//verifier que renvoi d'un post est true ou false
-
-        header('Location: index.php?action=login');//redirige vers la page de connexion
-        exit();
+    //else : active script_register
+    if ($dataPage['password'] != $dataPage['passwordVerif']) {
+        throw new Exception('Inscription : les mots de passe ne sont pas identiques');
     }
+    $dataPage['password'] = password_hash($dataPage['password']);
+    
+    postDataUser($dataPage);//throw new Exception('Inscription : Echec d\'enregistrement des données');//verifier que renvoi d'un post est true ou false
 
-    require('View/RegisterLogin/vRegister.php');
+    header('Location: index.php?action=login');//redirige vers la page de connexion
+    exit();
 }

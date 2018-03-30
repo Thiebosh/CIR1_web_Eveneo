@@ -60,8 +60,6 @@ Fonction : gestionnaire d'événements
 ------------------------------------------------------------------------------------------------------
 
 reste à faire : 
-finir partie controller
-finir partie view (CSS->bootstrap?)
 finir partie model (requetes)
-commencer partie routeur
+finir partie view (CSS->bootstrap?)
 ajuster noms de variable
