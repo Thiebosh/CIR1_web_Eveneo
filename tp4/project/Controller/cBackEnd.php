@@ -1,5 +1,5 @@
 <?php
-require('model/mBackEnd.php');
+require('Model/mBackEnd.php');
 
 function oEventsMonth($date) {
     if (empty($date)) $date = date('Y-m');
@@ -19,7 +19,7 @@ function oEventsMonth($date) {
 
     for ($day = 1; $day <= $nbDayMonth; $day++) {
         $fullDate = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $day, $dateSplit[0]));
-        $eventsMonth[] = getEventsDay($fullDate, true);//si vide, listEventsMonth[] vaudra false
+        $eventsMonth[] = oGetEventsDay($fullDate, true);//si vide, listEventsMonth[] vaudra false
     }
 
     require('View/BackEnd/vReception.php');
@@ -33,7 +33,7 @@ function oEventsDay($date) {
     $lastDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] - 1, $dateSplit[0]));
     $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] + 1, $dateSplit[0]));
 
-    $eventsDay = getEventsDay($date, false);
+    $eventsDay = oGetEventsDay($date, false);
     if (!$eventsDay) throw new Exception('Evénements du jour : Echec de récupération des données');
     
     require('View/BackEnd/vAllEvents.php');
@@ -42,10 +42,10 @@ function oEventsDay($date) {
 
 function oEvent($id) {
     if (isset($_POST['script_delete'])) {
-        $dateRedirection = getEventDate($id);
+        $dateRedirection = oGetEventDate($id);
         if (!$dateRedirection) throw new Exception('Suppression : Echec de redirection');
     
-        deleteEvent($id);//throw new Exception('Echec de suppression des données');//verifier que renvoi d'un delete est true ou false
+        oDeleteEvent($id);//throw new Exception('Echec de suppression des données');//verifier que renvoi d'un oDelete est true ou false
 
         header('Location: index.php?action=reception&date='.$dateRedirection);//recharge la page
         exit();
@@ -55,7 +55,7 @@ function oEvent($id) {
     $nextEvent = getOtherEventDate($id, 'next');
     if (!$lastEvent || $nextEvent) throw new Exception('Evénement : Echec de récupération des données');
     
-    $dataEvent = getEvent($id);
+    $dataEvent = oGetEvent($id);
     if (!$dataEvent) throw new Exception('Evénement : Echec de récupération des données');
     $dateStart = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['datestart']));
     $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['dateend']));
@@ -64,11 +64,11 @@ function oEvent($id) {
 }
 
 
-function oEventNew($dataPage) {
+function oEventNew($data) {
     if (isset($_POST['script_new'])) {
-        postEventData($dataPage);//throw new Exception('Création d\'événement : Echec d\'enregistrement des données');
-        $id = getEventId($dataPage);//checker retours de requete
-        if (!$idEvent) throw new Exception('Création d\'événement : Echec de redirection');
+        oPostEventData($data);//throw new Exception('Création d\'événement : Echec d\'enregistrement des données');
+        $id = oGetEventId($data);//possible de combiner avec le post?
+        if (!$id) throw new Exception('Création d\'événement : Echec de redirection');
         
         header('Location: index.php?action=detail&id='.$id);//recharge la page
         exit();
@@ -78,11 +78,11 @@ function oEventNew($dataPage) {
 }
 
 
-function oEventEdit($dataPage) {
+function oEventEdit($data) {
     if (isset($_POST['script_edit'])) {
-        changeEventData($dataPage);// throw new Exception('Modification d\'événement : Echec d\'enregistrement des données');
+        oChangeEventData($data);// throw new Exception('Modification d\'événement : Echec d\'enregistrement des données');
         
-        header('Location: index.php?action=detail&id='.$dataPage['id']);//recharge la page
+        header('Location: index.php?action=detail&id='.$data['id']);//recharge la page
         exit();
     }
 

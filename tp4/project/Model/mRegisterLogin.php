@@ -1,5 +1,5 @@
 <?php
-require('Model/mCommon.php');
+require_once('Model/mCommon.php');
 
 function getDataUser($login) {
     $bdd = dbConnect();

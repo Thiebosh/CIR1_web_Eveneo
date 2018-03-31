@@ -1,7 +1,7 @@
 <?php
-require('Model/mCommon.php');
+require_once('Model/mCommon.php');
 
-function getEventsDay($dateFull, $limited) {
+function oGetEventsDay($dateFull, $limited) {
     $bdd = dbConnect();
 
     $lim = '';//default
@@ -25,7 +25,7 @@ function getEventsDay($dateFull, $limited) {
 }
 
 
-function getEvent($idEvent) {
+function oGetEvent($idEvent) {
     $bdd = dbConnect();
 
     $query = 'SELECT `name`, `description`, startdate, enddate, nb_place
@@ -41,33 +41,7 @@ function getEvent($idEvent) {
     return $dataEvent;
 }
 
-
-function getOtherEventDate($date, $direction) {
-    $bdd = dbConnect();
-
-    if ($direction == 'next')      $change = ['>', ''];
-    else if ($direction == 'last') $change = ['<', 'DESC'];
-    else throw new Exception('Requête : appel incorrect');
-
-    $query = 'SELECT id
-                FROM events
-                WHERE DATEDIFF(`:dateTime`, startdate) :sign 0
-                ORDER BY startdate :dir
-                LIMIT 0,1';
-    $table = array('dateTime' => $date, 
-                    'sign' => $change[0], 
-                    'dir' => $change[1]);
-
-    $request = $bdd->prepare($query);
-    $request->execute($table);
-    $dataEvent = $request->fetch();
-    $request->closeCursor();
-
-    return $idEvent;
-}
-
-
-function getEventDate($idEvent) {
+function oGetEventDate($idEvent) {
     $bdd = dbConnect();
 
     $query = 'SELECT startdate
@@ -84,7 +58,26 @@ function getEventDate($idEvent) {
 }
 
 
-function postEventData($data) {
+function oGetEventId($data) {
+    $bdd = dbConnect();
+
+    $query = 'SELECT id
+                FROM events
+                WHERE `name` = :title AND startdate = :startDate AND enddate = :endDate';
+    $table = array('title' => $data['name'],
+                    'startDate' => $data['startDate'],
+                    'endDate' => $data['endDate']);
+
+    $request = $bdd->prepare($query);
+    $request->execute($table);
+    $id = $request->fetch();
+    $request->closeCursor();
+
+    return $id;
+}
+
+
+function oPostEventData($data) {
     $bdd = dbConnect();
 
     $query = 'INSERT INTO events(`name`, nb_place, startdate, enddate, `description`) 
@@ -97,10 +90,12 @@ function postEventData($data) {
 
     $request = $bdd->prepare($query);
     $request->execute($table);//retourne quelque chose?
+
+    
 }
 
 
-function changeEventData($data) {
+function oChangeEventData($data) {
     $bdd = dbConnect();
 
     $query = 'UPDATE events
@@ -116,7 +111,7 @@ function changeEventData($data) {
 }
 
 
-function deleteEvent($idEvent) {//combinable avec un inner_join?
+function oDeleteEvent($idEvent) {//combinable avec un inner_join?
     $bdd = dbConnect();
     
     $table = array('idEvent' => $idEvent);

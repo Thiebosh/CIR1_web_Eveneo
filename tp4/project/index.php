@@ -9,11 +9,11 @@ require('Controller/cRegisterLogin.php');
 require('Controller/cFrontEnd.php');
 require('Controller/cBackEnd.php');
 
-//VIEW : REPRENDRE LES LIENS DE REDIRECTION ET APPLIQUER LE GET
-try {
-    if (!isset($_GET['action'])) throw new Exception('Page cible inconnue');
 
-    $action = $_GET['action'];
+try {
+    if (!isset($_GET['action'])) $action = 'login';
+    else $action = $_GET['action'];
+
     if ($action != 'login' && $action != 'logout' && $action != 'register' &&
     $action != 'reception' && $action != 'list'   && $action != 'detail' &&
     $action != 'delete'    && $action != 'new'    && $action != 'edit') {
@@ -31,6 +31,7 @@ try {
     if (!isset($_SESSION['rank'])) {
         switch ($action) {
             case 'login':
+                $received = false;
                 if (isset($_POST['script_login'])) {
                     if (!isset($_POST['login']) || !isset($_POST['password'])) throw new Exception('Connexion : Données formulaire incomplètes');
 
@@ -44,6 +45,7 @@ try {
             break;
 
             case 'register':
+                $received = false;
                 if (isset($_POST['script_register'])) {
                     if (!isset($_POST['login']) || !isset($_POST['rank']) || !isset($_POST['password']) || !isset($_POST['passwordVerif'])) {
                         throw new Exception('Inscription : Données formulaire incomplètes');
