@@ -20,7 +20,8 @@ function cEventsMonth($date) {
     $dayEndMonth = date('N', gmmktime(0, 0, 0, $dateSplit[1], $nbDay, $dateSplit[0]));//pour finir le tableau d affichage
 
     for ($day = 1; $day <= $nbDayMonth; $day++) {
-        $eventsMonth[] = getEventsDay($date, true);//si vide, listEventsMonth[] vaudra false ->verifier requete
+        $fullDate = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $day, $dateSplit[0]));
+        $eventsMonth[] = getEventsDay($fullDate, true);//si vide, listEventsMonth[] vaudra false ->verifier requete
     }
 
     require('View/FrontEnd/vReception.php');

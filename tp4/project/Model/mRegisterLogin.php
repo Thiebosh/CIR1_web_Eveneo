@@ -5,7 +5,7 @@ require('Model/mCommon.php');
 function getDataUser($login) {//ok
     $bdd = dbConnect();
 
-    $query = "SELECT id, `password`, rank FROM Users WHERE `login` = `:login`";
+    $query = 'SELECT id, `password`, rank FROM Users WHERE `login` = `:login`';
     $table = array('login' => $login);
 
     $request = $bdd->prepare($query);
@@ -21,7 +21,7 @@ function getDataUser($login) {//ok
 function postDataUser($dataBDD) {
     $bdd = dbConnect();
 
-    $query = "INSERT INTO Users(`login`, `password`, rank) VALUES(`:login`, `:password`, :rank)";
+    $query = 'INSERT INTO Users(`login`, `password`, rank) VALUES(`:login`, `:password`, :rank)';
     $table = array('login' => $dataBDD['login'], 'password' => $dataBDD['password'], 'rank' => $dataBDD['rank']);
 
     $request = $bdd->prepare($query);

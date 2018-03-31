@@ -31,6 +31,7 @@ function register($dataPage) {
     }
     $dataPage['password'] = password_hash($dataPage['password']);
     
+    //verifier que le login n est pas deja pris
     postDataUser($dataPage);//throw new Exception('Inscription : Echec d\'enregistrement des données');//verifier que renvoi d'un post est true ou false
 
     header('Location: index.php?action=login');//redirige vers la page de connexion
