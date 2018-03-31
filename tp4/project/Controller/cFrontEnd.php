@@ -2,9 +2,7 @@
 require('Model/mFrontEnd.php');
 
 function cEventsMonth($date) {
-    if (empty($date)) {
-        $date = date('Y-m');
-    }
+    if (empty($date)) $date = date('Y-m');
 
     $timeStamp = strtotime($date);
     $showDate = strftime('%B %Y', $timeStamp);
@@ -21,12 +19,11 @@ function cEventsMonth($date) {
 
     for ($day = 1; $day <= $nbDayMonth; $day++) {
         $fullDate = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $day, $dateSplit[0]));
-        $eventsMonth[] = getEventsDay($fullDate, true);//si vide, listEventsMonth[] vaudra false ->verifier requete
+        $eventsMonth[] = getEventsDay($fullDate, true);//si vide, listEventsMonth[] vaudra false
     }
 
     require('View/FrontEnd/vReception.php');
 }
-
 
 
 function cEventsDay($date) {
@@ -37,29 +34,31 @@ function cEventsDay($date) {
     $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] + 1, $dateSplit[0]));
 
     $eventsDay = getEventsDay($date, false);
+    if (!$eventsDay) throw new Exception('Evénements du jour : Echec de récupération des données');
     
     require('View/FrontEnd/vAllEvents.php');
 }
 
 
-
-function cEvent($received) {
+function cEvent($id) {
+    $status = getEventStatus($id);//si faux, n'est pas inscrit
+    
     if (isset($_POST['script_joined'])) {
-        $received['eventJoined'] = !$received['eventJoined'];//change l etat de eventJoined
-        
-        changeStatusEvent($received);//throw new Exception('Echec d\'enregistrement des données');//applique changement d etat (UPDATE renvoie quelque chose pour echec?)
+        if (!$status) postStatusEvent($id);//throw new Exception('Echec d\'enregistrement des données');//applique changement d etat (INSERT INTO renvoie quelque chose pour echec?)
+        else          deleteStatusEvent($id);//throw new Exception('Echec d\'enregistrement des données');//applique changement d etat (DELETE FROM renvoie quelque chose pour echec?)
 
-        header('Location: index.php?action=detail&id='.'$event[\'id\']');//recharge la page
+        header('Location: index.php?action=detail&id='.$id);//recharge la page
         exit();
     }
 
-    $dataEvent = getEvent($infoPage['idEvent']);
+    $dataEvent = getEvent($id);
     if (!$dataEvent) throw new Exception('Evénement : Echec de récupération des données');
-    
-    //$lastEvent = ;
-    //$nextEvent = ;
     $dateStart = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['datestart']));
     $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['dateend']));
+    
+    $lastEvent = getOtherEventDate($dataEvent['datestart'], 'last');
+    $nextEvent = getOtherEventDate($dataEvent['datestart'], 'next');
+    if (!$lastEvent || $nextEvent) throw new Exception('Evénement : Echec de récupération des données');
     
     require('View/FrontEnd/vEvent.php');
 }

@@ -1,10 +1,8 @@
 <?php
 require('model/mBackEnd.php');
 
-function oEventsMonth($date) {//ok
-    if (empty($date)) {
-        $date = date('Y-m');
-    }
+function oEventsMonth($date) {
+    if (empty($date)) $date = date('Y-m');
 
     $timeStamp = strtotime($date);
     $showDate = strftime('%B %Y', $timeStamp);
@@ -20,12 +18,12 @@ function oEventsMonth($date) {//ok
     $dayEndMonth = date('N', gmmktime(0, 0, 0, $dateSplit[1], $nbDay, $dateSplit[0]));//pour finir le tableau d affichage
 
     for ($day = 1; $day <= $nbDayMonth; $day++) {
-        $eventsMonth[] = getEventsDay($date, true);//si vide, listEventsMonth[] vaudra false ->verifier requete
+        $fullDate = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $day, $dateSplit[0]));
+        $eventsMonth[] = getEventsDay($fullDate, true);//si vide, listEventsMonth[] vaudra false
     }
 
     require('View/BackEnd/vReception.php');
 }
-
 
 
 function oEventsDay($date) {
@@ -36,28 +34,29 @@ function oEventsDay($date) {
     $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] + 1, $dateSplit[0]));
 
     $eventsDay = getEventsDay($date, false);
-
+    if (!$eventsDay) throw new Exception('Evénements du jour : Echec de récupération des données');
+    
     require('View/BackEnd/vAllEvents.php');
 }
 
 
-
-function oEvent($received) {
+function oEvent($id) {
     if (isset($_POST['script_delete'])) {
-        //traite les infos recues
-        $dateRedirection = getDateEvent($received);
+        $dateRedirection = getEventDate($id);
+        if (!$dateRedirection) throw new Exception('Suppression : Echec de redirection');
+    
+        deleteEvent($id);//throw new Exception('Echec de suppression des données');//verifier que renvoi d'un delete est true ou false
 
-        //verifier que renvoi d'un delete est true ou false
-        if (!deleteEvent($received['deleteId'])) throw new Exception('Echec de suppression des données');//applique suppression
-
-        header('Location: index.php?action=reception&date='.'$dateRedirection');//recharge la page
+        header('Location: index.php?action=reception&date='.$dateRedirection);//recharge la page
         exit();
     }
-
-    $dataEvent = getEvent($infoPage['idEvent']);
     
-    //$lastEvent = ;
-    //$nextEvent = ;
+    $lastEvent = getOtherEventDate($id, 'last');
+    $nextEvent = getOtherEventDate($id, 'next');
+    if (!$lastEvent || $nextEvent) throw new Exception('Evénement : Echec de récupération des données');
+    
+    $dataEvent = getEvent($id);
+    if (!$dataEvent) throw new Exception('Evénement : Echec de récupération des données');
     $dateStart = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['datestart']));
     $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['dateend']));
     
@@ -65,44 +64,27 @@ function oEvent($received) {
 }
 
 
-
-function oEventEdit($received) {
-    if (isset($_POST['script_edit'])) {
-        if (!modifyDataEvent($received)) throw new Exception('Modification d\'événement : Echec d\'enregistrement des données');
-        
-        header('Location: index.php?action=detail&id='.'$received[\'idEvent\']');//recharge la page
-        exit();
-    }
-
-    $dateSplit = explode('-', $received['endDate']);
-
-    require('View/BackEnd/vEditEvent.php');
-}
-
-/*
-requete préparée ne convertit pas bien en entier pour OFFSET ET STRING seulement
-*/
-
-function oEventNew($received) {
+function oEventNew($dataPage) {
     if (isset($_POST['script_new'])) {
-        if (!postDataEvent($received)) throw new Exception('Création d\'événement : Echec d\'enregistrement des données');
-        $idEvent = getDataEvent($received);//checker retours de requete
-
-        header('Location: index.php?action=detail&id='.'$idEvent');//recharge la page
+        postEventData($dataPage);//throw new Exception('Création d\'événement : Echec d\'enregistrement des données');
+        $id = getEventId($dataPage);//checker retours de requete
+        if (!$idEvent) throw new Exception('Création d\'événement : Echec de redirection');
+        
+        header('Location: index.php?action=detail&id='.$id);//recharge la page
         exit();
     }
-
-    $dateSplit = explode('-', $received['date']);
 
     require('View/BackEnd/vNewEvent.php');
 }
 
 
+function oEventEdit($dataPage) {
+    if (isset($_POST['script_edit'])) {
+        changeEventData($dataPage);// throw new Exception('Modification d\'événement : Echec d\'enregistrement des données');
+        
+        header('Location: index.php?action=detail&id='.$dataPage['id']);//recharge la page
+        exit();
+    }
 
-function oEventDelete($idEvent) {
-    $date = getDataEvent($idEvent);
-    if (!deleteDataEvent($idEvent)) throw new Exception('Création d\'événement : Echec d\'enregistrement des données');
-    
-    header('Location: index.php?action=reception&date='.'$date');//recharge la page
-    exit();
+    require('View/BackEnd/vEditEvent.php');
 }

@@ -1,15 +1,20 @@
 <?php
-
 require('Model/mCommon.php');
 
-function getEventsDay($date, $limited) {//faire jointure et comparer nb places avec nb personnes inscrites à event
+function getEventsDay($dateFull, $limited) {
     $bdd = dbConnect();
 
-    $query = 'SELECT id, `name` FROM events WHERE DATEDIFF(`:date`, startdate) == 0 ORDER BY startdate';
+    $lim = '';//default
     if ($limited) {
-        $query = $query . 'LIMIT 0, 6';//si plus de 5, affiche le bouton
+        $lim = 'LIMIT 0, '.(MAX_LIST + 1);//si plus de 5, affiche le bouton //fonctionne?
     }
-    $table = array('date' => $date);
+    $query = 'SELECT id, `name` 
+                FROM events 
+                WHERE DATEDIFF(`:date`, startdate) == 0 AND nb_place > 0
+                ORDER BY startdate
+                :lim';
+    $table = array('date' => $dateFull, 
+                    'lim' => $lim);
 
     $request = $bdd->prepare($query);
     $request->execute($table);
@@ -18,31 +23,86 @@ function getEventsDay($date, $limited) {//faire jointure et comparer nb places a
     return $listEvent;
 }
 
-function getEvent($idEvent) {//et statut
+
+function getEvent($idEvent) {
     $bdd = dbConnect();
 
-    $query = 'SELECT e.name nameConf, e.description describeConf, e.startdate startDate, e.enddate endDate, e.nb_place places, u.login organizer
-    FROM Events e INNER JOIN User u ON u.id = e.organizer_id WHERE e.id = $idEvent';
-    $table = array('login' => $login);
+    $query = 'SELECT *
+                FROM events e INNER JOIN User u ON e.organizer_id = u.id
+                WHERE e.id = :id';
+    $table = array('id' => $idEvent);
 
     $request = $bdd->prepare($query);
     $request->execute($table);
     $dataEvent = $request->fetch();
-    $request->closeCursor;//verifier
+    $request->closeCursor();
 
     return $dataEvent;
 }
 
-function getEventStatus($idEvent) {
+function getOtherEventDate($date, $direction) {
     $bdd = dbConnect();
-    $request = $bdd->query('SELECT id FROM User_participates_event WHERE id_participant == $_SESSION[\'id\'] AND id_event == $idEvent');
-    $event = $request->fetchAll();
 
-    return $event;
+    if ($direction == 'next')      $change = ['>', ''];
+    else if ($direction == 'last') $change = ['<', 'DESC'];
+    else throw new Exception('Requête : appel incorrect');
+
+    $query = 'SELECT id
+                FROM events
+                WHERE DATEDIFF(`:dateTime`, startdate) :sign 0
+                ORDER BY startdate :dir
+                LIMIT 0,1';
+    $table = array('dateTime' => $date, 
+                    'sign' => $change[0], 
+                    'dir' => $change[1]);
+
+    $request = $bdd->prepare($query);
+    $request->execute($table);
+    $dataEvent = $request->fetch();
+    $request->closeCursor();
+
+    return $idEvent;
 }
 
-function changeStatusEvent($status) {
+function getEventStatus($idvent) {
+    $bdd = dbConnect();
+    
+    $query = 'SELECT iduser_participates_events
+                FROM user_participates_events
+                WHERE id_event = :idEvent AND id_participant = :idUser';
+    $table = array('idEvent' => $idEvent, 
+                    'idUser' => $_SESSION['id']);
+
+    $request = $bdd->prepare($query);
+    $request->execute($table);
+    $status = $request->fetch();
+    $request->closeCursor();
+
+    return $status;
+}
+
+
+function postStatusEvent($idEvent) {
     $bdd = dbConnect();
 
-    //requete post
+    $query = 'INSERT INTO user_participates_events(id_event, id_participant) 
+                VALUES(`:id`, :user)';
+    $table = array('id' => $idEvent,
+                    'user' => $_SESSION['id']);
+
+    $request = $bdd->prepare($query);
+    $request->execute($table);//retourne quelque chose?
+}
+
+
+function deleteStatusEvent($idEvent) {
+    $bdd = dbConnect();
+    
+    $query = 'DELETE FROM user_participates_events
+                WHERE id_event = :idEvent AND id_participant = :idUser';
+    $table = array('idEvent' => $idEvent, 
+                    'idUser' => $_SESSION['id']);
+
+    $request = $bdd->prepare($query);
+    $request->execute($table);
 }

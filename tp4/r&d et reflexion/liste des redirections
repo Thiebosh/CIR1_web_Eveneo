@@ -42,19 +42,19 @@ page eventsDay {            reçoit : date (y-m-d)
     [orga] créer event          dirige vers newEvent            avec GET : date (y-m-d)
 }
 
-page event {                reçoit : idEvent et [(eventJoined) ou (idDeleteEvent)]
+page event {                reçoit : idEvent et [(eventStatus) ou (idDeleteEvent)]
     script logout               dirige vers login               action : vide session
-    [client]script joined       dirige vers event               action : modifie données (eventJoined)      nouveau GET : idEvent
-    [orga] script delete        dirige vers eventsMonth         action : supprime données (idDeleteEvent)         nouveau GET : date (y-m)
+    [client]script join         dirige vers event               action : modifie données (eventJoined)      nouveau GET : idEvent
+    [orga] script delete        dirige vers eventsMonth         action : supprime données (idDeleteEvent)   nouveau GET : date (y-m)
 
     retour accueil              dirige vers eventsMonth
     retour mois de session      dirige vers eventsMonth         avec GET : date (y-m)
     retour jour de session      dirige vers eventsDay           avec GET : date (y-m-d)
     changer d'event             dirige vers event               avec GET : idEvent
 
-    [client]join/quit           dirige vers script joined       avec GET : idEvent
+    [client]join/quit           dirige vers script join         avec GET : idEvent
     [orga] éditer event         dirige vers editEvent           avec GET : idEvent
-    [orga] supprimer event      dirige vers script delete       avec GET : idDeleteEvent ; POST : date (y-m)
+    [orga] supprimer event      dirige vers script delete       avec GET : idEvent
 }
 
 ***
