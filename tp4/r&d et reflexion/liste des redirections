@@ -1,0 +1,79 @@
+protip : pages contenant un formulaire : s'appellent avec les données du formulaire et se redirigent ensuite vers la page finale
+dans les controleurs à formulaire : verifier l'existence de $_POST['exist']
+accueil : mois en cours (IRL)
+
+***
+
+page login {                reçoit : rien ou (login, password)
+    script login                dirige vers eventsMonth         action : compare données (login, password) et initie session (login, rank, id(?))
+
+    inscription                 dirige vers register
+    confirm connexion           dirige vers script login        avec POST : login, password
+}
+
+page register {             reçoit : rien ou (login, rank, password, passwordCheck)
+    script register             dirige vers login               action : enregistre données (login, rank, password (hashé))
+
+    connexion                   dirige vers login
+    confirm inscription         dirige vers script register     avec POST : login, rank, password, passwordCheck
+}
+
+***
+
+page eventsMonth (accueil) {reçoit : rien ou date (y-m)
+    script logout               dirige vers login               action : vide session
+
+    retour accueil              dirige vers eventsMonth
+    changer de mois             dirige vers eventsMonth         avec GET : date (y-m)
+    voir liste events           dirige vers eventsDay           avec GET : date (y-m-d)
+    voir détail event           dirige vers event               avec GET : idEvent
+
+    [orga] créer event          dirige vers newEvent            avec GET : date (y-m-d)
+}
+
+page eventsDay {            reçoit : date (y-m-d)
+    script logout               dirige vers login               action : vide session
+
+    retour accueil              dirige vers eventsMonth
+    retour mois de session      dirige vers eventsMonth         avec GET : date (y-m)
+    changer de jour             dirige vers eventsDay           avec GET : date (y-m-d)
+    voir détail event           dirige vers event               avec GET : idEvent
+
+    [orga] créer event          dirige vers newEvent            avec GET : date (y-m-d)
+}
+
+page event {                reçoit : idEvent et [(eventStatus) ou (idDeleteEvent)]
+    script logout               dirige vers login               action : vide session
+    [client]script join         dirige vers event               action : modifie données (eventJoined)      nouveau GET : idEvent
+    [orga] script delete        dirige vers eventsMonth         action : supprime données (idDeleteEvent)   nouveau GET : date (y-m)
+
+    retour accueil              dirige vers eventsMonth
+    retour mois de session      dirige vers eventsMonth         avec GET : date (y-m)
+    retour jour de session      dirige vers eventsDay           avec GET : date (y-m-d)
+    changer d'event             dirige vers event               avec GET : idEvent
+
+    [client]join/quit           dirige vers script join         avec GET : idEvent
+    [orga] éditer event         dirige vers editEvent           avec GET : idEvent
+    [orga] supprimer event      dirige vers script delete       avec GET : idEvent
+}
+
+***
+
+[orga] page editEvent {     reçoit : idEvent et (nbPlace, enddate, description)
+    script logout               dirige vers login               action : vide session
+    script edit                 dirige vers event               action : modifie données (nbPlace, enddate, description)    nouveau GET : idEvent
+
+    retour accueil              dirige vers eventsMonth
+    retour mois de session      dirige vers eventsMonth         avec GET : date (y-m)
+    annuler modifs              dirige vers event               avec GET : idEvent
+    confirm modifs              dirige vers script edit         avec POST : name(?), nbPlace, enddate, description
+}
+
+[orga] page newEvent {      reçoit : date (y-m-d) et (name, nbPlace, startDate, endDate, description)
+    script logout               dirige vers login               action : vide session
+    script new                  dirige vers event               action : enregistre données (name, nbPlace, startdate, enddate, description)    nouveau GET : idEvent
+
+    retour accueil              dirige vers eventsMonth
+    annuler creation            dirige vers eventsMonth         avec GET : date (y-m)
+    confirm creation            dirige vers script new          avec POST : name, nbPlace, startdate, enddate, description
+}
