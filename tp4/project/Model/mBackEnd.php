@@ -3,21 +3,13 @@ require_once('Model/mCommon.php');
 
 function oGetEventsDay($dateFull, $limited) {
     $bdd = dbConnect();
-    
-    if (!$limited) {
-        $query = 'SELECT id, name  
+    $query = 'SELECT u.id, name  
                 FROM events e INNER JOIN Users u ON u.id = e.organizer_id
                 WHERE DATEDIFF(:date, startdate) = 0 AND e.organizer_id = :orga
                 ORDER BY startdate';
-    }
-    else {
-        //$lim = 'LIMIT 0, '.(MAX_LIST + 1);//fonctionne?
-        //$lim = 'LIMIT 0, 6';//si plus de 5, affiche le bouton
-        $query = 'SELECT id, name  
-                    FROM events e INNER JOIN Users u ON u.id = e.organizer_id
-                    WHERE DATEDIFF(startdate, :date) = 0 AND e.organizer_id = :orga
-                    ORDER BY startdate
-                    LIMIT 0, 6';
+    if ($limited) {
+        
+        $query .= "\nLIMIT 0, 6";
     }
     $table = array('date' => $dateFull,
                     'orga' => $_SESSION['id']);
@@ -87,7 +79,7 @@ function oPostEventData($data) {
 
     $query = 'INSERT INTO events(name, nb_place, startdate, enddate, description) 
                 VALUES(:title, :nbPlaces, :startDate, :endDate, :describe)';
-    $table = array('title' => $data['name'],
+    $table = array('title' => $data['name'] ,
                     'nbPlaces' => $data['nbPlaces'],
                     'startDate' => $data['startDate'],
                     'endDate' => $data['endDate'],

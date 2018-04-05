@@ -19,7 +19,7 @@ ob_start(); ?>
 
 
 ob_start();
-    if ($infoPage['echec']) {
+    if ($_POST['echec']) {
         echo 'Erreur : certains champs sont incorrects ou manquant';
     }
 $asideContent = ob_get_clean();

@@ -12,11 +12,9 @@ ob_start(); ?>
 
 
 ob_start(); ?>
-    <a href="index.php?action=lastDay"><button>Jour précédent</button></a>
-
-    <?= htmlspecialchars($infoPage['date'].' '.$infoPage['month'].' '.$infoPage['year']) ?>
-
-    <a href="index.php?action=nextDay"><button>Jour suivant</button></a>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastDay) ?>">Jour précédent</a>
+    <?= htmlspecialchars($showDate) ?>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">Jour suivant</a>
 <?php $asideContent = ob_get_clean();
 
 

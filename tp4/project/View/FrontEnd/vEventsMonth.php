@@ -7,17 +7,9 @@ $menuContent = '';
 
 
 ob_start(); ?>
-    <form method="post" action="index.php?action=reception"><!--remplacer index.php par ./ ?-->
-        <input type="hidden" name="date" value=<?= htmlspecialchars($lastMonth) ?>>
-        <input type="submit" value="Mois précédent">
-    </form>
-
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastMonth) ?>">Mois précédent</a>
     <?= htmlspecialchars($showDate) ?>
-
-    <form method="post" action="index.php?action=reception">
-        <input type="hidden" name="date" value=<?= htmlspecialchars($nextMonth) ?>>
-        <input type="submit" value="Mois suivant">
-    </form>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">Mois suivant</a>
 <?php $asideContent = ob_get_clean();
 
 

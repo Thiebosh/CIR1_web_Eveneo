@@ -13,9 +13,7 @@ ob_start(); ?>
 
 ob_start(); ?>
     <a href="index.php?action=lastEvent"><button>Evénement précédent</button></a>
-
     <?= htmlspecialchars($data['title']) ?>
-
     <a href="index.php?action=nextEvent"><button>Evénement suivant</button></a>
 <?php $asideContent = ob_get_clean();
 

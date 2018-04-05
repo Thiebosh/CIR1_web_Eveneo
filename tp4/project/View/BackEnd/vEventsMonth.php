@@ -7,17 +7,9 @@ $menuContent = '';
 
 
 ob_start(); ?>
-    <form method="post" action="index.php?action=reception">
-        <input type="hidden" name="date" value=<?= htmlspecialchars($lastMonth) ?>>
-        <input type="submit" value="Mois précédent">
-    </form>
-
-    <?= $showDate ?>
-
-    <form method="post" action="index.php?action=reception">
-        <input type="hidden" name="date" value=<?= htmlspecialchars($nextMonth) ?>>
-        <input type="submit" value="Mois suivant">
-    </form>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastMonth) ?>">Mois précédent</a>
+    <?= htmlspecialchars($showDate) ?>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">Mois suivant</a>
 <?php $asideContent = ob_get_clean();
 
 
@@ -52,8 +44,8 @@ ob_start(); ?>
                     $dayInMonth++;
                     ?>
                     <td>
-                        <form method="post" action="index.php?action=new">
-                            <input type="hidden" name="date" value=<?= htmlspecialchars(date('Y-m-d', gmmktime(0, 0, 0, $split[1], $weekDay, $split[0]))) ?>>
+                        <form method="post" action="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>">
+                            <input type="hidden" name="date" value=<?= htmlspecialchars(date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dayInMonth, $dateSplit[0]))) ?>>
                             <input type="submit" value="<?= htmlspecialchars($dayInWeek) ?>">
                         </form>
                     </td>

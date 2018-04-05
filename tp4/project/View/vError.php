@@ -9,9 +9,10 @@
     <body>
         <fieldset><legend>Erreur</legend>
             <p>
-                <?= htmlspecialchars($errorMessage) ?>
+                <?= htmlspecialchars($errorMessage) ?><br>
+                (Fichier : <?= htmlspecialchars($errorDetail) ?>)
             </p>
-            <a href="index.php?ation=<?= htmlspecialchars($redirection['link']) ?>">
+            <a href="index.php?action=<?= htmlspecialchars($redirection['link']) ?>">
                 Retours à <?= htmlspecialchars($redirection['text']) ?><br>
             </a>
         </fieldset>

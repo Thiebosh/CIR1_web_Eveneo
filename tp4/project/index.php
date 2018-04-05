@@ -1,9 +1,9 @@
 <?php
-session_start();
-
 //affichage des datetimes en francais
 setlocale(LC_TIME, 'fr_FR');
 date_default_timezone_set('UTC');
+
+session_start();
 
 require('Controller/cRegisterLogin.php');
 require('Controller/cFrontEnd.php');
@@ -182,6 +182,7 @@ try {
 
 catch(Exception $error) {//rediriger vers la page en affichant par dessus un bloc erreur, qu'on peut "fermer" en appuyant sur un bouton (a faire)
     $errorMessage = $error->getMessage();
+    $errorDetail = $error->getFile() . ', ligne ' . $error->getLine();
     $redirection['text'] = 'l\'accueil';
     $redirection['link'] = 'reception';
     if (!isset($_SESSION['rank'])) {

@@ -12,17 +12,9 @@ ob_start(); ?>
 
 
 ob_start(); ?>
-    <form method="post" action="index.php?action=reception">
-        <input type="hidden" name="date" value=<?= htmlspecialchars($lastDay) ?>>
-        <input type="submit" value="Jour précédent">
-    </form>
-
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastDay) ?>">Jour précédent</a>
     <?= htmlspecialchars($showDate) ?>
-
-    <form method="post" action="index.php?action=reception">
-        <input type="hidden" name="date" value=<?= htmlspecialchars($nextDay) ?>>
-        <input type="submit" value="Jour suivant">
-    </form>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">Jour suivant</a>
 <?php $asideContent = ob_get_clean();
 
 
