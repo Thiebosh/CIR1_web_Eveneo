@@ -131,7 +131,7 @@ try {
                 if (!$received['date']) throw new Exception('Nouveau : Donnée invalide');
 
                 if (isset($_POST['script_new'])) {
-                    if (!isset($_POST['name']) || !isset($_POST['nbPlace']) || !isset($_POST['description']) ||
+                    if (!isset($_POST['name']) || !isset($_POST['nbPlaces']) || !isset($_POST['description']) ||
                     !isset($_POST['startDate']) || !isset($_POST['endDate'])) {
                         throw new Exception('Nouveau : Donnée(s) formulaire absente(s)');
                     }

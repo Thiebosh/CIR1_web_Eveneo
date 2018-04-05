@@ -3,7 +3,7 @@ require_once('Model/mCommon.php');
 
 function oGetEventsDay($dateFull, $limited) {
     $bdd = dbConnect();
-    $query = 'SELECT u.id, name  
+    $query = 'SELECT u.id, e.name  
                 FROM events e INNER JOIN Users u ON u.id = e.organizer_id
                 WHERE DATEDIFF(:date, startdate) = 0 AND e.organizer_id = :orga
                 ORDER BY startdate';

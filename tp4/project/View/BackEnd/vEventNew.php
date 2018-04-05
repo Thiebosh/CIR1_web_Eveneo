@@ -8,10 +8,15 @@ ob_start(); ?>
     <li>
         <a href="index.php?action=reception"><button>Accueil</button></a>
     </li>
+    <li>
+        <a href="index.php?action=allEvents&amp;date=<?= htmlspecialchars($date) ?>">
+            Liste des événements de <?= htmlspecialchars($showDate) ?>
+        </a>
+    </li>
     <!--si recoit date
     <li>
         <form method="post" action="index.php?action=allEvents&amp;date=< ?= $data['id']">
-            <input type="submit" value="Liste des événements de < ?= htmlspecialchars($data['day']) ?>">
+            <input type="submit" value="">
         </form>
     </li>
     -->
@@ -26,13 +31,15 @@ $asideContent = ob_get_clean();
 
 
 ob_start(); ?>
-    <form method="post" action="index.php?action=saveEvent">
-        <input type="text" id="nameEvent" name="nameEvent" placeholder="nom">
-        <input type="text" id="nbPlaces" name="nbPlaces" placeholder="nbPlaces">
-        <input type="text" id="dateDebut" name="dateDebut" placeholder="dateDebut"><!--liste deroulante préremplie si infos (sauf heure)-->
-        <input type="text" id="duree" name="duree" placeholder="duree"><!--liste deroulante / bouton pour choisir de mettre une durée ou une date de fin-->
-        <textarea id="description" name="description" placeholder="description"></textarea>
-        
+    <form method="post" action="index.php?action=new">
+        <input type="text" id="name" name="name" placeholder="Titre de l'événement">
+        <input type="text" id="nbPlaces" name="nbPlaces" placeholder="Nombre de places">
+        <br>
+        <input type="text" id="startDate" name="startDate" placeholder="Date de début"><!--liste deroulante préremplie si infos (sauf heure)-->
+        <input type="text" id="endDate" name="endDate" placeholder="Date de fin"><!--liste deroulante / bouton pour choisir de mettre une durée ou une date de fin-->
+        <br>
+        <textarea id="description" name="description" placeholder="Description de l'événement"></textarea>
+        <br><br>
         <input type="submit" value="Enregistrer">
     </form>
 <?php $articleContent = ob_get_clean();

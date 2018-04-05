@@ -39,15 +39,14 @@ ob_start(); ?>
                     echo '<td colspan="2"></td>';
                     $dayInMonth++;
                 }
+                
                 foreach($eventsMonth as $eventsDay) {
                     $dayInWeek++;
                     $dayInMonth++;
+                    $date = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dayInMonth, $dateSplit[0]));
                     ?>
                     <td>
-                        <form method="post" action="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>">
-                            <input type="hidden" name="date" value=<?= htmlspecialchars(date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dayInMonth, $dateSplit[0]))) ?>>
-                            <input type="submit" value="<?= htmlspecialchars($dayInWeek) ?>">
-                        </form>
+                        <a href="index.php?action=new&amp;date=<?= $date ?>"><?= htmlspecialchars($dayInWeek) ?></a>
                     </td>
                     <td>
                         <?php
