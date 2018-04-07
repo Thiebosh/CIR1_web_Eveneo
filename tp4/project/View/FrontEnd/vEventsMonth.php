@@ -7,9 +7,13 @@ $menuContent = '';
 
 
 ob_start(); ?>
-    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastMonth) ?>">Mois précédent</a>
-    <?= htmlspecialchars($showDate) ?>
-    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">Mois suivant</a>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastMonth) ?>">
+        <button><h3>Mois précédent</h3></button>
+    </a>
+    <h3><?= htmlspecialchars($showDate) ?></h3>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">
+        <button><h3>Mois suivant</h3></button>
+    </a>
 <?php $asideContent = ob_get_clean();
 
 
@@ -17,63 +21,81 @@ ob_start(); ?>
     <table>
         <thead>
             <tr>
-                <?php
-                for ($dayInWeek = 0; $dayInWeek < 7; $dayInWeek++) {
-                    echo '<th colspan="2">' . $dayName['fr'][$dayInWeek] . '</th>';
-                }
-                ?>
+                <?php for ($dayInWeek = 0; $dayInWeek < 7; $dayInWeek++) { ?>
+                    <th>
+                        <h4><?= htmlspecialchars($dayName['fr'][$dayInWeek]) ?></h4>
+                    </th>
+                <?php } ?>
             </tr>
         </thead>
+        <tfoot>
+            <tr>
+                <?php for ($dayInWeek = 0; $dayInWeek < 7; $dayInWeek++) { ?>
+                    <th>
+                        <h4><?= htmlspecialchars($dayName['fr'][$dayInWeek]) ?></h4>
+                    </th>
+                <?php } ?>
+            </tr>
+        </tfoot>
         <tbody>
             <tr>
                 <?php
                 $dayInMonth = $dayInWeek = 0;
                 while ($dayName['ang'][$dayInMonth] != $dayStartMonth) {
-                    echo '<td colspan="2"></td>';
+                    echo '<td class="otherMonth"></td>';
                     $dayInMonth++;
                 }
+
                 foreach($eventsMonth as $eventsDay) {
                     $dayInWeek++;
                     $dayInMonth++;
+                    $date = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dayInWeek, $dateSplit[0]));
                     ?>
                     <td>
-                        <?= htmlspecialchars($dayInWeek) ?>
+                        <table>
+                            <tr>
+                                <td class="date">
+                                    <?= htmlspecialchars($dayInWeek) ?>
+                                </td>
+                                <td>
+                                    <?php if ($eventsDay) {
+                                        $nbEvent = 0;
+                                        foreach($eventsDay as $event) {
+                                            $status = cGetEventStatus($event['id']);
+                                            if ($event['nb_place'] > 0 || $status) {?>
+                                                <div <?php if ($status) echo 'class="follow"' ?>>
+                                                    <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($event['id']) ?>">
+                                                        <?= htmlspecialchars($event['name']) ?>
+                                                    </a>
+                                                </div>
+                                                <?php
+                                                $nbEvent++;
+                                            }
+                                            if ($nbEvent == MAX_LIST) break;
+                                        }
+                                        
+                                        if (count($eventsDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template ?>
+                                            <br>
+                                            <a href="index.php?action=list&amp;date=<?= htmlspecialchars($date) ?>">
+                                                <button>Voir plus</button>
+                                            </a>
+                                        <?php }
+                                    } ?>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
-                    <td>
-                        <?php
-                        if ($eventsDay) {
-                            $nbEvent = 0;
-                            foreach($eventsDay as $event) {
-                                ?>
-                                <div>
-                                    <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($event['id']) ?>">
-                                        <?= htmlspecialchars($event['name']) ?>
-                                    </a>
-                                </div>
-                                <?php
-                                $nbEvent++;
-                                if ($nbEvent == MAX_LIST) break;
-                            }
-                            
-                            if (count($eventsDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template
-                                echo '<a href="index.php?action=list">Plus de conférences</a>';
-                            }
-                        }
-                        ?>
-                    </td>
-                    <?php
-                    if ($dayInMonth % 7 == 0 && $dayInWeek < $nbDayMonth) {//si egal a nbDayMonth, est fermé par le dernier
+                    <?php if ($dayInMonth % 7 == 0 && $dayInWeek < $nbDayMonth) {//si egal a nbDayMonth, est fermé par le dernier
                         echo '</tr><tr>';//nouvelle semaine
                     }
                 }
 
-                if ($dayInWeek % 7 != 0) {//ne s est pas arreté sur dimanche  (necessaire?)
+                if ($dayInWeek % 7 != 0) {//ne s est pas arreté sur dimanche
                     while ($dayName['ang'][$dayEndMonth - 1] != 'Sun') {
-                        echo '<td colspan="2"></td>';
+                        echo '<td class="otherMonth"></td>';
                         $dayEndMonth++;
                     }
-                }
-                ?>
+                } ?>
             </tr>
         </tbody>
     </table>

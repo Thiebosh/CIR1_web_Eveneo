@@ -5,8 +5,7 @@ function oGetEventsDay($date, $limited) {
     $bdd = dbConnect();
     $query = 'SELECT id, name, startdate, nb_place
                 FROM events
-                WHERE DATEDIFF(:date, startdate) = 0
-                AND organizer_id = :orga
+                WHERE DATEDIFF(:date, startdate) = 0 AND organizer_id = :orga
                 ORDER BY startdate';
     if ($limited) {
         $query .= ' LIMIT 0, '.(MAX_LIST + 1);

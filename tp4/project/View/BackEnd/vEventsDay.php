@@ -12,16 +12,20 @@ ob_start(); ?>
 
 
 ob_start(); ?>
-    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastDay) ?>">Jour précédent</a>
-    <?= htmlspecialchars($showDate) ?>
-    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">Jour suivant</a>
+    <a href="index.php?action=list&amp;date=<?= htmlspecialchars($lastDay) ?>">
+        <button><h3>Jour précédent</h3></button>
+    </a>
+    <h3><?= htmlspecialchars($showDate) ?></h3>
+    <a href="index.php?action=list&amp;date=<?= htmlspecialchars($nextDay) ?>">
+        <button><h3>Jour suivant</h3></button>
+    </a>
 <?php $asideContent = ob_get_clean();
 
 
 ob_start();
     foreach($eventsDay as $event) {
-    $startDate = strftime('%hHeure %i', strtotime($event['startdate']));
-    ?>
+        $startDate = strftime('%hHeure %i', strtotime($event['startdate']));
+        ?>
         <hr>
         <div class="event">
             <h3>
@@ -33,10 +37,10 @@ ob_start();
             <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($event['id']) ?>"><button>Plus d'infos</button></a>
         </div>
         <hr>
-    <?php
-    }
-    ?>
-    <a href="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>"><button>Ajouter une conférence</button></a>
+    <?php } ?>
+    <a href="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>">
+        <button>Ajouter un événement</button>
+    </a>
     <?php
 $articleContent = ob_get_clean();
 

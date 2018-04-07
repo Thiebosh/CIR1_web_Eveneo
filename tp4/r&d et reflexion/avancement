@@ -6,3 +6,19 @@ harmoniser les noms de variable
 rendre connexion fonctionnelle
 
 rendre affichage correct
+
+
+
+connexion - déconnexion - inscription : fait
+    reste désinscription (option)
+
+client
+    mois - jour - detail - (dés)inscription : fait
+        faire un model pour month et un pour list (optionnel)
+
+orga
+    mois - jour - detail - création - suppression : fait
+        reste modification
+        faire un model pour month et un pour list (optionnel)
+
+tous : peaufiner les affichages (dates, visuel)

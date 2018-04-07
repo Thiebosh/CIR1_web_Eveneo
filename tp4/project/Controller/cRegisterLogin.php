@@ -2,11 +2,7 @@
 require('Model/mRegisterLogin.php');
 
 function aLogin($data) {
-    if (!$data) {
-        require('View/RegisterLogin/vLogin.php');
-    }
-    else {//active script_login
-        
+    if ($data) {//active script_login
         $dataUser = getDataUser($data['login']);
 
         if (!$dataUser) throw new Exception("Connexion : Echec de récupération des données");
@@ -24,19 +20,17 @@ function aLogin($data) {
         header('Location: index.php?action=reception');//redirige vers l'accueil
         exit();
     }
+
+    require('View/RegisterLogin/vLogin.php');
 }
 
 
 function aRegister($data) {
-    if (!$data) {
-        require('View/RegisterLogin/vRegister.php');
-    }
-
-    else {//active script_register
+    if ($data) {//active script_register
         if ($data['password'] != $data['passwordVerif']) {
             throw new Exception("Inscription : les mots de passe ne sont pas identiques");
         }
-        $data['password'] = password_hash($data['password']);
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
         
         if (getLoginUser($data['login'])) throw new Exception("Inscription : Login déjà utilisé");
         
@@ -45,4 +39,6 @@ function aRegister($data) {
         header('Location: index.php?action=login');//redirige vers la page de connexion
         exit();
     }
+
+    require('View/RegisterLogin/vRegister.php');
 }

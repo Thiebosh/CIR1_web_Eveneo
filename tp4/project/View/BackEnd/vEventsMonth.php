@@ -7,9 +7,13 @@ $menuContent = '';
 
 
 ob_start(); ?>
-    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastMonth) ?>">Mois précédent</a>
-    <?= htmlspecialchars($showDate) ?>
-    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">Mois suivant</a>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastMonth) ?>">
+        <button><h3>Mois précédent</h3></button>
+    </a>
+    <h3><?= htmlspecialchars($showDate) ?></h3>
+    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">
+        <button><h3>Mois suivant</h3></button>
+    </a>
 <?php $asideContent = ob_get_clean();
 
 
@@ -18,15 +22,24 @@ ob_start(); ?>
         <thead>
             <tr>
                 <?php for ($dayInWeek = 0; $dayInWeek < 7; $dayInWeek++) { ?>
-                    <th colspan="2"><?= htmlspecialchars($dayName['fr'][$dayInWeek]) ?></th>
+                    <th>
+                        <h4><?= htmlspecialchars($dayName['fr'][$dayInWeek]) ?></h4>
+                    </th>
                 <?php } ?>
+            </tr>
+            <tr>
+                <th colspan="7">
+                    Sélectionnez un jour pour y créer un événement!
+                </th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <td colspan="7">
-                    Sélectionnez un jour pour y créer un événement!
-                </td>
+                <?php for ($dayInWeek = 0; $dayInWeek < 7; $dayInWeek++) { ?>
+                    <th>
+                        <h4><?= htmlspecialchars($dayName['fr'][$dayInWeek]) ?></h4>
+                    </th>
+                <?php } ?>
             </tr>
         </tfoot>
         <tbody>
@@ -34,7 +47,7 @@ ob_start(); ?>
                 <?php
                 $dayInMonth = $dayInWeek = 0;
                 while ($dayName['ang'][$dayInMonth] != $dayStartMonth) {
-                    echo '<td></td>';
+                    echo '<td class="otherMonth"></td>';
                     $dayInMonth++;
                 }
                 
@@ -47,7 +60,7 @@ ob_start(); ?>
                         <a href="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>">
                             <table>
                                 <tr>
-                                    <td>
+                                    <td class="date">
                                         <?= htmlspecialchars($dayInWeek) ?>
                                     </td>
                                     <td>
@@ -58,11 +71,6 @@ ob_start(); ?>
                                                     <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($event['id']) ?>">
                                                         <?= htmlspecialchars($event['name']) ?>
                                                     </a>
-
-                                                    <form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($event['id']) ?>">
-                                                        <input type="hidden" name="script_delete" value='true'>
-                                                        <input type="submit" value="Supprimer">
-                                                    </form>
                                                 </div>
                                                 <?php
                                                 $nbEvent++;
@@ -70,7 +78,10 @@ ob_start(); ?>
                                             }
                                             
                                             if (count($eventsDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template ?>
-                                                <a href="index.php?action=list&amp;date=<?= htmlspecialchars($date) ?>">Plus de conférences</a>
+                                                <br>
+                                                <a href="index.php?action=list&amp;date=<?= htmlspecialchars($date) ?>">
+                                                    <button>Voir plus</button>
+                                                </a>
                                             <?php }
                                         } ?>
                                     </td>
@@ -85,7 +96,7 @@ ob_start(); ?>
 
                 if ($dayInWeek % 7 != 0) {//ne s est pas arreté sur dimanche
                     while ($dayName['ang'][$dayEndMonth - 1] != 'Sun') {
-                        echo '<td></td>';
+                        echo '<td class="otherMonth"></td>';
                         $dayEndMonth++;
                     }
                 } ?>

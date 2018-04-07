@@ -1,44 +1,40 @@
 <?php 
-$pageName = 'Détails';
+$pageName = "Détails";
 
-$legendContent = 'Détails de l\'événement';
+$legendContent = "Détails de l'événement";
 
 
 ob_start(); ?>
     <li>
         <a href="index.php?action=reception"><button>Accueil</button></a>
     </li>
+    <li>
+        <a href="index.php?action=list&amp;date=<?= htmlspecialchars($dataEvent['startdate']) ?>">
+            <button>Tous les événements du <?= htmlspecialchars($dateStart) ?></button>
+        </a>
+    </li>
 <?php $menuContent = ob_get_clean();
 
 
-ob_start(); ?>
-    <a href="index.php?action=lastEvent"><button>Evénement précédent</button></a>
-    <?= htmlspecialchars($data['title']) ?>
-    <a href="index.php?action=nextEvent"><button>Evénement suivant</button></a>
-<?php $asideContent = ob_get_clean();
+$asideContent = '';
 
 
 ob_start(); ?>
-    <h3>
-        <?= htmlspecialchars($dataEvent['nameConf']) ?>
-    </h3>
-    Organisateur : <?= htmlspecialchars($dataEvent['organizer']) ?>
-    durée : <?= htmlspecialchars($dureeEvent) ?>
-    de <?= htmlspecialchars($dateStart) ?> à <?= htmlspecialchars($dateEnd) ?>
-    <?= htmlspecialchars($dataEvent['place']) ?>
-    <?= htmlspecialchars($dataEvent['describeConf']) ?>
-
-
-    <a href="index.php?action=statusEvents&amp;id=<?= htmlspecialchars($data['id']) ?>"><button>
-        <?php
-        if (!$current) {
-            echo 'S\'inscrire à l\'événement';
-        }
-        else {
-            echo 'Se désinscrire de l\'événement';
-        }
-        ?>
-    </button></a>
+    <h3><?= htmlspecialchars($dataEvent['name']) ?></h3>
+    Organisateur : <?= htmlspecialchars($dataEvent['login']) ?><br>
+    Nombre de places restantes : <?= htmlspecialchars($dataEvent['nb_place']) ?><br>
+    <br>
+    De <?= htmlspecialchars($dateStart) ?> à <?= htmlspecialchars($dateEnd) ?> (Durée : <?= htmlspecialchars($dureeEvent) ?>)<br>
+    <br>
+    <fieldset class="describe">
+        <legend>Description :</legend>
+        <?= htmlspecialchars($dataEvent['description']) ?>
+    </fieldset>
+    <br>
+    <form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($id) ?>">
+        <input type="hidden" name="script_join" value='true'>
+        <input type="submit" value=<?= $action ?>>
+    </form>
 <?php $articleContent = ob_get_clean();
 
 require('View/template.php');

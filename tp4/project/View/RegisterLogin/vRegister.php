@@ -14,10 +14,10 @@ ob_start(); ?>
             <input type="password" id="passwordVerif" name="passwordVerif" placeholder="Vérification du mot de passe">
             <br>
             <br>
-            <input type="radio" id="Customer" name="rank" value="yes" checked>
+            <input type="radio" id="Customer" name="rank" value="CUSTOMER" checked>
             <label for="Customer">Client</label>
             <br>
-            <input type="radio" id="Organizer" name="rank" value="yes">
+            <input type="radio" id="Organizer" name="rank" value="ORGANIZER">
             <label for="Organizer">Organisateur</label>
             <br>
             <br>

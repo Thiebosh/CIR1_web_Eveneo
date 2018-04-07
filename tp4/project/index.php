@@ -1,6 +1,6 @@
 <?php
 //affichage des datetimes en francais
-setlocale(LC_TIME, 'fr_FR');
+setlocale(LC_TIME, "fr_FR", "French");
 date_default_timezone_set('UTC');
 
 session_start();

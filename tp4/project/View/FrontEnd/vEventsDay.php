@@ -12,27 +12,35 @@ ob_start(); ?>
 
 
 ob_start(); ?>
-    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastDay) ?>">Jour précédent</a>
-    <?= htmlspecialchars($showDate) ?>
-    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">Jour suivant</a>
+    <a href="index.php?action=list&amp;date=<?= htmlspecialchars($lastDay) ?>">
+        <button><h3>Jour précédent</h3></button>
+    </a>
+    <h3><?= htmlspecialchars($showDate) ?></h3>
+    <a href="index.php?action=list&amp;date=<?= htmlspecialchars($nextDay) ?>">
+        <button><h3>Jour suivant</h3></button>
+    </a>
 <?php $asideContent = ob_get_clean();
 
 
 ob_start();
     foreach($eventsDay as $event) {
-    ?>
-        <div>
+        $startDate = strftime('%hHeure %i', strtotime($event['startdate']));
+        if (cGetEventStatus($event['id'])) $status = 'Oui';
+        else $status = 'Non';
+        ?>
+        <hr>
+        <div class="event">
             <h3>
                 <?= htmlspecialchars($event['name']) ?>
             </h3>
-            début : <?= htmlspecialchars(strftime('%A %e %B %Y', strtotime($event['datestart']))) ?>
-            <form method="post" action="index.php?action=detail">
-                <input type="hidden" name="id" value=<?= htmlspecialchars($event['id']) ?>>
-                <input type="submit" value="Plus d'infos">
-            </form>
+            Début : <?= htmlspecialchars($startDate) ?><br>
+            Places restantes : <?= htmlspecialchars($event['nb_place']) ?><br>
+            Inscrit : <?= htmlspecialchars($status) ?><br>
+            <br>
+            <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($event['id']) ?>"><button>Plus d'infos</button></a>
         </div>
-    <?php
-    }
+        <hr>
+    <?php }
 $articleContent = ob_get_clean();
 
 require('View/template.php');

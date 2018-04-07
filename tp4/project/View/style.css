@@ -1,0 +1,78 @@
+fieldset {
+    text-align: center;
+    margin: auto;
+    border-radius: 2em;
+}
+
+legend {
+    margin-left: 3em;
+}
+
+td, th, table {
+    border : 1px solid black;
+    border-collapse:collapse;
+    width: 14em;
+    text-align: center;
+    margin: auto;
+}
+
+td {
+    height: 10em;
+}
+
+aside, header, menu {
+    display: flex;
+}
+
+aside {
+    justify-content: space-around;
+}
+
+header {
+    justify-content: space-between
+}
+
+menu li {
+    margin-right: 0.5em;
+    list-style-type: none;
+}
+menu li:before {
+    content: "→";
+}
+
+form {
+    display: inline-block;
+}
+
+.date {
+    width: 3em;
+}
+
+.otherMonth {
+    background-color: lightgray;
+}
+
+a {
+    color: black;
+}
+
+.follow {
+    border : 1px solid black;
+    border-radius: 0.5em;
+    background-color: lightgreen;
+    width : 75%;
+    margin: auto;
+}
+
+.column {
+    display: flex;
+    flex-direction :column;
+    text-align: center;
+    justify-content: space-between
+}
+
+.describe {
+    width: 60%;
+    border-radius: 1em;
+    margin: auto;
+}

@@ -33,8 +33,7 @@ function oEventsDay($date) {
     $lastDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] - 1, $dateSplit[0]));
     $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] + 1, $dateSplit[0]));
 
-    $eventsDay = oGetEventsDay($date, false);
-    if (!$eventsDay) throw new Exception("Evénements du jour : Echec de récupération des données");
+    $eventsDay = oGetEventsDay($date, false);//si pas d'événement, n'affiche rien
 
     require('View/BackEnd/vEventsDay.php');
 }
@@ -53,6 +52,7 @@ function oEvent($id) {
 
     $dataEvent = oGetEvent($id);
     if (!$dataEvent) throw new Exception("Evénement : Echec de récupération des données");
+    
     $dateStart = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['startdate']));
     $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['enddate']));
     $dureeEvent = 'coder fonction';
