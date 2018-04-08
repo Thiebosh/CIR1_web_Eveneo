@@ -1,0 +1,10 @@
+<nav>
+    <ol class="pagination">
+        <?php 
+        for ($i = 1; $i <= $nbPages; $i++) { ?>
+        <li>
+            <a href="controller.php?$page=<?= $i ?>"><?= $i ?></a>
+        </li>
+        <?php } ?> 
+    </ol>
+</nav>
