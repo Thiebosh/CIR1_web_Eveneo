@@ -1,32 +1,52 @@
 <?php
 require_once('Model/mCommon.php');
 
-function cGetEventsDay($date, $limited) {
+
+function cGetEventsMonth($dataDate) {
     $bdd = dbConnect();
-    $query = 'SELECT id, name, startdate, nb_place
+    
+    for ($day = 1; $day <= $dataDate['nbDays']; $day++) {
+        $fullDate = date('Y-m-d', gmmktime(0, 0, 0, $dataDate['month'], $day, $dataDate['year']));
+
+        $query = 'SELECT id, name, nb_place AS place, startdate 
                 FROM events
-                WHERE DATEDIFF(:date, startdate) = 0
-                ORDER BY startdate';
-    if ($limited) {
-        $query .= ' LIMIT 0, '.(MAX_LIST + 1);
+                WHERE DATEDIFF(startdate, :date) = 0
+                ORDER BY startdate LIMIT 0, ' . (MAX_LIST + 1);
+        $table = array('date' => $fullDate);
+
+        $request = $bdd->prepare($query);
+        $request->execute($table);
+        $dataMonth[$day] = $request->fetchAll();
     }
-    $table = array('date' => $date);
 
-    $request = $bdd->prepare($query);
-    $request->execute($table);
-    $listEvent = $request->fetchAll();
-
-    return $listEvent;
+    return $dataMonth;
 }
 
 
-function cGetEvent($idEvent) {
+function cGetEventsDay($day) {
     $bdd = dbConnect();
 
-    $query = 'SELECT e.name, e.description, e.startdate, e.enddate, e.nb_place, u.login
-                FROM events e INNER JOIN Users u ON e.organizer_id = u.id
-                WHERE e.id = :idEvent';
-    $table = array('idEvent' => $idEvent);
+    $query = 'SELECT e.id, e.name, e.startdate AS startTime, e.nb_place AS place, u.login AS organizer
+            FROM events e INNER JOIN Users u ON e.organizer_id = u.id
+            WHERE DATEDIFF(e.startdate, :date) = 0
+            ORDER BY e.startdate';
+    $table = array('date' => $day);
+
+    $request = $bdd->prepare($query);
+    $request->execute($table);
+    $dataDay = $request->fetchAll();
+
+    return $dataDay;
+}
+
+
+function cGetEventDetail($idEvent) {
+    $bdd = dbConnect();
+
+    $query = 'SELECT e.name, e.description, e.startdate, e.enddate, e.nb_place AS place, u.login
+            FROM events e INNER JOIN Users u ON e.organizer_id = u.id
+            WHERE e.id = :event';
+    $table = array('event' => $idEvent);
 
     $request = $bdd->prepare($query);
     $request->execute($table);
@@ -36,63 +56,38 @@ function cGetEvent($idEvent) {
     return $dataEvent;
 }
 
-function cGetEventStatus($idEvent) {
-    $bdd = dbConnect();
-    
-    $query = 'SELECT iduser_participates_events
-                FROM user_participates_events
-                WHERE id_event = :idEvent AND id_participant = :idUser';
-    $table = array('idEvent' => $idEvent, 
-                    'idUser' => $_SESSION['id']);
 
-    $request = $bdd->prepare($query);
-    $request->execute($table);
-    $status = $request->fetch();
-    $request->closeCursor();
-
-    return $status;
-}
-
-
-function cPostStatusEvent($idEvent) {
+function cSetStatusON($idEvent) {
     $bdd = dbConnect();
 
     $query = 'INSERT INTO user_participates_events(id_event, id_participant) 
-                VALUES(:event, :user)';
-    $table = array('event' => $idEvent,
-                    'user' => $_SESSION['id']);
-
+            VALUES(:event, :user)';
+    $table = array('event' => $idEvent, 'user' => $_SESSION['id']);
     $request = $bdd->prepare($query);
     $request->execute($table);//retourne quelque chose?
 
-
     $query = 'UPDATE events
-                SET nb_place = nb_place - 1
-                WHERE id = :idEvent';
+            SET nb_place = nb_place - 1
+            WHERE id = :idEvent';
     $table = array('idEvent' => $idEvent);
-
     $request = $bdd->prepare($query);
     $request->execute($table);//retourne quelque chose?
 }
 
 
-function cDeleteStatusEvent($idEvent) {
+function cSetStatusOFF($idEvent) {
     $bdd = dbConnect();
     
     $query = 'DELETE FROM user_participates_events
-                WHERE id_event = :event AND id_participant = :user';
-    $table = array('event' => $idEvent, 
-                    'user' => $_SESSION['id']);
-
+            WHERE id_event = :event AND id_participant = :user';
+    $table = array('event' => $idEvent, 'user' => $_SESSION['id']);
     $request = $bdd->prepare($query);
     $request->execute($table);
 
-
     $query = 'UPDATE events
-                SET nb_place = nb_place + 1
-                WHERE id = :idEvent';
+            SET nb_place = nb_place + 1
+            WHERE id = :idEvent';
     $table = array('idEvent' => $idEvent);
-
     $request = $bdd->prepare($query);
     $request->execute($table);//retourne quelque chose?
 }

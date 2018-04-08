@@ -12,3 +12,19 @@ function dbConnect() {
 
     return $dataBase;
 }
+
+function getEventStatus($idEvent) {//si faux, n'est pas inscrit
+    $bdd = dbConnect();
+
+    $query = 'SELECT iduser_participates_events
+            FROM user_participates_events
+            WHERE id_event = :event AND id_participant = :user';
+    $table = array('event' => $idEvent, 'user' => $_SESSION['id']);
+
+    $request = $bdd->prepare($query);
+    $request->execute($table);
+    $status = $request->fetch();
+    $request->closeCursor();
+
+    return $status['iduser_participates_events'];
+}

@@ -57,6 +57,8 @@ function oEvent($id) {
     $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['enddate']));
     $dureeEvent = 'coder fonction';
 
+    $action = "Supprimer";
+
     require('View/BackEnd/vEvent.php');
 }
 

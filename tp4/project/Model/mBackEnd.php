@@ -1,6 +1,7 @@
 <?php
 require_once('Model/mCommon.php');
 
+
 function oGetEventsDay($date, $limited) {
     $bdd = dbConnect();
     $query = 'SELECT id, name, startdate, nb_place

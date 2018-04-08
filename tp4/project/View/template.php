@@ -32,6 +32,10 @@
                 <article>
                     <?= $articleContent ?>
                 </article>
+                <br>
+                <aside>
+                    <?= $asideBottomContent ?>
+                </aside>
             </fieldset>
         </section>
 

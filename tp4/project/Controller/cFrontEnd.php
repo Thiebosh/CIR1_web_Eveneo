@@ -6,58 +6,76 @@ function cEventsMonth($date) {
 
     $timeStamp = strtotime($date);
     $showDate = strftime('%B %Y', $timeStamp);
-    $nbDayMonth = date('t', $timeStamp);
+    $dataDate['nbDays'] = date('t', $timeStamp);
 
     $dateSplit = explode('-', $date);
-    $lastMonth = date('Y-m', gmmktime(0, 0, 0, $dateSplit[1] - 1, 1, $dateSplit[0]));
-    $nextMonth = date('Y-m', gmmktime(0, 0, 0, $dateSplit[1] + 1, 1, $dateSplit[0]));
+    $dataDate['year'] = $dateSplit[0];
+    $dataDate['month'] = $dateSplit[1];
+
+    $dataMonth = cGetEventsMonth($dataDate);
+    for($day = 1; $day < $dataDate['nbDays']; $day++) {
+        if ($dataMonth[$day]) {
+            $event = 0;
+            foreach($dataMonth[$day] as $dataEvent) {
+                $dataMonth[$day][$event]['status'] = getEventStatus($dataEvent['id']);
+                $event++;
+            }
+        }
+    }
+    
+    $lastMonth = date('Y-m', gmmktime(0, 0, 0, $dataDate['month'] - 1, 1, $dataDate['year']));
+    $nextMonth = date('Y-m', gmmktime(0, 0, 0, $dataDate['month'] + 1, 1, $dataDate['year']));
+    
+    $startMonth = date('D', gmmktime(0, 0, 0, $dataDate['month'], 1, $dataDate['year']));//pour commencer le tableau d affichage
+    $endMonth = date('N', gmmktime(0, 0, 0, $dataDate['month'], $dataDate['nbDays'], $dataDate['year']));//pour finir le tableau d affichage
 
     $dayName = array('ang' => array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'),
                     'fr' => array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'));
-    $dayStartMonth = date('D', gmmktime(0, 0, 0, $dateSplit[1], 1, $dateSplit[0]));//pour commencer le tableau d affichage
-    $dayEndMonth = date('N', gmmktime(0, 0, 0, $dateSplit[1], $nbDayMonth, $dateSplit[0]));//pour finir le tableau d affichage
-
-    for ($day = 1; $day <= $nbDayMonth; $day++) {
-        $fullDate = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $day, $dateSplit[0]));
-        $eventsMonth[] = cGetEventsDay($fullDate, true);//si vide, listEventsMonth[] vaudra false
-    }
-
-    require('View/FrontEnd/vEventsMonth.php');
+    
+    require('View/Common/vMonth.php');
 }
 
 
 function cEventsDay($date) {
-    $showDate = strftime('%A %e %B %Y', strtotime($date));
+    $dataDay = cGetEventsDay($date);
+    $event = 0;
+    foreach($dataDay as $dataEvent) {
+        if (getEventStatus($dataEvent['id'])) $dataDay[$event]['status'] = 'Oui';
+        else $dataDay[$event]['status'] = 'Non';
 
+        $dataDay[$event]['startTime'] = strftime('%hHeure %i', strtotime($dataEvent['startTime']));
+        $event++;
+    }
+
+    $showDate = strftime('%A %e %B %Y', strtotime($date));
     $dateSplit = explode('-', $date);
     $lastDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] - 1, $dateSplit[0]));
     $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] + 1, $dateSplit[0]));
 
-    $eventsDay = cGetEventsDay($date, false);//si pas d'événement, n'affiche rien
-
-    require('View/FrontEnd/vEventsDay.php');
+    require('View/Common/vDay.php');
 }
 
 
 function cEvent($id) {
-    $status = cGetEventStatus($id);//si faux, n'est pas inscrit
-    $dataEvent = cGetEvent($id);
+    $dataEvent = cGetEventDetail($id);
     if (!$dataEvent) throw new Exception("Evénement : Echec de récupération des données");
     
+    $dataEvent['status'] = getEventStatus($id);
+    
     if (isset($_POST['script_join'])) {
-        if (!$status) cPostStatusEvent($id);//throw new Exception("Echec d\'enregistrement des données');//applique cChangement d etat (INSERT INTO renvoie quelque chose pour echec?)
-        else cDeleteStatusEvent($id);//throw new Exception("Echec d\'enregistrement des données');//applique cChangement d etat (DELETE FROM renvoie quelque chose pour echec?)
+        if (!$dataEvent['status']) cSetStatusON($id);
+        else cSetStatusOFF($id);
 
         header('Location: index.php?action=reception&date='.$dataEvent['startdate']);//recharge la page
         exit();
     }
 
-    $dateStart = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['startdate']));
-    $dateEnd = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['enddate']));
+    $startDateFr = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['startdate']));
+    $endDateFr = strftime('%A %e %B %Y, %Hheures %i', strtotime($dataEvent['enddate']));
     $dureeEvent = 'coder fonction';
     
-    if (!$status) $action = "Inscription";
+    if (!$dataEvent['status']) $action = "Inscription";
     else $action = "Désinscription";
 
-    require('View/FrontEnd/vEvent.php');
+    require('View/Common/vEvent.php');
 }
