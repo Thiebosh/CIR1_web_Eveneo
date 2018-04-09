@@ -12,7 +12,7 @@ ob_start(); ?>
         <a href="index.php?action=reception"><button>Accueil</button></a>
     </li>
     <li>
-        <a href="index.php?action=list&amp;date=<?= htmlspecialchars($dataEvent['startdate']) ?>">
+        <a href="index.php?action=list&amp;date=<?= htmlspecialchars($dateSplit[0]) ?>">
             <button>Tous les événements du <?= htmlspecialchars($startDateFr) ?></button>
         </a>
     </li>
@@ -36,6 +36,8 @@ ob_start(); ?>
 <?php $articleContent = ob_get_clean();
 
 $asideBottomContent = '<a href="#"><button class="ancre"><h3>Haut de page</h3></button></a>';
+
+$asideContent = '';
 
 
 require('View/template.php');

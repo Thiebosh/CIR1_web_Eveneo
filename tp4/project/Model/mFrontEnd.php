@@ -64,14 +64,14 @@ function cSetStatusON($idEvent) {
             VALUES(:event, :user)';
     $table = array('event' => $idEvent, 'user' => $_SESSION['id']);
     $request = $bdd->prepare($query);
-    $request->execute($table);//retourne quelque chose?
+    $request->execute($table);
 
     $query = 'UPDATE events
             SET nb_place = nb_place - 1
             WHERE id = :idEvent';
     $table = array('idEvent' => $idEvent);
     $request = $bdd->prepare($query);
-    $request->execute($table);//retourne quelque chose?
+    $request->execute($table);
 }
 
 
@@ -89,5 +89,5 @@ function cSetStatusOFF($idEvent) {
             WHERE id = :idEvent';
     $table = array('idEvent' => $idEvent);
     $request = $bdd->prepare($query);
-    $request->execute($table);//retourne quelque chose?
+    $request->execute($table);
 }

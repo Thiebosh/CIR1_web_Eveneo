@@ -1,37 +1,29 @@
-fieldset {
+body {
     text-align: center;
-    margin: auto;
-    border-radius: 2em;
+}
+a {
+    color: black;
+}
+form {
+    display: inline-block;
 }
 
-legend {
-    margin-left: 3em;
-}
-
-td, th, table {
-    border : 1px solid black;
-    border-collapse:collapse;
-    width: 14em;
-    text-align: center;
-    margin: auto;
-}
-
-td {
-    height: 10em;
-}
-
-aside, header, menu {
-    display: flex;
-}
-
-aside {
-    justify-content: space-around;
-}
 
 header {
-    justify-content: space-between
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
 }
-
+menu {
+    display: flex;
+    width: 80%;
+    margin: auto;
+    padding: 1em;
+    border: 1px solid lightgray;
+    border-radius: 1em;
+    background-color: whitesmoke;
+}
 menu li {
     margin-right: 0.5em;
     list-style-type: none;
@@ -40,36 +32,60 @@ menu li:before {
     content: "→";
 }
 
-form {
-    display: inline-block;
+
+section>fieldset {
+    width: 95%;
+    margin: auto;
+    border-radius: 5em;
+    border: double;
+    background-color: whitesmoke;
+}
+section>fieldset>legend {
+    margin-left: 6em;
+}
+#mainGrid, thead th, tfoot th {
+    background-color: ghostwhite;
+    border : 2px solid black;
+    border-collapse:collapse;
+    margin: auto;
+}
+.borderless {
+    border: hidden;
+    background-color: whitesmoke;
 }
 
-.date {
-    width: 3em;
-}
 
-.otherMonth {
-    background-color: lightgray;
+#month table {
+    border-collapse:collapse;
 }
-
-a {
-    color: black;
-}
-
-.follow {
+#month td {
     border : 1px solid black;
-    border-radius: 0.5em;
+    width: 14em;
+    height: 10em;
+}
+#month .date {
+    width: 20%;
+}
+
+#month .otherMonth {
+    background-color: gainsboro;
+}
+#month .follow {
+    border : 1px solid gray;
+    border-radius: 0.3em;
     background-color: lightgreen;
     width : 75%;
     margin: auto;
 }
 
-.column {
-    display: flex;
-    flex-direction :column;
-    text-align: center;
-    justify-content: space-between
-}
+
+
+
+
+
+
+
+
 
 .describe {
     width: 60%;

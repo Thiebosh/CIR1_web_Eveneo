@@ -27,9 +27,13 @@ function displayDay($part, $dataEvent, $date) {
             Fin : <?= htmlspecialchars($dataEvent['endTime']) ?><br>
         <?php break;
         case 3:?>
-            <a href="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>">
-                <button>Ajouter un événement</button>
-            </a>
+            <tr>
+                <th colspan="3">
+                    <a href="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>">
+                        <button>Ajouter un événement</button>
+                    </a>
+                </th>
+            </tr>
         <?php break;
     }
 }

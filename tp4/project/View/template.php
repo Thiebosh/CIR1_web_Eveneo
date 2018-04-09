@@ -14,7 +14,7 @@
                     <input type="submit" value="Déconnexion">
                 </form>
                 <form method="post" action="index.php?action=logout">
-                    <input type="submit" value="Supprimer compte">
+                    <input type="submit" value="Supprimer compte (coder)">
                 </form>
             </div>
         </header>
@@ -24,22 +24,19 @@
         </menu>
 
         <section>
-            <fieldset><legend><h2><?= htmlspecialchars($legendContent) ?></h2></legend>
-                <aside>
-                    <?= $asideContent ?>
-                </aside>
-                <br>
+            <fieldset>
+                <legend>
+                    <h2><?= htmlspecialchars($legendContent) ?></h2>
+                </legend>
+
                 <article>
                     <?= $articleContent ?>
                 </article>
-                <br>
+
                 <aside>
-                    <?= $asideBottomContent ?>
+                    <?= $asideContent ?>
                 </aside>
             </fieldset>
         </section>
-
-        <footer>
-        </footer>
     </body>
 </html>

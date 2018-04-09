@@ -10,14 +10,53 @@ require('Controller/cFrontEnd.php');
 require('Controller/cBackEnd.php');
 
 
+function checktime($hour, $min) {
+    if ($hour < 0 || $hour > 23 || !is_numeric($hour)) return false;
+    if ($min < 0 || $min > 59 || !is_numeric($min)) return false;
+    return true;
+}
+
+function verifDateTime($date, $page) {
+    if (!isset($date)) throw new Exception($page." : Donnée manquante");
+    
+    $date = filter_var($date, FILTER_SANITIZE_STRING);
+    if (!$date) throw new Exception($page." : Donnée invalide");
+
+    $dateSplit = explode('-', $date);
+    $nbPart = 0;
+    foreach($dateSplit as $partDate) {
+        if (!is_numeric($partDate)) throw new Exception($page." : Date invalide");
+        $nbPart++;
+    }
+    if ($nbPart != 2 && $nbPart != 3 && $nbPart != 5) throw new Exception($page." : Date invalide");
+    
+    if ($nbPart < 5) $dateSplit[3] = $dateSplit[4] = 1;
+    if ($nbPart < 3) $dateSplit [2] = 1;
+    if (!checkdate($dateSplit[1], $dateSplit[2], $dateSplit[0]) || !checktime($dateSplit[3], $dateSplit[4])) {
+        throw new Exception($page." : Date invalide");
+    }
+
+    return $date;
+}
+
+function verifID($id, $page) {
+    if (!isset($id)) throw new Exception($page." : Donnée manquante");
+    if (!is_numeric($id)) throw new Exception($page." : Donnée invalide");
+    return $id;
+}
+
+
 try {
-    if (!isset($_GET['action'])) $action = 'login';
+    if (!isset($_GET['action'])) {
+        if (!isset($_SESSION['rank'])) $action = 'login';
+        else $action = 'reception';
+    }
     else $action = $_GET['action'];
 
     if ($action != 'login' && $action != 'logout' && $action != 'register' &&
     $action != 'reception' && $action != 'list'   && $action != 'detail' &&
     $action != 'delete'    && $action != 'new'    && $action != 'edit') {
-        throw new Exception("Action indéfinie");
+        throw new Exception("Page indéfinie");
     }
     
     /* BEGINNING */
@@ -27,6 +66,7 @@ try {
         exit();//mets fin au script courant
     }
 
+    if ($action == 'reception' && !isset($_GET['date'])) $_GET['date'] = date('Y-m');    
 
     if (!isset($_SESSION['rank'])) {
         switch ($action) {
@@ -67,115 +107,68 @@ try {
     }
     else if ($_SESSION['rank'] == 'CUSTOMER') {
         switch ($action) {
-            case 'reception':
-                $date = false;
-                if (isset($_GET['date'])) {
-                    $date = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_STRING);
-                    if (!$date) throw new Exception("Accueil : Donnée invalide");
-                }
-
-                cEventsMonth($date);
-            break;
-            case 'list':
-                if (!isset($_GET['date'])) throw new Exception("Evénements du jour : Donnée manquante");
-
-                $date = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_STRING);
-                if (!$date) throw new Exception("Evénements du jour : Donnée invalide");
-
-                cEventsDay($date);
-            break;
-            case 'detail';
-                if (!isset($_GET['id'])) throw new Exception("Evénement : Donnée manquante");
-
-                $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-                if (!$id) throw new Exception("Evénement : Donnée invalide");
-
-                cEvent($id);
-            break;
-            default:
-                cEventsMonth(false);
-            break;
+            case 'reception': cEventsMonth(verifDateTime($_GET['date'], "Evénements du mois"));
+                break;
+            case 'list':      cEventsDay(verifDateTime($_GET['date'], "Evénements du jour"));
+                break;
+            case 'detail':    cEvent(verifID($_GET['id'], "Evénement"));
+                break;
         }
     }
     else if ($_SESSION['rank'] == 'ORGANIZER') {
         switch ($action) {
-            case 'reception':
-                $date = false;
-                if (isset($_GET['date'])) {
-                    $date = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_STRING);
-                    if (!$date) throw new Exception("Accueil : Donnée invalide");
-                }
-
-                oEventsMonth($date);
-            break;
-            case 'list':
-                if (!isset($_GET['date'])) throw new Exception("Evénements du jour : Donnée manquante");
-                    
-                $date = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_STRING);
-                if (!$date) throw new Exception("Evénements du jour : Donnée invalide");
-
-                oEventsDay($date);
-            break;
-            case 'detail';
-                if (!isset($_GET['id'])) throw new Exception("Evénement : Donnée manquante");
-
-                $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-                if (!$id) throw new Exception("Evénement : Donnée invalide");
-
-                oEvent($id);
-            break;
+            case 'reception': oEventsMonth(verifDateTime($_GET['date'], "Evénements du mois"));
+                break;
+            case 'list':      oEventsDay(verifDateTime($_GET['date'], "Evénements du jour"));
+                break;
+            case 'detail':    oEvent(verifID($_GET['id'], "Evénement"));
+                break;
             case 'new':
-                if (!isset($_GET['date'])) throw new Exception("Nouveau : Donnée manquante");
-                
-                $received['date'] = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_STRING);
-                if (!$received['date']) throw new Exception("Nouveau : Donnée invalide");
+                $received['date'] = verifDateTime($_GET['date'], "Nouvel événement");
 
                 if (isset($_POST['script_new'])) {
                     if (!isset($_POST['name']) || !isset($_POST['nbPlaces']) || !isset($_POST['description']) ||
                     !isset($_POST['startDate']) || !isset($_POST['endDate'])) {
-                        throw new Exception("Nouveau : Donnée(s) formulaire absente(s)");
+                        throw new Exception("Nouvel événement : Donnée(s) formulaire absente(s)");
                     }
 
-                    $received['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-                    $received['nbPlaces'] = filter_input(INPUT_POST, 'nbPlaces', FILTER_VALIDATE_INT);
-                    $received['startDate'] = filter_input(INPUT_POST, 'startDate', FILTER_SANITIZE_STRING);
-                    $received['endDate'] = filter_input(INPUT_POST, 'endDate', FILTER_SANITIZE_STRING);
+                    $received['name']        = filter_input(INPUT_POST, 'name',        FILTER_SANITIZE_STRING);
+                    $received['nbPlaces']    = filter_input(INPUT_POST, 'nbPlaces',    FILTER_VALIDATE_INT);
+                    $received['startDate']   = filter_input(INPUT_POST, 'startDate',   FILTER_SANITIZE_STRING);
+                    $received['endDate']     = filter_input(INPUT_POST, 'endDate',     FILTER_SANITIZE_STRING);
                     $received['description'] = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
 
-                    if (!$received['name']) $received['echec'][] = 'name';
-                    if (!$received['nbPlaces']) $received['echec'][] = 'nbPlaces';
+                    if (!$received['name'])        $received['echec'][] = 'name';
+                    if (!$received['nbPlaces'])    $received['echec'][] = 'nbPlaces';
                     if (!$received['description']) $received['echec'][] = 'description';
-                    if (!$received['startDate']) $received['echec'][] = 'startDate';
-                    if (!$received['endDate']) $received['echec'][] = 'endDate';
+                    if (!$received['startDate'])   $received['echec'][] = 'startDate';
+                    if (!$received['endDate'])     $received['echec'][] = 'endDate';
+
                     if (isset($received['echec'])) $_POST['script_new'] = false;
                 }
 
                 oEventNew($received);
             break;
             case 'edit':
-                if (!isset($_GET['id'])) throw new Exception("Modification : Donnée manquante");
-                
-                $received['id'] = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-                if (!$received['id']) throw new Exception("Modification : Donnée invalide");
+                $received['id'] = verifID($_GET['id'], "Modification d'événement");
 
                 if (isset($_POST['script_edit'])) {
                     if (!isset($_POST['nbPlaces']) || !isset($_POST['description']) || !isset($_POST['endDate'])) {
-                        throw new Exception("Modification : Donnée(s) formulaire absente(s)");
+                        throw new Exception("Modification d'événement : Donnée(s) formulaire absente(s)");
                     }
 
-                    $received['nbPlaces'] = filter_input(INPUT_POST, 'nbPlaces', FILTER_VALIDATE_INT);
-                    $received['endDate'] = filter_input(INPUT_POST, 'endDate', FILTER_SANITIZE_STRING);
+                    $received['nbPlaces']    = filter_input(INPUT_POST, 'nbPlaces',    FILTER_VALIDATE_INT);
+                    $received['endDate']     = filter_input(INPUT_POST, 'endDate',     FILTER_SANITIZE_STRING);
                     $received['description'] = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
 
-                    if (!$received['nbPlaces'] || !$received['endDate'] || !$received['description']) {
-                        throw new Exception("Modification : Donnée(s) formulaire invalide(s)");
-                    }
+                    if (!$received['nbPlaces'])    $received['echec'][] = 'nbPlaces';
+                    if (!$received['endDate'])     $received['echec'][] = 'endDate';
+                    if (!$received['description']) $received['echec'][] = 'description';
+
+                    if (isset($received['echec'])) $_POST['script_edit'] = false;
                 }
 
                 oEventEdit($received);
-            break;
-            default:
-                oEventsMonth(false);
             break;
         }
     }

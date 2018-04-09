@@ -3,8 +3,6 @@ require('Model/mFrontEnd.php');
 
 
 function cEventsMonth($date) {
-    if (!$date) $date = date('Y-m');
-
     $timeStamp = strtotime($date);
     $showDate = strftime('%B %Y', $timeStamp);
     $dataDate['nbDays'] = date('t', $timeStamp);
@@ -63,6 +61,7 @@ function cEventsDay($date) {
 function cEvent($id) {
     $dataEvent = cGetEventDetail($id);
     if (!$dataEvent) throw new Exception("Evénement : Echec de récupération des données");
+    $dateSplit = explode(' ', $dataEvent['startdate']);
     
     $dataEvent['status'] = getEventStatus($id);
     
@@ -70,7 +69,7 @@ function cEvent($id) {
         if (!$dataEvent['status']) cSetStatusON($id);
         else cSetStatusOFF($id);
 
-        header('Location: index.php?action=reception&date='.$dataEvent['startdate']);//recharge la page
+        header('Location: index.php?action=reception&date='.$dateSplit[0]);
         exit();
     }
 

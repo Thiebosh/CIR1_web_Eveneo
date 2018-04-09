@@ -3,8 +3,6 @@ require('Model/mBackEnd.php');
 
 
 function oEventsMonth($date) {
-    if (!$date) $date = date('Y-m');
-
     $timeStamp = strtotime($date);
     $showDate = strftime('%B %Y', $timeStamp);
     $dataDate['nbDays'] = date('t', $timeStamp);
@@ -52,11 +50,12 @@ function oEventsDay($date) {
 function oEvent($id) {
     $dataEvent = oGetEvent($id);
     if (!$dataEvent) throw new Exception("Evénement : Echec de récupération des données");
+    $dateSplit = explode(' ', $dataEvent['startdate']);
     
     if (isset($_POST['script_delete'])) {
         oDeleteEvent($id);
 
-        header('Location: index.php?action=reception&date='.$dataEvent['startdate']);//recharge la page
+        header('Location: index.php?action=reception&date='.$dateSplit[0]);
         exit();
     }
     
@@ -72,10 +71,10 @@ function oEvent($id) {
 
 function oEventNew($data) {
     if (isset($_POST['script_new']) && $_POST['script_new']) {
-        $id = oPostDataAndGetIdEvent($data);//throw new Exception('Création d\'événement : Echec d\'enregistrement des données');
+        $id = oPostDataAndGetIdEvent($data);
         if (!$id) throw new Exception("Création d'événement : Echec d'enregistrement ou de redirection");
         
-        header('Location: index.php?action=detail&id='.$id);//recharge la page
+        header('Location: index.php?action=detail&id='.$id);
         exit();
     }
 
@@ -87,9 +86,9 @@ function oEventNew($data) {
 
 function oEventEdit($data) {
     if (isset($_POST['script_edit'])) {
-        oChangeEventData($data);// throw new Exception('Modification d\'événement : Echec d\'enregistrement des données');
+        oChangeEventData($data);
         
-        header('Location: index.php?action=detail&id='.$data['id']);//recharge la page
+        header('Location: index.php?action=detail&id='.$data['id']);
         exit();
     }
 

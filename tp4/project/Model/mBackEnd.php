@@ -70,7 +70,7 @@ function oPostDataAndGetIdEvent($data) {
                     'describe' => $data['description']);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);//retourne quelque chose?
+    $request->execute($table);
 
     $query = 'SELECT id
                 FROM events
@@ -100,7 +100,7 @@ function oChangeEventData($data) {
                     'idEvent' => $data['id']);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);//retourne quelque chose?
+    $request->execute($table);
 }
 
 

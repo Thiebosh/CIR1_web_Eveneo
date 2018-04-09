@@ -17,7 +17,7 @@ function aLogin($data) {
         if ($dataUser['rank'] == 'CUSTOMER') $_SESSION['rankFR'] = 'Client';
         else                                 $_SESSION['rankFR'] = 'Organisateur';
 
-        header('Location: index.php?action=reception');//redirige vers l'accueil
+        header('Location: index.php?action=reception');
         exit();
     }
 
@@ -34,9 +34,9 @@ function aRegister($data) {
         
         if (getLoginUser($data['login'])) throw new Exception("Inscription : Login déjà utilisé");
         
-        postDataUser($data);//throw new Exception("Inscription : Echec d\'enregistrement des données');//verifier que renvoi d'un post est true ou false
+        postDataUser($data);
 
-        header('Location: index.php?action=login');//redirige vers la page de connexion
+        header('Location: index.php?action=login');
         exit();
     }
 

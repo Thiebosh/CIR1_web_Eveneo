@@ -14,7 +14,7 @@ function displayMonth($part, $dataEvent, $dataDay) {
 function displayDay($part, $dataEvent, $date) {
     switch ($part) {
         case 2:?>
-            Organisateur : <?= htmlspecialchars($dataEvent['organizer']) ?><br>
+            <br>Organisateur : <?= htmlspecialchars($dataEvent['organizer']) ?><br>
             <br>
             Inscrit : <?= htmlspecialchars($dataEvent['status']) ?>
         <?php break;

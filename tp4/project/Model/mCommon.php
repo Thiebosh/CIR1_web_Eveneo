@@ -13,7 +13,7 @@ function dbConnect() {
     return $dataBase;
 }
 
-function getEventStatus($idEvent) {//si faux, n'est pas inscrit
+function getEventStatus($idEvent) {//valeur ou false
     $bdd = dbConnect();
 
     $query = 'SELECT iduser_participates_events
@@ -23,8 +23,8 @@ function getEventStatus($idEvent) {//si faux, n'est pas inscrit
 
     $request = $bdd->prepare($query);
     $request->execute($table);
-    $status = $request->fetch();
+    $table = $request->fetch();
     $request->closeCursor();
 
-    return $status['iduser_participates_events'];
+    return $table['iduser_participates_events'];
 }

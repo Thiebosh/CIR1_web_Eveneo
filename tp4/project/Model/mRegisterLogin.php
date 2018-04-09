@@ -45,5 +45,5 @@ function postDataUser($data) {
                     'rank' => $data['rank']);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);//retourne quelque chose?
+    $request->execute($table);
 }
