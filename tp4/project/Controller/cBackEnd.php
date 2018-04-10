@@ -4,7 +4,7 @@ require('Model/mBackEnd.php');
 
 function oEventsMonth($date) {
     $timeStamp = strtotime($date);
-    $showDate = strftime('%B %Y', $timeStamp);
+    $displayDate = strftime('%B %Y', $timeStamp);
     $dataDate['nbDays'] = date('t', $timeStamp);
 
     $dateSplit = explode('-', $date);
@@ -15,15 +15,18 @@ function oEventsMonth($date) {
     for($day = 1; $day < $dataDate['nbDays']; $day++) {
         $dataMonth[$day][0]['date'] = date('Y-m-d', gmmktime(0, 0, 0, $dataDate['month'], $day, $dataDate['year']));
     }
-    
-    $lastMonth = date('Y-m', gmmktime(0, 0, 0, $dataDate['month'] - 1, 1, $dataDate['year']));
-    $nextMonth = date('Y-m', gmmktime(0, 0, 0, $dataDate['month'] + 1, 1, $dataDate['year']));
-    
+
     $startMonth = date('D', gmmktime(0, 0, 0, $dataDate['month'], 1, $dataDate['year']));//pour commencer le tableau d affichage
     $endMonth = date('N', gmmktime(0, 0, 0, $dataDate['month'], $dataDate['nbDays'], $dataDate['year']));//pour finir le tableau d affichage
 
     $dayName = array('ang' => array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'),
                     'fr' => array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'));
+
+    $lastMonth = date('Y-m', gmmktime(0, 0, 0, $dataDate['month'] - 1, 1, $dataDate['year']));
+    $nextMonth = date('Y-m', gmmktime(0, 0, 0, $dataDate['month'] + 1, 1, $dataDate['year']));
+    $lastPage = "reception&amp;date=".$lastMonth;
+    $nextPage = "reception&amp;date=".$nextMonth;
+    $switchName = 'Mois';
     
     require('View/Common/vMonth.php');
 }
@@ -38,10 +41,14 @@ function oEventsDay($date) {
         $event++;
     }
 
-    $showDate = strftime('%A %e %B %Y', strtotime($date));
+    $displayDate = strftime('%A %e %B %Y', strtotime($date));
     $dateSplit = explode('-', $date);
     $lastDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] - 1, $dateSplit[0]));
     $nextDay = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $dateSplit[2] + 1, $dateSplit[0]));
+
+    $lastPage = "list&amp;date=".$lastDay;
+    $nextPage = "list&amp;date=".$nextDay;
+    $switchName = 'Jour';
 
     require('View/Common/vDay.php');
 }
@@ -78,7 +85,7 @@ function oEventNew($data) {
         exit();
     }
 
-    $showDate = strftime('%A %e %B %Y', strtotime($data['date']));
+    $displayDate = strftime('%A %e %B %Y', strtotime($data['date']));
 
     require('View/BackEnd/vEventNew.php');
 }

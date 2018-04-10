@@ -1,11 +1,10 @@
-body {
-    text-align: center;
-}
-a {
-    color: black;
-}
-form {
-    display: inline-block;
+body {text-align: center;}
+a {color: black;}
+form {display: inline-block;}
+span {font-weight: bold;}
+span:first-of-type {
+    text-decoration: underline;
+    font-weight: normal;
 }
 
 
@@ -18,77 +17,176 @@ header {
 menu {
     display: flex;
     width: 80%;
+    height: 2em;
     margin: auto;
+    margin-top: 1em;
+    margin-bottom: 2.6em;
     padding: 1em;
     border: 1px solid lightgray;
     border-radius: 1em;
     background-color: whitesmoke;
 }
 menu li {
-    margin-right: 0.5em;
+    margin-left: 1em;
     list-style-type: none;
 }
-menu li:before {
-    content: "→";
-}
+menu li:before {content: "→";}
+menu li:first-of-type:before {content: "";}
+menu li:first-of-type {margin-top: 0.3em;}
 
 
-section>fieldset {
+
+section {
     width: 95%;
     margin: auto;
     border-radius: 5em;
-    border: double;
+    border : 2px solid black;
     background-color: whitesmoke;
 }
-section>fieldset>legend {
-    margin-left: 6em;
+section>h2 {
+    display: inline-block;
+    margin: 0;
+    width: 14em;
+    position: relative;
+    right: 22%;
+    bottom: 1em;
+    border : double;
+    border-radius: 2em;
+    padding: 0.25em;
+    background-color: whitesmoke;
 }
-#mainGrid, thead th, tfoot th {
+section>aside {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    z-index: 10;
+}
+#mainGrid {
+    margin: auto;
+    width: 92%;
+}
+#mainGrid>thead th {border-radius: 5em;}
+#mainGrid>thead th:nth-child(2n+2) {width: 30%;}
+#mainGrid>thead th:nth-child(3) {width: 18em;}
+
+
+
+#month {
+    border-collapse:collapse;
+    margin: 2em 0;
+    border : 2px solid black;
+}
+#month th {
     background-color: ghostwhite;
     border : 2px solid black;
-    border-collapse:collapse;
     margin: auto;
-}
-.borderless {
-    border: hidden;
-    background-color: whitesmoke;
-}
-
-
-#month table {
-    border-collapse:collapse;
+    width: 14em;
 }
 #month td {
     border : 1px solid black;
-    width: 14em;
-    height: 10em;
+    height: 12em;
 }
-#month .date {
-    width: 20%;
-}
-
-#month .otherMonth {
-    background-color: gainsboro;
-}
-#month .follow {
-    border : 1px solid gray;
-    border-radius: 0.3em;
-    background-color: lightgreen;
+#month tbody a {
+    display: inline-block;
     width : 75%;
     margin: auto;
+    padding: 0.1em;
+    margin: 0.15em;
+    border : 1px solid gray;
+    border-radius: 0.4em;
+}
+#month tbody .more {
+    margin-top: 0.4em;
+    border: hidden;
+}
+#month .follow {
+    background-color: skyblue;
+    border : 1px solid royalblue;
+}
+#month .otherMonth {background-color: gainsboro;}
+#month tbody aside, #month .date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#month .date {width: 20%;}
+#month .allEvents {width: 80%;}
+#month .vLine {
+    height: 10em;
+    border-left: 1px solid gray;
 }
 
 
 
-
-
-
-
-
-
-
-.describe {
-    width: 60%;
-    border-radius: 1em;
+#mainGrid tbody header {background-color: gainsboro;}
+#day {
+    border-radius: 2em;
+    border: 1px solid darkgray;
+    background-color: ghostwhite;
+    width: 90%;
+    min-height: 10em;
     margin: auto;
+    margin-top: 1em;
+    margin-bottom: 3em;
+    padding: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-around;
+}
+#day aside {
+    border: 1px solid gray;
+    border-radius: 0.2em;
+    margin: 1em;
+    padding: 1em;
+}
+#day aside hr {
+    width: 60%;
+    margin-bottom: 1em; 
+}
+#day .follow {
+    background-color: skyblue;
+    border : 1px solid royalblue;
+}
+
+
+
+#event {
+    border-radius: 2em;
+    border: 1px solid darkgray;
+    background-color: ghostwhite;
+    width: 90%;
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 3em;
+    padding: 1.5em;
+}
+#event>div {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+}
+#event aside:first-child {width: 30%;}
+#event aside:last-child {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+#event .vLine {
+    border-left: 1px solid gray;
+}
+#event p {
+    border: 1px solid gray;
+    padding: 1em;
+    margin: 0 2em;
+}
+#event>footer {
+    width: 75%;
+    margin: auto;
+    border-top: 1px solid gray;
+    padding-top: 1em;
+    margin-top: 2em;
 }

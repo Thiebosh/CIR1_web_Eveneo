@@ -5,60 +5,35 @@ else require_once('View/vBackEnd.php');
 
 $pageName = 'Accueil';
 
-$legendContent = 'Evènements du mois';
+$titleContent = 'Évènements du mois';
 
-ob_start(); ?>
-    <li>
-        <a href="index.php?action=reception"><button>Mois en cours</button></a>
-    </li>
-<?php $menuContent = ob_get_clean();
-
-ob_start(); ?>
-    <tr>
-        <th class="borderless"></th>
-        <th class="borderless">
-            <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastMonth) ?>">
-                <button><h3>Mois précédent</h3></button>
+ob_start();
+    if ($date != date('Y-m')) { ?>
+        <li>
+            <a href='index.php?action=reception'>
+                <button>Mois en cours</button>
             </a>
-        </th>
-        <th colspan="3" class="borderless">
-            <h3><?= htmlspecialchars($showDate) ?></h3>
-        </th>
-        <th class="borderless">
-            <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">
-            <button><h3>Mois suivant</h3></button>
-            </a>
-        </th>
-        <th class="borderless"></th>
-    </tr>
-<?php $headTable = ob_get_clean();
+        </li>
+    <?php }
+$menuContent = ob_get_clean();
 
-ob_start(); ?>
-    <tr>
-    <?php for ($weekDay = 0; $weekDay < 7; $weekDay++) { ?>
+
+ob_start();
+    for ($weekDay = 0; $weekDay < 7; $weekDay++) { ?>
         <th>
             <h4><?= htmlspecialchars($dayName['fr'][$weekDay]) ?></h4>
         </th>
-    <?php } ?>
-    </tr>
-<?php $tailTable = ob_get_clean();
+    <?php }
+$displayWeekday = ob_get_clean();
 
 ob_start(); ?>
-    <table id="mainGrid">
+    <table id="month">
         <thead>
-            <?= $headTable ?>
-            <tr><th colspan="7" class="borderless"><br></th></tr>
-            <tr></tr>
-            <?= $tailTable ?>
+            <tr> <?= $displayWeekday ?> </tr>
             <?php displayMonth(1, false, false) ?>
         </thead>
-        <tfoot>
-            <?= $tailTable ?>
-            <tr></tr>
-            <tr><th colspan="7" class="borderless"><br></th></tr>
-            <?= $headTable ?>
-        </tfoot>
-        <tbody id="month">
+        <tfoot><tr> <?= $displayWeekday ?> </tr></tfoot>
+        <tbody>
             <tr>
                 <?php
                 $monthDay = $weekDay = 0;
@@ -73,37 +48,32 @@ ob_start(); ?>
                     ?>
                     <td>
                         <?php displayMonth(2, false, $dataDay) ?>
-                            <table>
-                                <tr>
-                                    <td class="date">
-                                        <?= htmlspecialchars($weekDay) ?>
-                                    </td>
-                                    <td>
-                                        <?php if ($dataDay) {
-                                            $nbEvent = 0;
-                                            foreach($dataDay as $dataEvent) {
-                                                if (displayMonth(3, $dataEvent, false)) {?>
-                                                    <div <?php displayMonth(4, $dataEvent, false) ?>>
-                                                        <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($dataEvent['id']) ?>">
-                                                            <?= htmlspecialchars($dataEvent['name']) ?>
-                                                        </a>
-                                                    </div>
-                                                    <?php 
-                                                    $nbEvent++;
-                                                }
-                                                if ($nbEvent == MAX_LIST) break;
-                                            }
-                                            
-                                            if (count($dataDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template ?>
-                                                <br>
-                                                <a href="index.php?action=list&amp;date=<?= htmlspecialchars($dataDay[0]['date']) ?>">
-                                                    <button>Voir plus</button>
+                            <aside>
+                                <div class="date"><?= htmlspecialchars($weekDay) ?></div>
+                                <div class="vLine"></div>
+                                <div class="allEvents">
+                                    <?php if ($dataDay) {
+                                        $nbEvent = 0;
+                                        foreach($dataDay as $dataEvent) {
+                                            if (displayMonth(3, $dataEvent, false)) {?>
+                                                <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($dataEvent['id']) ?>" <?php displayMonth(4, $dataEvent, false) ?>>
+                                                    <?= htmlspecialchars($dataEvent['name']) ?>
                                                 </a>
-                                            <?php }
-                                        } ?>
-                                    </td>
-                                </tr>
-                            </table>
+                                                <?php
+                                                $nbEvent++;
+                                            }
+                                            if ($nbEvent == MAX_LIST) break;
+                                        }
+                                        
+                                        if (count($dataDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template ?>
+                                            
+                                            <a href="index.php?action=list&amp;date=<?= htmlspecialchars($dataDay[0]['date']) ?>" class="more">
+                                                <button>Voir tout</button>
+                                            </a>
+                                        <?php }
+                                    } ?>
+                                </div>
+                            </aside>
                         <?php displayMonth(5, false, false) ?>
                     </td>
                     <?php if ($monthDay % 7 == 0 && $weekDay < $dataDate['nbDays']) {//si egal a nbDayMonth, est fermé par le dernier
@@ -119,8 +89,6 @@ ob_start(); ?>
         </tbody>
     </table>
 <?php $articleContent = ob_get_clean();
-
-$asideContent = '';
 
 
 require('View/template.php');

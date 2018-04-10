@@ -2,11 +2,9 @@
 function displayMonth($part, $dataEvent, $dataDay) {
     switch ($part) {
         case 1: ?>
-            <tr>
-                <th colspan="7">
+            <tr><th colspan="7">
                     Sélectionnez un jour pour y créer un événement!
-                </th>
-            </tr>
+            </th></tr>
         <?php break;
         case 2: ?>
             <a href="index.php?action=new&amp;date=<?= htmlspecialchars($dataDay[0]['date']) ?>">
@@ -23,17 +21,13 @@ function displayMonth($part, $dataEvent, $dataDay) {
 
 function displayDay($part, $dataEvent, $date) {
     switch ($part) {
-        case 1:?>
+        case 2:?>
             Fin : <?= htmlspecialchars($dataEvent['endTime']) ?><br>
         <?php break;
-        case 3:?>
-            <tr>
-                <th colspan="3">
-                    <a href="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>">
-                        <button>Ajouter un événement</button>
-                    </a>
-                </th>
-            </tr>
+        case 4:?>
+            <a href="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>">
+                <button>Ajouter un événement</button>
+            </a>
         <?php break;
     }
 }

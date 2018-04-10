@@ -13,7 +13,10 @@ function displayMonth($part, $dataEvent, $dataDay) {
 
 function displayDay($part, $dataEvent, $date) {
     switch ($part) {
-        case 2:?>
+        case 1:
+            if ($dataEvent['status'] == 'Oui') echo 'class="follow"';
+        break;
+        case 3:?>
             <br>Organisateur : <?= htmlspecialchars($dataEvent['organizer']) ?><br>
             <br>
             Inscrit : <?= htmlspecialchars($dataEvent['status']) ?>
