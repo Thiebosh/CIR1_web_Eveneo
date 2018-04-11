@@ -1,7 +1,7 @@
 <?php
 require_once('Model/mCommon.php');
 
-function getDataUser($login) {
+function externGetDataUser($login) {
     $bdd = dbConnect();
 
     $query = 'SELECT id, password, rank 
@@ -10,7 +10,7 @@ function getDataUser($login) {
     $table = array('log' => $login);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
     $dataUser = $request->fetch();
     $request->closeCursor();
 
@@ -18,7 +18,7 @@ function getDataUser($login) {
 }
 
 
-function getLoginUser($login) {
+function externGetLoginUser($login) {
     $bdd = dbConnect();
 
     $query = 'SELECT login
@@ -27,7 +27,7 @@ function getLoginUser($login) {
     $table = array('log' => $login);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
     $result = $request->fetch();
     $request->closeCursor();
 
@@ -35,7 +35,7 @@ function getLoginUser($login) {
 }
 
 
-function postDataUser($data) {
+function externPostDataUser($data) {
     $bdd = dbConnect();
 
     $query = 'INSERT INTO Users(login, password, rank) 
@@ -45,5 +45,5 @@ function postDataUser($data) {
                     'rank' => $data['rank']);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
 }

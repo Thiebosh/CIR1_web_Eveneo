@@ -22,7 +22,7 @@ function getEventStatus($idEvent) {//valeur ou false
     $table = array('event' => $idEvent, 'user' => $_SESSION['id']);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
     $table = $request->fetch();
     $request->closeCursor();
 

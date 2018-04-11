@@ -25,10 +25,9 @@ function displayDay($part, $dataEvent, $date) {
 }
 
 
-function displayEvent($id, $action) {
-    ?><form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($id) ?>">
+function displayEvent($data) {
+    ?><form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($data['id']) ?>">
         <input type="hidden" name="script_join" value='true'>
-        <input type="submit" value=<?= $action ?>>
+        <input type="submit" value=<?= htmlspecialchars($data['action']) ?>>
     </form><?php
 }
-

@@ -3,41 +3,41 @@ if ($_SESSION['rank'] == 'CUSTOMER') require_once('View/vFrontEnd.php');
 else require_once('View/vBackEnd.php');
 
 
-$pageName = 'Accueil';
+$template['pageName'] = 'Accueil';
 
-$titleContent = 'Évènements du mois';
+$template['titleContent'] = 'Évènements du mois';
 
 ob_start();
-    if ($date != date('Y-m')) { ?>
+    if ($page['dateMonth'] != date('Y-m')) { ?>
         <li>
             <a href='index.php?action=reception'>
                 <button>Mois en cours</button>
             </a>
         </li>
     <?php }
-$menuContent = ob_get_clean();
+$template['menuContent'] = ob_get_clean();
 
 
 ob_start();
     for ($weekDay = 0; $weekDay < 7; $weekDay++) { ?>
         <th>
-            <h4><?= htmlspecialchars($dayName['fr'][$weekDay]) ?></h4>
+            <h4><?= htmlspecialchars($page['dayName']['fr'][$weekDay]) ?></h4>
         </th>
     <?php }
-$displayWeekday = ob_get_clean();
+$template['displayWeekDay'] = ob_get_clean();
 
 ob_start(); ?>
     <table id="month">
         <thead>
-            <tr> <?= $displayWeekday ?> </tr>
+            <tr> <?= $template['displayWeekDay'] ?> </tr>
             <?php displayMonth(1, false, false) ?>
         </thead>
-        <tfoot><tr> <?= $displayWeekday ?> </tr></tfoot>
+        <tfoot><tr> <?= $template['displayWeekDay'] ?> </tr></tfoot>
         <tbody>
             <tr>
                 <?php
                 $monthDay = $weekDay = 0;
-                while ($dayName['ang'][$monthDay] != $startMonth) {//ne commence pas par lundi
+                while ($page['dayName']['ang'][$monthDay] != $page['startMonth']) {//ne commence pas par lundi
                     echo '<td class="otherMonth"></td>';
                     $monthDay++;
                 }
@@ -76,19 +76,19 @@ ob_start(); ?>
                             </aside>
                         <?php displayMonth(5, false, false) ?>
                     </td>
-                    <?php if ($monthDay % 7 == 0 && $weekDay < $dataDate['nbDays']) {//si egal a nbDayMonth, est fermé par le dernier
+                    <?php if ($monthDay % 7 == 0 && $weekDay < $page['nbDays']) {//si egal a nbDayMonth, est fermé par le dernier
                         echo '</tr><tr>';//nouvelle semaine
                     }
                 }
 
-                while ($dayName['ang'][$endMonth - 1] != 'Sun') {//ne s est pas arreté sur dimanche
+                while ($page['dayName']['ang'][$page['endMonth'] - 1] != 'Sun') {//ne s est pas arreté sur dimanche
                     echo '<td class="otherMonth"></td>';
-                    $endMonth++;
+                    $page['endMonth']++;
                 }?>
             </tr>
         </tbody>
     </table>
-<?php $articleContent = ob_get_clean();
+<?php $template['articleContent'] = ob_get_clean();
 
 
 require('View/template.php');

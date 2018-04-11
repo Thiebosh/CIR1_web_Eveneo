@@ -2,10 +2,12 @@ body {text-align: center;}
 a {color: black;}
 form {display: inline-block;}
 span {font-weight: bold;}
-span:first-of-type {
+menu span:first-of-type {
     text-decoration: underline;
     font-weight: normal;
 }
+header:empty, #day aside:empty, footer:empty {visibility: hidden;}
+
 
 
 header {
@@ -68,7 +70,7 @@ section>aside {
 #mainGrid>thead th {border-radius: 5em;}
 #mainGrid>thead th:nth-child(2n+2) {width: 30%;}
 #mainGrid>thead th:nth-child(3) {width: 18em;}
-
+#mainGrid>thead th:nth-child(3) h3, #mainGrid>thead th:only-child h3 {text-decoration: underline;}
 
 
 #month {
@@ -173,15 +175,15 @@ section>aside {
     width: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
 }
-#event .vLine {
-    border-left: 1px solid gray;
-}
+#event .vLine {border-left: double gray;}
 #event p {
     border: 1px solid gray;
     padding: 1em;
-    margin: 0 2em;
+    margin: 1em 2em;
+    text-align: justify;
+    word-wrap: break-word;
 }
 #event>footer {
     width: 75%;

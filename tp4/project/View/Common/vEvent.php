@@ -3,12 +3,12 @@ if ($_SESSION['rank'] == 'CUSTOMER') require('View/vFrontEnd.php');
 else require('View/vBackEnd.php');
 
 
-$pageName = "Détails";
+$template['pageName'] = 'Détails';
 
-$titleContent = "Détails de l'événement";
+$template['titleContent'] = 'Détails de l\'événement';
 
 ob_start();
-    if ($dateMonth != date('Y-m')) { ?>
+    if ($page['dateMonth'] != date('Y-m')) { ?>
         <li>
             <a href='index.php?action=reception'>
                 <button>Mois en cours</button>
@@ -16,11 +16,11 @@ ob_start();
         </li>
     <?php } ?>
     <li>
-        <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($dateMonth) ?>">
+        <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($page['dateMonth']) ?>">
             <button>Mois de défilement</button>
         </a>
     </li>
-    <?php if ($dataEvent['startdate'] != date('Y-m-d')) { ?>
+    <?php if ($page['date'] != date('Y-m-d')) { ?>
         <li>
             <a href="index.php?action=list&amp;date=<?= htmlspecialchars(date('Y-m-d')) ?>">
                 <button>Jour en cours</button>
@@ -28,45 +28,39 @@ ob_start();
         </li>
     <?php } ?>
     <li>
-        <a href="index.php?action=list&amp;date=<?= htmlspecialchars($date) ?>">
+        <a href="index.php?action=list&amp;date=<?= htmlspecialchars($page['date']) ?>">
             <button>Jour de défilement</button>
         </a>
     </li>
-<?php $menuContent = ob_get_clean();
+<?php $template['menuContent'] = ob_get_clean();
 
 
 ob_start(); ?>
     <div id="event">
         <div>
             <aside>
-                <span>De</span> 
-                <?= htmlspecialchars($startDateFr) ?> 
+                <span>Organisateur : </span><?= htmlspecialchars($dataEvent['login']) ?>
                 <br>
-                <span>A</span> 
-                <?= htmlspecialchars($endDateFr) ?>
-                <br>
-                <span>Durée :</span> 
-                <?= htmlspecialchars($dureeEvent) ?>
+                <span>Places restantes : </span><?= htmlspecialchars($dataEvent['place']) ?>
                 <br>
                 <br>
-                <span>Organisateur :</span> 
-                <?= htmlspecialchars($dataEvent['login']) ?>
+                <span>Du </span><?= htmlspecialchars($display['startDate']) ?><span> à </span><?= htmlspecialchars($display['startTime']) ?>
                 <br>
-                <span>Places restantes :</span> 
-                <?= htmlspecialchars($dataEvent['place']) ?>
+                <span>Au </span><?= htmlspecialchars($display['endDate']) ?><span> à </span><?= htmlspecialchars($display['endTime']) ?>
+                <br>
+                <br>
+                <?= $display['duration'] ?>
             </aside>
             <aside class="vLine"></aside>
             <aside>
-                <span>Description :</span> 
+                <span>Description :</span>
                 <p><?= htmlspecialchars($dataEvent['description']) ?></p>
             </aside>
         </div>
         
-        <footer><?php displayEvent($id, $action) ?></footer>
+        <footer><?php displayEvent($script) ?></footer>
     </div>
-<?php $articleContent = ob_get_clean();
+<?php $template['articleContent'] = ob_get_clean();
 
 
 require('View/template.php');
-
-//<time><?= $billet['date'] ? ></time>//a voir

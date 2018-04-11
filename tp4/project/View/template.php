@@ -1,26 +1,26 @@
 <?php
-$nbColumn = 1;
-$switchPage = "<tr><th><h3>".htmlspecialchars($display)."</h3></th></tr>";
+$template['nbColumn'] = 1;
+$template['switchPage'] = '<tr><th><h3>'.htmlspecialchars($template['title']).'</h3></th></tr>';
 
-if (isset($switchName)) {
-    $nbColumn = 5;
+if (isset($template['switchName'])) {
+    $template['nbColumn'] = 5;
     ob_start(); ?>
         <tr>
             <th></th>
             <th>
-                <a href="index.php?action=<?= $lastPage ?>">
-                    <button><h3><?= htmlspecialchars($switchName) ?> précédent</h3></button>
+                <a href="index.php?action=<?= $template['lastPage'] ?>">
+                    <button><h3><?= htmlspecialchars($template['switchName']) ?> précédent</h3></button>
                 </a>
             </th>
-            <th><h3><?= htmlspecialchars($display) ?></h3></th>
+            <th><h3><?= htmlspecialchars($template['title']) ?></h3></th>
             <th>
-                <a href="index.php?action=<?= $nextPage ?>">
-                    <button><h3><?= htmlspecialchars($switchName) ?> suivant</h3></button>
+                <a href="index.php?action=<?= $template['nextPage'] ?>">
+                    <button><h3><?= htmlspecialchars($template['switchName']) ?> suivant</h3></button>
                 </a>
             </th>
             <th></th>
         </tr>
-    <?php $switchPage = ob_get_clean();
+    <?php $template['switchPage'] = ob_get_clean();
 }
 ?>
 
@@ -28,7 +28,7 @@ if (isset($switchName)) {
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Événéo - <?= htmlspecialchars($pageName) ?></title>
+        <title>Événéo - <?= htmlspecialchars($template['pageName']) ?></title>
         <link href="View/style.css" rel="stylesheet"/>
     </head>
         
@@ -39,26 +39,26 @@ if (isset($switchName)) {
                 <form method="post" action="index.php?action=logout">
                     <input type="submit" value="Déconnexion">
                 </form>
-                <form method="post" action="index.php?action=logout">
+                <!--<form method="post" action="index.php?action=logout">
                     <input type="submit" value="Supprimer compte (coder)">
-                </form>
+                </form>-->
             </div>
         </header>
 
         <menu>
-            <li><span>Parcours du site :</span></li>
-            <?= $menuContent ?>
+            <li><span>Parcours du site : </span></li>
+            <?= $template['menuContent'] ?>
         </menu>
 
         <section>
-            <h2><?= htmlspecialchars($titleContent) ?></h2>
+            <h2><?= htmlspecialchars($template['titleContent']) ?></h2>
 
             <article>
                 <table id="mainGrid">
-                    <thead> <?= $switchPage ?> </thead>
+                    <thead> <?= $template['switchPage'] ?> </thead>
                     <tbody>
-                        <tr><td colspan=<?= htmlspecialchars($nbColumn) ?>>
-                                <?= $articleContent ?>
+                        <tr><td colspan=<?= htmlspecialchars($template['nbColumn']) ?>>
+                            <?= $template['articleContent'] ?>
                         </td></tr>
                     </tbody>
                 </table>
@@ -70,38 +70,3 @@ if (isset($switchName)) {
         </section>
     </body>
 </html>
-
-
-<!--
-
-
-#day td {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-}
-#day fieldset {
-    width: 30%;
-}
-
-
-
-.tableEvents {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-
-
-
-
-.describe {
-    width: 60%;
-    border-radius: 1em;
-    margin: auto;
-    text-align: justify;
-    word-wrap: break-word;
-}
-
-
--->

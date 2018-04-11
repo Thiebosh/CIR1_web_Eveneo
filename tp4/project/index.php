@@ -1,8 +1,4 @@
 <?php
-//affichage des datetimes en francais
-setlocale(LC_TIME, "fr_FR", "French");
-date_default_timezone_set('UTC');
-
 session_start();
 
 require('Controller/cRegisterLogin.php');
@@ -81,7 +77,7 @@ try {
                     if (!$received['login'] || !$received['password']) throw new Exception("Connexion : Donnée(s) formulaire invalide(s)");
                 }
 
-                aLogin($received);
+                externLogin($received);
             break;
 
             case 'register':
@@ -101,27 +97,27 @@ try {
                     }
                 }
 
-                aRegister($received);
+                externRegister($received);
             break;
         }
     }
     else if ($_SESSION['rank'] == 'CUSTOMER') {
         switch ($action) {
-            case 'reception': cEventsMonth(verifDateTime($_GET['date'], "Evénements du mois"));
+            case 'reception': frontEventsMonth(verifDateTime($_GET['date'], "Evénements du mois"));
                 break;
-            case 'list':      cEventsDay(verifDateTime($_GET['date'], "Evénements du jour"));
+            case 'list':      frontEventsDay(verifDateTime($_GET['date'], "Evénements du jour"));
                 break;
-            case 'detail':    cEvent(verifID($_GET['id'], "Evénement"));
+            case 'detail':    frontEventDetail(verifID($_GET['id'], "Evénement"));
                 break;
         }
     }
     else if ($_SESSION['rank'] == 'ORGANIZER') {
         switch ($action) {
-            case 'reception': oEventsMonth(verifDateTime($_GET['date'], "Evénements du mois"));
+            case 'reception': backEventsMonth(verifDateTime($_GET['date'], "Evénements du mois"));
                 break;
-            case 'list':      oEventsDay(verifDateTime($_GET['date'], "Evénements du jour"));
+            case 'list':      backEventsDay(verifDateTime($_GET['date'], "Evénements du jour"));
                 break;
-            case 'detail':    oEvent(verifID($_GET['id'], "Evénement"));
+            case 'detail':    backEventDetail(verifID($_GET['id'], "Evénement"));
                 break;
             case 'new':
                 $received['date'] = verifDateTime($_GET['date'], "Nouvel événement");
@@ -147,7 +143,7 @@ try {
                     if (isset($received['echec'])) $_POST['script_new'] = false;
                 }
 
-                oEventNew($received);
+                backEventNew($received);
             break;
             case 'edit':
                 $received['id'] = verifID($_GET['id'], "Modification d'événement");
@@ -168,7 +164,7 @@ try {
                     if (isset($received['echec'])) $_POST['script_edit'] = false;
                 }
 
-                oEventEdit($received);
+                backEventEdit($received);
             break;
         }
     }

@@ -1,9 +1,9 @@
 <?php
 require('Model/mRegisterLogin.php');
 
-function aLogin($data) {
+function externLogin($data) {
     if ($data) {//active script_login
-        $dataUser = getDataUser($data['login']);
+        $dataUser = externGetDataUser($data['login']);
 
         if (!$dataUser) throw new Exception("Connexion : Echec de récupération des données");
         else if (!password_verify($data['password'], $dataUser['password'])) {
@@ -25,16 +25,16 @@ function aLogin($data) {
 }
 
 
-function aRegister($data) {
+function externRegister($data) {
     if ($data) {//active script_register
         if ($data['password'] != $data['passwordVerif']) {
             throw new Exception("Inscription : les mots de passe ne sont pas identiques");
         }
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
         
-        if (getLoginUser($data['login'])) throw new Exception("Inscription : Login déjà utilisé");
+        if (externGetLoginUser($data['login'])) throw new Exception("Inscription : Login déjà utilisé");
         
-        postDataUser($data);
+        externPostDataUser($data);
 
         header('Location: index.php?action=login');
         exit();

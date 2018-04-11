@@ -2,11 +2,12 @@
 require_once('Model/mCommon.php');
 
 
-function oGetEventsMonth($dataDate) {
+function backGetEventsMonth($dataDate) {
     $bdd = dbConnect();
     
     for ($day = 1; $day <= $dataDate['nbDays']; $day++) {
-        $fullDate = date('Y-m-d', gmmktime(0, 0, 0, $dataDate['month'], $day, $dataDate['year']));
+        $dateSplit = explode('-', $dataDate['dateMonth']);
+        $fullDate = date('Y-m-d', gmmktime(0, 0, 0, $dateSplit[1], $day, $dateSplit[0]));
 
         $query = 'SELECT id, name, startdate 
                 FROM events
@@ -15,7 +16,7 @@ function oGetEventsMonth($dataDate) {
         $table = array('date' => $fullDate, 'orga' => $_SESSION['id']);
 
         $request = $bdd->prepare($query);
-        $request->execute($table);
+        if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
         $dataMonth[$day] = $request->fetchAll();
     }
 
@@ -23,7 +24,7 @@ function oGetEventsMonth($dataDate) {
 }
 
 
-function oGetEventsDay($day) {
+function backGetEventsDay($day) {
     $bdd = dbConnect();
 
     $query = 'SELECT id, name, startdate AS startTime, enddate AS endTime, nb_place AS place
@@ -33,14 +34,14 @@ function oGetEventsDay($day) {
     $table = array('date' => $day, 'orga' => $_SESSION['id']);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
     $dataDay = $request->fetchAll();
 
     return $dataDay;
 }
 
 
-function oGetEvent($idEvent) {
+function backGetEventDetail($idEvent) {
     $bdd = dbConnect();
 
     $query = 'SELECT name, description, startdate, enddate, nb_place AS place
@@ -49,7 +50,7 @@ function oGetEvent($idEvent) {
     $table = array('event' => $idEvent);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
     $dataEvent = $request->fetch();
     $request->closeCursor();
 
@@ -57,7 +58,7 @@ function oGetEvent($idEvent) {
 }
 
 
-function oPostDataAndGetIdEvent($data) {
+function backPostDataAndGetIdEvent($data) {
     $bdd = dbConnect();
 
     $query = 'INSERT INTO events(name, organizer_id, nb_place, startdate, enddate, description) 
@@ -70,8 +71,9 @@ function oPostDataAndGetIdEvent($data) {
                     'describe' => $data['description']);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
 
+    
     $query = 'SELECT id
                 FROM events
                 WHERE name  = :title AND startdate = :startDate AND enddate = :endDate';
@@ -80,7 +82,7 @@ function oPostDataAndGetIdEvent($data) {
                     'endDate' => $data['endDate']);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
     $data = $request->fetch();
     $request->closeCursor();
 
@@ -88,7 +90,7 @@ function oPostDataAndGetIdEvent($data) {
 }
 
 
-function oChangeEventData($data) {
+function backChangeEventData($data) {
     $bdd = dbConnect();
 
     $query = 'UPDATE events
@@ -100,11 +102,11 @@ function oChangeEventData($data) {
                     'idEvent' => $data['id']);
 
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
 }
 
 
-function oDeleteEvent($idEvent) {//combinable avec un inner_join?
+function backDeleteEvent($idEvent) {
     $bdd = dbConnect();
     
     $table = array('idEvent' => $idEvent);
@@ -112,10 +114,10 @@ function oDeleteEvent($idEvent) {//combinable avec un inner_join?
     $query = 'DELETE FROM user_participates_events
                 WHERE id_event = :idEvent';
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
 
     $query = 'DELETE FROM events
                 WHERE id = :idEvent';
     $request = $bdd->prepare($query);
-    $request->execute($table);
+    if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
 }
