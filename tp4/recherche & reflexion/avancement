@@ -1,21 +1,14 @@
-//tout mettre en simple guillemets (echo / php)
-//verifier nb arguments de date pour chaque page
-
-connexion - déconnexion - inscription : fait
-    reste désinscription (option)
-
-client
-    mois - jour - detail - (dés)inscription : fait
-        empecher inscription une fois date passée
-
-orga
-    mois - jour - detail - création - suppression : fait
-        reste modification
-
-tous : 
-    peaufiner les affichages (dates, visuel) -> 2 événements par ligne? plus?
-    finir les regroupements de fichier
-    affichage des erreurs plus userfriendly
-
-
+fonction utile
 print_r($array);
+
+
+finir la factorisation
+assurer affichage de toutes les pages et fonctionnement de toutes les fonctionnalités
+implémenter dernières idées dont
+    désinscription
+    empecher inscription une fois date passée
+    gérer les alertes plus solidement (liste (erreur, alerte, confirmation) dans une case survolable a coté de menu, redirection vers la page d'origine?)
+    afficher bouton de suppression au survol (orga - mois)
+    afficher retours au mois actuel au survol (tous - tout)
+verifier nb arguments de date pour chaque page
+tout mettre en simple guillemets (echo / php)

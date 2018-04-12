@@ -21,7 +21,7 @@ function externLogin($data) {
         exit();
     }
 
-    require('View/RegisterLogin/vLogin.php');
+    require('View/Common/mutualiser/RegisterLogin/vLogin.php');
 }
 
 
@@ -40,5 +40,5 @@ function externRegister($data) {
         exit();
     }
 
-    require('View/RegisterLogin/vRegister.php');
+    require('View/Common/mutualiser/RegisterLogin/vRegister.php');
 }

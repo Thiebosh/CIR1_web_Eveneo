@@ -1,5 +1,5 @@
 <?php
-function displayMonth($part, $dataEvent, $dataDay) {
+function switchDisplayMonth($part, $dataEvent, $dataDay) {
     switch ($part) {
         case 1: ?>
             <tr><th colspan="7">
@@ -19,7 +19,8 @@ function displayMonth($part, $dataEvent, $dataDay) {
     }
 }
 
-function displayDay($part, $dataEvent, $date) {
+
+function switchDisplayDay($part, $dataEvent, $date) {
     switch ($part) {
         case 2:?>
             Fin : <?= htmlspecialchars($dataEvent['endTime']) ?><br>
@@ -33,9 +34,19 @@ function displayDay($part, $dataEvent, $date) {
 }
 
 
-function displayEvent($data) {
-    ?><form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($data['id']) ?>">
-        <input type="hidden" name="script_delete" value='true'>
-        <input type="submit" value="Supprimer">
-    </form><?php
+function switchDisplayEvent($part, $data) {
+    switch ($part) {
+        case 2:?>
+            <div>
+                <form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($data['id']) ?>">
+                    <input type="hidden" name="script_edit" value='true'>
+                    <input type="submit" value="Modifier">
+                </form>
+                <form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($data['id']) ?>">
+                    <input type="hidden" name="script_delete" value='true'>
+                    <input type="submit" value="Supprimer">
+                </form>
+            </div>
+            <?php break;
+    }
 }

@@ -37,19 +37,23 @@ ob_start();
 
 ob_start(); ?>
     <div id="event">
+        <header>
+            <h3><?= $display['title'] ?></h3>
+            <aside class="vLine"></aside>
+            <?php switchDisplayEvent(2, $script) ?>
+        </header>
+
         <div>
             <aside>
-                <span>Organisateur : </span><?= htmlspecialchars($dataEvent['login']) ?>
-                <br>
+                <?php switchDisplayEvent(1, $dataEvent['login']) ?>
                 <span>Places restantes : </span><?= htmlspecialchars($dataEvent['place']) ?>
+                <br>
+                <?= $display['duration'] ?>
                 <br>
                 <br>
                 <span>Du </span><?= htmlspecialchars($display['startDate']) ?><span> à </span><?= htmlspecialchars($display['startTime']) ?>
                 <br>
                 <span>Au </span><?= htmlspecialchars($display['endDate']) ?><span> à </span><?= htmlspecialchars($display['endTime']) ?>
-                <br>
-                <br>
-                <?= $display['duration'] ?>
             </aside>
             <aside class="vLine"></aside>
             <aside>
@@ -57,10 +61,8 @@ ob_start(); ?>
                 <p><?= htmlspecialchars($dataEvent['description']) ?></p>
             </aside>
         </div>
-        
-        <footer><?php displayEvent($script) ?></footer>
     </div>
 <?php $template['articleContent'] = ob_get_clean();
 
 
-require('View/template.php');
+require('View/Common/template.php');

@@ -1,5 +1,5 @@
 <?php
-function displayMonth($part, $dataEvent, $dataDay) {
+function switchDisplayMonth($part, $dataEvent, $dataDay) {
     switch ($part) {
         case 3:
             if ($dataEvent['place'] > 0 || $dataEvent['status']) return true;
@@ -11,7 +11,8 @@ function displayMonth($part, $dataEvent, $dataDay) {
     }
 }
 
-function displayDay($part, $dataEvent, $date) {
+
+function switchDisplayDay($part, $dataEvent, $date) {
     switch ($part) {
         case 1:
             if ($dataEvent['status'] == 'Oui') echo 'class="follow"';
@@ -25,9 +26,16 @@ function displayDay($part, $dataEvent, $date) {
 }
 
 
-function displayEvent($data) {
-    ?><form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($data['id']) ?>">
-        <input type="hidden" name="script_join" value='true'>
-        <input type="submit" value=<?= htmlspecialchars($data['action']) ?>>
-    </form><?php
+function switchDisplayEvent($part, $data) {
+    switch ($part) {
+        case 1:?>
+            <span>Organisateur : </span><?= htmlspecialchars($data) ?><br>
+            <?php break;
+        case 2:?>
+            <form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($data['id']) ?>">
+                <input type="hidden" name="script_join" value='true'>
+                <input type="submit" value=<?= htmlspecialchars($data['action']) ?>>
+            </form>
+            <?php break;
+    }
 }

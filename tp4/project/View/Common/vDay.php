@@ -31,23 +31,22 @@ $template['menuContent'] = ob_get_clean();
 
 
 ob_start(); ?>
-    <header><?= displayDay(4, false, $page['date']); ?></header>
+    <?= switchDisplayDay(4, false, $page['date']); ?>
     <div id="day">
         <?php foreach($dataDay as $dataEvent) { ?>
-            <aside  <?php displayDay(1, $dataEvent, false) ?>>
+            <aside  <?php switchDisplayDay(1, $dataEvent, false) ?>>
                 <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($dataEvent['id']) ?>">
                     <h3><?= htmlspecialchars($dataEvent['name']) ?></h3>
                 </a>
                 <hr>
                 Début : <?= htmlspecialchars($dataEvent['startTime']) ?><br>
-                <?php displayDay(2, $dataEvent, false); ?>
+                <?php switchDisplayDay(2, $dataEvent, false); ?>
                 Places restantes : <?= htmlspecialchars($dataEvent['place']) ?>
-                <?php displayDay(3, $dataEvent, false); ?>
+                <?php switchDisplayDay(3, $dataEvent, false); ?>
             </aside>
         <?php } ?>
     </div>
-    <footer><?= displayDay(4, false, $page['date']); ?></footer>
 <?php $template['articleContent'] = ob_get_clean();
 
 
-require('View/template.php');
+require('View/Common/template.php');
