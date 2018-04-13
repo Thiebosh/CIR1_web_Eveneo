@@ -1,0 +1,93 @@
+	<!DOCTYPE html>
+<html>
+  <head>
+    <title>CIR1 : Développement Web</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-slide-container {
+    visibility: hidden;
+    display: initial;
+}
+.remark-visible {
+    visibility: visible;
+}
+.inlineimg img{
+	display: inline-block;
+	max-width: 150px;
+
+}
+
+.px300 img{
+	display: inline-block;
+	max-width: 300px;
+
+}
+.table_container td{
+	border-bottom: 1px solid black !important;
+	border-right: 1px solid black !important;
+}
+
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/mermaid@7.0.0/dist/mermaid.css" media="all"/>
+  </head>
+  <body>
+    <textarea id="source">
+class:center, middle
+# TP2: l'épicerie
+
+---
+# Exercice 1 (obligatoire): Ajouter des produits
+
+- dans le fichier `ajout_produits.php` créez un formulaire qui permet d'ajouter un produit
+
+--
+- un produit possède une photo, un nom et un prix et un nombre de produit disponibles
+
+--
+- il est nécessaire de s'assurer que le prix est un nombre positif avec au maximum 2 chiffres après la virgule
+
+--
+- un nom ne doit pas contenir autre chose que des lettres ou des chiffres
+
+--
+- vous stockez le nom, le prix et le chemin vers l'image dans le fichier "mesproduts.csv" en séparant ces trois données par un `;`
+
+--
+
+- Dans le fichier `liste_produits.php` vous affichez tous les produits.
+
+---
+
+# Exercice 2 : Aller un peu plus loin
+
+- Modifier le fichier `liste_produit.php` pour que l'épicier puis dire qu'il a vendu un produit. Si le produit arrive à 0 en quantité, afficher la ligne en rouge.
+
+--
+- Il est impossible de vendre un produit qui a une quantité de 0
+
+--
+- Assurez-vous que les failles de sécurités sont comblées.
+
+
+	</textarea>
+	<script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+<script src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad: true, theme: 'forest'});
+  </script>
+  </body>
+</html>
