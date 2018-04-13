@@ -1,5 +1,8 @@
 body {text-align: center;}
-a {color: black;}
+a {
+    color: black;
+    text-decoration: none;
+}
 form {display: inline-block;}
 span {font-weight: bold;}
 menu span:first-of-type {
@@ -84,7 +87,11 @@ section>aside {
     margin: auto;
     width: 14em;
 }
-#month>thead th {font-weight: normal;}
+#month>thead td {
+    height: auto;
+    color: whitesmoke;
+    background-color: lightslategray;
+}
 #month td {
     border : 1px solid black;
     height: 12em;

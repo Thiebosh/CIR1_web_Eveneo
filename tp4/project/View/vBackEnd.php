@@ -2,7 +2,7 @@
 function switchDisplayMonth($part, $dataEvent, $dateFull) {
     switch ($part) {
         case 1: ?>
-            <tr><th colspan="7">Sélectionnez un jour pour y créer un événement!</th></tr>
+            <tr><td colspan="7">Sélectionnez un jour pour y créer un événement!</td></tr>
         <?php break;
         case 2: ?>
             <a href="index.php?action=new&amp;date=<?= htmlspecialchars($dateFull) ?>">
