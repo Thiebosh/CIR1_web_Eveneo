@@ -42,7 +42,7 @@ function backGetEventsDay($day) {
 function backGetEventDetail($idEvent) {
     $bdd = dbConnect();
 
-    $query = 'SELECT name, description, startdate, enddate, nb_place AS place
+    $query = 'SELECT name, description, startdate, enddate, nb_place AS place, id
                 FROM events
                 WHERE id = :event';
     $table = array('event' => $idEvent);

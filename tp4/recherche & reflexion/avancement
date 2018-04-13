@@ -12,3 +12,8 @@ implémenter dernières idées dont
     afficher retours au mois actuel au survol (tous - tout)
 verifier nb arguments de date pour chaque page
 tout mettre en simple guillemets (echo / php)
+
+
+pour durée :
+si plus de 3 éléments, ajoute un retours à la ligne
+met le dernier element à ajouter en attente, et insère un 'et' entre le début de la liste et lui (si plus d'un élément)

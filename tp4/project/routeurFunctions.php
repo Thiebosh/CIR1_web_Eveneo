@@ -110,10 +110,23 @@ function verifScript($script) {
             if (!$received['description']) $received['echec'][] = 'description';
             if (!$received['startDate'])   $received['echec'][] = 'startDate';
             if (!$received['endDate'])     $received['echec'][] = 'endDate';
+            break;
+        case 'script_edit':
+            if (!isset($_POST['nbPlaces']) || !isset($_POST['description']) || !isset($_POST['endDate'])) {
+                throw new Exception("Modification d'événement : Donnée(s) formulaire absente(s)");
+            }
 
-            if (isset($received['echec'])) $_POST['script_new'] = false;
+            $received['nbPlaces']    = filter_input(INPUT_POST, 'nbPlaces',    FILTER_VALIDATE_INT);
+            $received['endDate']     = filter_input(INPUT_POST, 'endDate',     FILTER_SANITIZE_STRING);
+            $received['description'] = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+
+            if (!$received['nbPlaces'])    $received['echec'][] = 'nbPlaces';
+            if (!$received['endDate'])     $received['echec'][] = 'endDate';
+            if (!$received['description']) $received['echec'][] = 'description';
             break;
     }
+
+    if (isset($received['echec'])) $_POST[$script] = false;
 
     return $received;
 }

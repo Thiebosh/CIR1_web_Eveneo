@@ -36,8 +36,7 @@ function switchDisplayEvent($part, $data) {
     switch ($part) {
         case 2:?>
             <div>
-                <form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($data['id']) ?>">
-                    <input type="hidden" name="script_edit" value='true'>
+                <form method="post" action="index.php?action=edit&amp;id=<?= htmlspecialchars($data['id']) ?>">
                     <input type="submit" value="Modifier">
                 </form>
                 <form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($data['id']) ?>">

@@ -45,33 +45,41 @@ function switchEventDetail($part, $id, $status, $dateMonth) {
 }
 
 
-function backEventNew($data) {
+function backEventNew($reception) {
     setlocale(LC_TIME, 'fr_FR.utf8','fra');
     
     if (isset($_POST['script_new']) && $_POST['script_new']) {
-        $id = backPostDataAndGetIdEvent($data);
+        $id = backPostDataAndGetIdEvent($reception);
         if (!$id) throw new Exception("Création d'événement : Echec d'enregistrement ou de redirection");
         
         header('Location: index.php?action=detail&id='.$id);
         exit();
     }
     
-    $page['date'] = $data['date'];
-    $dateSplit = explode('-', $page['date']);
+    $dateSplit = explode('-', $reception['date']);
     $page['dateMonth'] = $dateSplit[0].'-'.$dateSplit[1];
-    $template['title'] = strftime('%A %e %B %Y', strtotime($data['date']));
+    $page['date'] = $reception['date'];
+    $template['title'] = strftime('%A %e %B %Y', strtotime($reception['date']));
 
     require('View/Common/vNew.php');
 }
 
-//A REPRENDRE (dans le fichier de fonction)
-function backEventEdit($data) {
-    if (isset($_POST['script_edit'])) {
-        backChangeEventData($data);
+
+function backEventEdit($reception) {
+    if (isset($_POST['script_edit']) && $_POST['script_edit']) {
+        backChangeEventData($reception);
         
-        header('Location: index.php?action=detail&id='.$data['id']);
+        header('Location: index.php?action=detail&id='.$reception['id']);
         exit();
     }
 
-    require('View/BackEnd/vEventEdit.php');
+    $page = backGetEventDetail($reception['id']);
+    $page['date'] = explode(' ', $page['startdate']);
+    $page['date'] = $page['date'][0];
+    $dateSplit = explode('-', $page['date']);
+    $page['dateMonth'] = $dateSplit[0].'-'.$dateSplit[1];
+
+    $template['title'] = '';
+
+    require('View/Common/vEdit.php');
 }

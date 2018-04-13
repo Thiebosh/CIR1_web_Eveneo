@@ -33,9 +33,9 @@ ob_start();
 ob_start(); ?>
     <div>
         <?php 
-        if (isset($data['echec'])) {
+        if (isset($reception['echec'])) {
             echo "<br><br>Erreur - Certains champs sont incorrects ou manquant : ";
-            foreach($data['echec'] as $message) {
+            foreach($reception['echec'] as $message) {
                 echo $message . ' ; ';
             }
         }
@@ -43,12 +43,12 @@ ob_start(); ?>
     </div>
     <fieldset>
         <legend>formulaire</legend>
-        <form method="post" action="index.php?action=new&amp;date=<?= htmlspecialchars($data['date']) ?>">
+        <form method="post" action="index.php?action=new&amp;date=<?= htmlspecialchars($page['date']) ?>">
             <input type="text" id="name" name="name" placeholder="Titre de l'événement">
             <input type="text" id="nbPlaces" name="nbPlaces" placeholder="Nombre de places">
             <br>
-            <input type="text" id="startDate" name="startDate" placeholder="Date de début" value=<?= $data['date'] ?>><!--liste deroulante préremplie-->
-            <input type="text" id="endDate"   name="endDate"   placeholder="Date de fin"   value=<?= $data['date'] ?>><!--liste deroulante-->
+            <input type="text" id="startDate" name="startDate" placeholder="Date de début" value=<?= $page['date'] ?>><!--liste deroulante préremplie-->
+            <input type="text" id="endDate"   name="endDate"   placeholder="Date de fin"   value=<?= $page['date'] ?>><!--liste deroulante-->
             <br>
             <textarea id="description" name="description" placeholder="Description de l'événement"></textarea>
             <br><br>
