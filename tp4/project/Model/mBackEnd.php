@@ -23,7 +23,6 @@ function backGetEventsMonth($dataDate) {
     return $dataMonth;
 }
 
-
 function backGetEventsDay($day) {
     $bdd = dbConnect();
 
@@ -40,7 +39,6 @@ function backGetEventsDay($day) {
     return $dataDay;
 }
 
-
 function backGetEventDetail($idEvent) {
     $bdd = dbConnect();
 
@@ -56,7 +54,6 @@ function backGetEventDetail($idEvent) {
 
     return $dataEvent;
 }
-
 
 function backPostDataAndGetIdEvent($data) {
     $bdd = dbConnect();
@@ -89,7 +86,6 @@ function backPostDataAndGetIdEvent($data) {
     return $data['id'];
 }
 
-
 function backChangeEventData($data) {
     $bdd = dbConnect();
 
@@ -104,7 +100,6 @@ function backChangeEventData($data) {
     $request = $bdd->prepare($query);
     if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
 }
-
 
 function backDeleteEvent($idEvent) {
     $bdd = dbConnect();

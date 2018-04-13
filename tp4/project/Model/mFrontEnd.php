@@ -23,7 +23,6 @@ function frontGetEventsMonth($dataDate) {
     return $dataMonth;
 }
 
-
 function frontGetEventsDay($day) {
     $bdd = dbConnect();
 
@@ -39,7 +38,6 @@ function frontGetEventsDay($day) {
 
     return $dataDay;
 }
-
 
 function frontGetEventDetail($idEvent) {
     $bdd = dbConnect();
@@ -57,7 +55,6 @@ function frontGetEventDetail($idEvent) {
     return $dataEvent;
 }
 
-
 function frontSetStatusON($idEvent) {
     $bdd = dbConnect();
 
@@ -74,7 +71,6 @@ function frontSetStatusON($idEvent) {
     $request = $bdd->prepare($query);
     if (!$request->execute($table)) throw new Exception("Base De Données : Echec d'exécution");
 }
-
 
 function frontSetStatusOFF($idEvent) {
     $bdd = dbConnect();

@@ -18,7 +18,6 @@ function externGetDataUser($login) {
     return $dataUser;
 }
 
-
 function externGetLoginUser($login) {
     $bdd = dbConnect();
 
@@ -34,7 +33,6 @@ function externGetLoginUser($login) {
 
     return $result;
 }
-
 
 function externPostDataUser($data) {
     $bdd = dbConnect();

@@ -28,7 +28,3 @@ function getEventStatus($idEvent) {//valeur ou false
 
     return $table['iduser_participates_events'];
 }
-
-function modelInteraction() {
-
-}
