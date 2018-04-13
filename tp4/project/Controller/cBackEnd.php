@@ -44,7 +44,7 @@ function switchEventDetail($part, $id, $status, $dateMonth) {
     }
 }
 
-//A REPRENDRE (dans le fichier de fonction)
+
 function backEventNew($data) {
     setlocale(LC_TIME, 'fr_FR.utf8','fra');
     
