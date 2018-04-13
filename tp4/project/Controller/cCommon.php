@@ -1,5 +1,4 @@
 <?php
-//require('controllerFonctions.php');
 if (!isset($_SESSION['rank']))             require('Controller/cRegisterLogin.php');
 else if ($_SESSION['rank'] == 'CUSTOMER')  require('Controller/cFrontEnd.php');
 else if ($_SESSION['rank'] == 'ORGANIZER') require('Controller/cBackEnd.php');
