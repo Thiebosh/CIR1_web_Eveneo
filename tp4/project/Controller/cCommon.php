@@ -57,8 +57,6 @@ function EventDetail($id) {
 
     $interval = date_diff(date_create($dataEvent['startdate']), date_create($dataEvent['enddate']));
     $splitDuration = explode('-', $interval->format('%y-%m-%d-%h-%i'));
-    if ($splitDuration[0] || $splitDuration[1] || $splitDuration[2]) $return = true;
-    else $return = false;
 
     $page['date'] = explode(' ', $dataEvent['startdate']);
     $page['time'] = $page['date'][1];
@@ -78,15 +76,45 @@ function EventDetail($id) {
     $display['endDate']   = strftime('%A %e %B %Y', strtotime($splitEndDate[0]));
     $display['endTime']   = strftime('%kh %M',      strtotime($splitEndDate[1]));
 
-    $display['duration']  = '<span>Durée : </span>';
-    if ($return) $display['duration'] .= '<br>';
-    if ($splitDuration[0]) $display['duration'] .= $splitDuration[0].' an, ';
-    if ($splitDuration[1]) $display['duration'] .= $splitDuration[1].' mois, ';
-    if ($splitDuration[2]) $display['duration'] .= $splitDuration[2].' jour, ';
-    if ($return) $display['duration'] .= '<br>';
-    if ($splitDuration[3]) $display['duration'] .= $splitDuration[3].' heure';
-    if ($return || $splitDuration[3]) $display['duration'] .= ' et ';
-    $display['duration'] .= $splitDuration[4].' minutes ';
+    $totalPart = $nbPart = 0;
+    foreach($splitDuration as $part) if ($part != 0) $totalPart++;
+    $DisplayPart = 0;
+    $display['duration'][$DisplayPart] = '';
+    for ($part = 0; $part < 5; $part++) {
+        if ($splitDuration[$part]) {
+            $display['duration'][$DisplayPart] .= $splitDuration[$part];
+            switch ($part) {
+                case 0:
+                    if ($splitDuration[$part] == 1) $display['duration'][$DisplayPart] .= ' an';
+                    else $display['duration'][$DisplayPart] .= ' ans';
+                    break;
+                case 1: $display['duration'][$DisplayPart] .= ' mois';
+                    break;
+                case 2:
+                    if ($splitDuration[$part] == 1) $display['duration'][$DisplayPart] .= ' jour';
+                    else $display['duration'][$DisplayPart] .= ' jours';
+                    break;
+                case 3:
+                    if ($splitDuration[$part] == 1) $display['duration'][$DisplayPart] .= ' heure';
+                    else $display['duration'][$DisplayPart] .= ' heures';
+                    break;
+                case 4:
+                    if ($splitDuration[$part] == 1) $display['duration'][$DisplayPart] .= ' minute';
+                    else $display['duration'][$DisplayPart] .= ' minutes';
+                    break;
+            }
+
+            $nbPart++;
+            if ($nbPart < $totalPart - 1) $display['duration'][$DisplayPart] .= ', ';
+            else if ($nbPart > 0 && $nbPart != $totalPart) $display['duration'][$DisplayPart] .= ' et ';
+            if ($nbPart == $totalPart) break;
+            if (($nbPart == 2 && $totalPart == 4) || ($nbPart == 3 && $totalPart == 5)) {
+                $DisplayPart++;
+                $display['duration'][$DisplayPart] = '';
+            }
+        }
+    }
+    if ($display['duration'][$DisplayPart] == '') $display['duration'][$DisplayPart] = 'Nulle';
 
     require('View/Common/vEvent.php');
 }

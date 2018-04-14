@@ -22,6 +22,10 @@ function switchDisplayDay($part, $dataEvent, $date) {
             <br>
             Inscrit : <?= htmlspecialchars($dataEvent['status']) ?>
         <?php break;
+        case 5:
+            if ($dataEvent['place'] > 0 || $dataEvent['status'] == 'Oui') return true;
+            else return false;
+            break;
     }
 }
 

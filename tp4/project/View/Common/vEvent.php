@@ -47,17 +47,21 @@ ob_start(); ?>
                 <?php switchDisplayEvent(1, $dataEvent['login']) ?>
                 <span>Places restantes : </span><?= htmlspecialchars($dataEvent['place']) ?>
                 <br>
-                <?= $display['duration'] ?>
+                <span>Durée : </span>
+                <?php foreach($display['duration'] as $displayPart) echo htmlspecialchars($displayPart).'<br>';?>
                 <br>
+                <span>Du </span><?= htmlspecialchars($display['startDate']) ?><span>
                 <br>
-                <span>Du </span><?= htmlspecialchars($display['startDate']) ?><span> à </span><?= htmlspecialchars($display['startTime']) ?>
+                à </span><?= htmlspecialchars($display['startTime']) ?>
                 <br>
-                <span>Au </span><?= htmlspecialchars($display['endDate']) ?><span> à </span><?= htmlspecialchars($display['endTime']) ?>
+                <span>Au </span><?= htmlspecialchars($display['endDate']) ?><span>
+                <br>
+                à </span><?= htmlspecialchars($display['endTime']) ?>
             </aside>
             <aside class="vLine"></aside>
             <aside>
                 <span>Description :</span>
-                <p><?= htmlspecialchars($dataEvent['description']) ?></p>
+                <p><?= $dataEvent['description'] ?></p>
             </aside>
         </div>
     </div>

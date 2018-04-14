@@ -28,6 +28,9 @@ function switchDisplayDay($part, $dataEvent, $date) {
                 <button>Ajouter un événement</button>
             </a>
         <?php break;
+        case 5:
+            return true;
+            break;
     }
 }
 

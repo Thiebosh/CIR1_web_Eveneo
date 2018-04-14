@@ -33,18 +33,20 @@ $template['menuContent'] = ob_get_clean();
 ob_start(); ?>
     <?= switchDisplayDay(4, false, $page['date']); ?>
     <div id="day">
-        <?php foreach($dataDay as $dataEvent) { ?>
-            <aside  <?php switchDisplayDay(1, $dataEvent, false) ?>>
-                <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($dataEvent['id']) ?>">
-                    <h3><?= htmlspecialchars($dataEvent['name']) ?></h3>
-                </a>
-                <hr>
-                Début : <?= htmlspecialchars($dataEvent['startTime']) ?><br>
-                <?php switchDisplayDay(2, $dataEvent, false); ?>
-                Places restantes : <?= htmlspecialchars($dataEvent['place']) ?>
-                <?php switchDisplayDay(3, $dataEvent, false); ?>
-            </aside>
-        <?php } ?>
+        <?php foreach($dataDay as $dataEvent) {
+            if (switchDisplayDay(5, $dataEvent, false)) { ?>
+                <aside  <?php switchDisplayDay(1, $dataEvent, false) ?>>
+                    <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($dataEvent['id']) ?>">
+                        <h3><?= htmlspecialchars($dataEvent['name']) ?></h3>
+                    </a>
+                    <hr>
+                    Début : <?= htmlspecialchars($dataEvent['startTime']) ?><br>
+                    <?php switchDisplayDay(2, $dataEvent, false); ?>
+                    Places restantes : <?= htmlspecialchars($dataEvent['place']) ?>
+                    <?php switchDisplayDay(3, $dataEvent, false); ?>
+                </aside>
+            <?php }
+        } ?>
     </div>
 <?php $template['articleContent'] = ob_get_clean();
 

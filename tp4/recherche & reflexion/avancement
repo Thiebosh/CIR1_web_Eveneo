@@ -3,17 +3,12 @@ print_r($array);
 
 
 finir la factorisation
-assurer affichage de toutes les pages et fonctionnement de toutes les fonctionnalités
+    gérer les alertes plus solidement (liste (erreur, alerte, confirmation) dans une case survolable a coté de menu, redirection vers la page d'origine?)
 implémenter dernières idées dont
     désinscription
     empecher inscription une fois date passée
-    gérer les alertes plus solidement (liste (erreur, alerte, confirmation) dans une case survolable a coté de menu, redirection vers la page d'origine?)
+    afficher nb de personnes inscrites (orga)
     afficher bouton de suppression au survol (orga - mois)
     afficher retours au mois actuel au survol (tous - tout)
 verifier nb arguments de date pour chaque page
 tout mettre en simple guillemets (echo / php)
-
-
-pour durée :
-si plus de 3 éléments, ajoute un retours à la ligne
-met le dernier element à ajouter en attente, et insère un 'et' entre le début de la liste et lui (si plus d'un élément)
