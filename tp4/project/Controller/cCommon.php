@@ -29,7 +29,6 @@ function EventsMonth($date) {
     require('View/vMonth.php');
 }
 
-
 function EventsDay($date) {
     setlocale(LC_TIME, 'fr_FR.utf8','fra');
 
@@ -48,7 +47,6 @@ function EventsDay($date) {
 
     require('View/vDay.php');
 }
-
 
 function EventDetail($id) {
     setlocale(LC_TIME, 'fr_FR.utf8','fra');

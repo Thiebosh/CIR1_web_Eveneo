@@ -1,6 +1,7 @@
 <?php
 define('MAX_LIST', 5);
 
+
 function dbConnect() {
     $errMsg = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
     $dbName = 'eventCalendar';

@@ -4,6 +4,7 @@ session_start();
 require('globalFunctions.php');
 require('Controller/cCommon.php');
 
+
 try {
     $action = verifAction();
     

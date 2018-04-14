@@ -17,7 +17,6 @@ function switchDisplayMonth($part, $dataEvent, $dateFull) {
     }
 }
 
-
 function switchDisplayDay($part, $dataEvent, $date) {
     switch ($part) {
         case 2: ?>
@@ -33,7 +32,6 @@ function switchDisplayDay($part, $dataEvent, $date) {
             break;
     }
 }
-
 
 function switchDisplayEvent($part, $data) {
     switch ($part) {

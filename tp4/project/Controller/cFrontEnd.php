@@ -17,7 +17,6 @@ function switchEventsMonth($page, $dateSplit) {
     return $dataMonth;
 }
 
-
 function switchEventsDay($date) {
     $dataDay = frontGetEventsDay($date);
     $event = 0;
@@ -31,7 +30,6 @@ function switchEventsDay($date) {
 
     return $dataDay;
 }
-
 
 function switchEventDetail($part, $id, $status, $dateMonth) {
     switch ($part) {

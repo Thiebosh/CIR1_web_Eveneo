@@ -1,11 +1,9 @@
 <?php
 require('Model/mBackEnd.php');
 
-
 function switchEventsMonth($page, $dateSplit) {
     return backGetEventsMonth($page);
 }
-
 
 function switchEventsDay($date) {
     $dataDay = backGetEventsDay($date);
@@ -18,7 +16,6 @@ function switchEventsDay($date) {
 
     return $dataDay;
 }
-
 
 function switchEventDetail($part, $id, $status, $dateMonth) {
     switch ($part) {
@@ -44,7 +41,6 @@ function switchEventDetail($part, $id, $status, $dateMonth) {
     }
 }
 
-
 function backEventNew($reception) {
     setlocale(LC_TIME, 'fr_FR.utf8','fra');
     
@@ -63,7 +59,6 @@ function backEventNew($reception) {
 
     require('View/vNew.php');
 }
-
 
 function backEventEdit($reception) {
     if (isset($_POST['script_edit']) && $_POST['script_edit']) {

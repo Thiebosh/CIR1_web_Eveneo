@@ -1,7 +1,6 @@
 <?php
 require_once('Model/mCommon.php');
 
-
 function backGetEventsMonth($dataDate) {
     $bdd = dbConnect();
     
