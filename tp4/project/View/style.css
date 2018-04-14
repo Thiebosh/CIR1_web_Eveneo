@@ -1,0 +1,223 @@
+body {text-align: center;}
+a {
+    color: black;
+    text-decoration: none;
+}
+form {display: inline-block;}
+span {font-weight: bold;}
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+}
+menu {
+    display: flex;
+    width: 80%;
+    height: 2em;
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 2.6em;
+    padding: 1em;
+    border: 1px solid lightgray;
+    border-radius: 1em;
+    background-color: whitesmoke;
+}
+menu li {
+    margin-left: 1em;
+    list-style-type: none;
+}
+menu li:before {content: "→";}
+section {
+    width: 95%;
+    margin: auto;
+    border-radius: 5em;
+    border : 2px solid black;
+    background-color: whitesmoke;
+}
+section>h2 {
+    display: inline-block;
+    margin: 0;
+    width: 14em;
+    position: relative;
+    right: 22%;
+    bottom: 1em;
+    border : double;
+    border-radius: 2em;
+    padding: 0.25em;
+    background-color: whitesmoke;
+}
+section>aside {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    z-index: 10;
+}
+#mainGrid {
+    margin: auto;
+    width: 92%;
+}
+#mainGrid>thead th {border-radius: 5em;}
+#mainGrid>thead th:nth-child(2n+2) {width: 30%;}
+#mainGrid>thead th:nth-child(3) {width: 18em;}
+#mainGrid>thead th:nth-child(3) h3, 
+#mainGrid>thead th:only-child h3 {text-decoration: underline;}
+#mainGrid>thead h3:empty {margin: 0;}
+
+#month {
+    border-collapse:collapse;
+    margin: 2em 0;
+    border : 2px solid black;
+    background-color: ghostwhite;
+}
+#month th {
+    background-color: rgba(100, 150, 240, 0.75);
+    border : 2px solid black;
+    margin: auto;
+    width: 14em;
+}
+#month>thead td {
+    height: auto;
+    color: whitesmoke;
+    background-color: lightslategray;
+}
+#month td {
+    border : 1px solid black;
+    height: 12em;
+}
+#month tbody a {
+    display: inline-block;
+    width : 75%;
+    margin: auto;
+    padding: 0.1em;
+    margin: 0.15em;
+    border : 1px solid gray;
+    border-radius: 0.4em;
+}
+#month tbody .more {
+    margin-top: 0.4em;
+    border: hidden;
+}
+#month .allEvents {width: 80%;}
+#month .allEvents>.follow {
+    background-color: skyblue;
+    border : 1px solid royalblue;
+}
+#month .allEvents>:not(.follow) {background-color: lavender;}
+#month .allEvents>a:nth-child(6) {
+    width: auto; 
+    padding: 0;
+}
+#month .today {background-color: rgba(0, 190, 255, 0.15);}
+#month .saturday .date, #month .saturday .date a {color: blue;}
+#month .sunday .date, #month .sunday .date a {color: red;}
+#month tbody aside, #month .date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#month .date {width: 20%;}
+#month .date a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 11.7em;
+    border: hidden;
+}
+#month .vLine {
+    height: 10em;
+    border-left: 1px solid gray;
+}
+#month .otherMonth {
+    background-color: gainsboro;
+    padding: 0;
+}
+#month .otherMonth a {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: auto;
+    border: hidden;
+}
+#month .otherMonth aside {margin: 1em 0;}
+
+
+
+#day {
+    border-radius: 2em;
+    border: 1px solid darkgray;
+    background-color: ghostwhite;
+    width: 90%;
+    min-height: 10em;
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 3em;
+    padding: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-around;
+}
+#day aside {
+    border: 1px solid gray;
+    border-radius: 0.2em;
+    margin: 1em;
+    padding: 1em;
+}
+#day aside hr {
+    width: 60%;
+    margin-bottom: 1em; 
+}
+#day .follow {
+    background-color: skyblue;
+    border : 1px solid royalblue;
+}
+
+
+#event {
+    border-radius: 2em;
+    border: 1px solid darkgray;
+    background-color: ghostwhite;
+    width: 80%;
+    margin: auto;
+    margin-bottom: 2em;
+    padding: 1.5em;
+}
+#event header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 75%;
+    padding: 0 3em 1em 3em;
+    margin: auto;
+    margin-bottom: 2em;
+    border-bottom: 1px solid gray;
+}
+#event header h3 { margin: 0.16em 0;}
+#event .vLine {border-left: double gray;}
+#event>div {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+}
+#event aside:first-child {width: 35%;}
+#event aside:last-child {
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#event p {
+    border: 1px solid gray;
+    padding: 1em;
+    margin: 1em 2em;
+    text-align: justify;
+    word-wrap: break-word;
+}
