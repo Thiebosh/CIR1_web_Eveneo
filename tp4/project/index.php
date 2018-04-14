@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require('routeurFunctions.php');
+require('globalFunctions.php');
 require('Controller/cCommon.php');
 
 try {
@@ -47,5 +47,5 @@ catch(Exception $error) {//rediriger vers la page en affichant un bloc erreur
         $redirection['link'] = 'login';
     }
     
-    require('View/Common/mutualiser/vError.php');
+    require('View/vError(provisoire).php');
 }

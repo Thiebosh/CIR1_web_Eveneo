@@ -1,14 +1,20 @@
 fonction utile
 print_r($array);
 
-
-finir la factorisation
-    gérer les alertes plus solidement (liste (erreur, alerte, confirmation) dans une case survolable a coté de menu, redirection vers la page d'origine?)
-implémenter dernières idées dont
+remettre switchs dans l'ordre
+factorisation de verifScript et du menu
+gestion des erreurs
+refonte graphique
+    menu : cases survolables si possibilité de retours (mois, jour, evenement) => menu dans template et ajout de classes par inclusion de page?
+    formulaire : centrés. en tableau?
+    erreurs et alerte : liste (erreur, alerte, confirmation) dans une case survolable sous le menu (?), redirection vers la page d'origine?
+    cadre principal : taille définie selon contenu plutôt que fixée?
+tout mettre en simple guillemets (echo / php)
+implémenter dernières idées
     désinscription
-    empecher inscription une fois date passée
     afficher nb de personnes inscrites (orga)
     afficher bouton de suppression au survol (orga - mois)
-    afficher retours au mois actuel au survol (tous - tout)
-verifier nb arguments de date pour chaque page
-tout mettre en simple guillemets (echo / php)
+    afficher jours fériés d'une couleur différente
+
+
+pb : ne peut pas afficher un string contenant un espace avec <?= ?> dans la value d'un form

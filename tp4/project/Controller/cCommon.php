@@ -1,5 +1,5 @@
 <?php
-if (!isset($_SESSION['rank']))             require('Controller/cRegisterLogin.php');
+if (!isset($_SESSION['rank']))             require('Controller/cExtern.php');
 else if ($_SESSION['rank'] == 'CUSTOMER')  require('Controller/cFrontEnd.php');
 else if ($_SESSION['rank'] == 'ORGANIZER') require('Controller/cBackEnd.php');
 else throw new Exception("Rang : problème de définition");
@@ -22,11 +22,11 @@ function EventsMonth($date) {
                     'fr' => array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'));
     
     $template['switchName'] = 'Mois';
-    $template['title'] = strftime('%B %Y', strtotime($page['dateMonth']));
+    $template['title'] = ucfirst(strftime('%B %Y', strtotime($page['dateMonth'])));
     $template['lastPage'] = "reception&amp;date=".$lastMonth;
     $template['nextPage'] = "reception&amp;date=".$nextMonth;
 
-    require('View/Common/vMonth.php');
+    require('View/vMonth.php');
 }
 
 
@@ -44,16 +44,16 @@ function EventsDay($date) {
     $template['switchName'] = 'Jour';
     $template['lastPage'] = "list&amp;date=".$lastDay;
     $template['nextPage'] = "list&amp;date=".$nextDay;
-    $template['title'] = strftime('%A %e %B %Y', strtotime($date));
+    $template['title'] = ucfirst(strftime('%A %e %B %Y', strtotime($date)));
 
-    require('View/Common/vDay.php');
+    require('View/vDay.php');
 }
 
 
 function EventDetail($id) {
     setlocale(LC_TIME, 'fr_FR.utf8','fra');
 
-    $dataEvent = switchEventDetail(1, $id, false, false);
+    $dataEvent = switchEventDetail(1, $id, false, false, false);
 
     $interval = date_diff(date_create($dataEvent['startdate']), date_create($dataEvent['enddate']));
     $splitDuration = explode('-', $interval->format('%y-%m-%d-%h-%i'));
@@ -66,7 +66,9 @@ function EventDetail($id) {
     $dateSplit = explode('-', $page['date']);
     $page['dateMonth'] = $dateSplit[0].'-'.$dateSplit[1];
     
-    $script = switchEventDetail(2, $id, $dataEvent['status'], $page['dateMonth']);
+    if (isPreviousDate(date('Y-m-d H-i'), $dataEvent['startdate'])) {
+        $script = switchEventDetail(2, $id, $dataEvent['status'], $page['dateMonth']);
+    }
 
     $template['title'] = '';
 
@@ -114,7 +116,6 @@ function EventDetail($id) {
             }
         }
     }
-    if ($display['duration'][$DisplayPart] == '') $display['duration'][$DisplayPart] = 'Nulle';
 
-    require('View/Common/vEvent.php');
+    require('View/vEvent.php');
 }

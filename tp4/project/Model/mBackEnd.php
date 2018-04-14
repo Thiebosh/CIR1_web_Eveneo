@@ -90,9 +90,10 @@ function backChangeEventData($data) {
     $bdd = dbConnect();
 
     $query = 'UPDATE events
-                SET description  = :describe, enddate = :endDate, nb_place = :nbPlace
+                SET name = :title, description  = :describe, enddate = :endDate, nb_place = :nbPlace
                 WHERE id = :idEvent';
-    $table = array('describe' => $data['description'],
+    $table = array('title' => $data['name'],
+                    'describe' => $data['description'],
                     'endDate' => $data['endDate'],
                     'nbPlace' => $data['nbPlaces'],
                     'idEvent' => $data['id']);

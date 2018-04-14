@@ -17,7 +17,7 @@ function switchDisplayDay($part, $dataEvent, $date) {
         case 1:
             if ($dataEvent['status'] == 'Oui') echo 'class="follow"';
         break;
-        case 3:?>
+        case 3: ?>
             <br>Organisateur : <?= htmlspecialchars($dataEvent['organizer']) ?><br>
             <br>
             Inscrit : <?= htmlspecialchars($dataEvent['status']) ?>
@@ -32,10 +32,10 @@ function switchDisplayDay($part, $dataEvent, $date) {
 
 function switchDisplayEvent($part, $data) {
     switch ($part) {
-        case 1:?>
+        case 1: ?>
             <span>Organisateur : </span><?= htmlspecialchars($data) ?><br>
             <?php break;
-        case 2:?>
+        case 2: ?>
             <form method="post" action="index.php?action=detail&amp;id=<?= htmlspecialchars($data['id']) ?>">
                 <input type="hidden" name="script_join" value='true'>
                 <input type="submit" value=<?= htmlspecialchars($data['action']) ?>>

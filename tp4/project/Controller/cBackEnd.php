@@ -59,9 +59,9 @@ function backEventNew($reception) {
     $dateSplit = explode('-', $reception['date']);
     $page['dateMonth'] = $dateSplit[0].'-'.$dateSplit[1];
     $page['date'] = $reception['date'];
-    $template['title'] = strftime('%A %e %B %Y', strtotime($reception['date']));
+    $template['title'] = ucfirst(strftime('%A %e %B %Y', strtotime($reception['date'])));
 
-    require('View/Common/vNew.php');
+    require('View/vNew.php');
 }
 
 
@@ -81,5 +81,5 @@ function backEventEdit($reception) {
 
     $template['title'] = '';
 
-    require('View/Common/vEdit.php');
+    require('View/vEdit.php');
 }

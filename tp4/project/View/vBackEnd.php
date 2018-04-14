@@ -20,10 +20,10 @@ function switchDisplayMonth($part, $dataEvent, $dateFull) {
 
 function switchDisplayDay($part, $dataEvent, $date) {
     switch ($part) {
-        case 2:?>
+        case 2: ?>
             Fin : <?= htmlspecialchars($dataEvent['endTime']) ?><br>
         <?php break;
-        case 4:?>
+        case 4: ?>
             <a href="index.php?action=new&amp;date=<?= htmlspecialchars($date) ?>">
                 <button>Ajouter un événement</button>
             </a>
@@ -37,7 +37,7 @@ function switchDisplayDay($part, $dataEvent, $date) {
 
 function switchDisplayEvent($part, $data) {
     switch ($part) {
-        case 2:?>
+        case 2: ?>
             <div>
                 <form method="post" action="index.php?action=edit&amp;id=<?= htmlspecialchars($data['id']) ?>">
                     <input type="submit" value="Modifier">
