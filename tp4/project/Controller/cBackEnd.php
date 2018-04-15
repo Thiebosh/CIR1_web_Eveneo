@@ -1,6 +1,7 @@
 <?php
 require('Model/mBackEnd.php');
 
+
 function switchEventsMonth($page, $dateSplit) {
     return backGetEventsMonth($page);
 }
@@ -32,7 +33,7 @@ function switchEventDetail($part, $id, $status, $dateMonth) {
             if (isset($_POST['script_delete'])) {
                 backDeleteEvent($id);
         
-                header('Location: index.php?action=reception&date='.$dateMonth);
+                header('Location: index.php?action=month&date='.$dateMonth);
                 exit();
             }
 
@@ -41,40 +42,46 @@ function switchEventDetail($part, $id, $status, $dateMonth) {
     }
 }
 
-function backEventNew($reception) {
+function backEventNew($dataPage) {
     setlocale(LC_TIME, 'fr_FR.utf8','fra');
     
     if (isset($_POST['script_new']) && $_POST['script_new']) {
-        $id = backPostDataAndGetIdEvent($reception);
+        $id = backPostDataAndGetIdEvent($dataPage);
         if (!$id) throw new Exception("Création d'événement : Echec d'enregistrement ou de redirection");
         
-        header('Location: index.php?action=detail&id='.$id);
+        header('Location: index.php?action=event&id='.$id);
         exit();
     }
-    
-    $dateSplit = explode('-', $reception['date']);
+
+    $dateSplit = explode('-', $dataPage['date']);
+
+    $page['pageName'] = 'Création';
     $page['dateMonth'] = $dateSplit[0].'-'.$dateSplit[1];
-    $page['date'] = $reception['date'];
-    $template['title'] = ucfirst(strftime('%A %e %B %Y', strtotime($reception['date'])));
+    $page['actual'] = 'new';
+    $page['date'] = $dataPage['date'];
+    $page['sectionTitle'] = 'Création d\'événement';
 
     require('View/vNew.php');
 }
 
-function backEventEdit($reception) {
+function backEventEdit($dataPage) {
     if (isset($_POST['script_edit']) && $_POST['script_edit']) {
-        backChangeEventData($reception);
+        backChangeEventData($dataPage);
         
-        header('Location: index.php?action=detail&id='.$reception['id']);
+        header('Location: index.php?action=event&id='.$dataPage['id']);
         exit();
     }
 
-    $page = backGetEventDetail($reception['id']);
+    $page = backGetEventDetail($dataPage['id']);
+
     $page['date'] = explode(' ', $page['startdate']);
     $page['date'] = $page['date'][0];
     $dateSplit = explode('-', $page['date']);
     $page['dateMonth'] = $dateSplit[0].'-'.$dateSplit[1];
 
-    $template['title'] = '';
+    $page['pageName'] = 'Modification';
+    $page['actual'] = 'edit';
+    $page['sectionTitle'] = 'Édition d\'événement';
 
     require('View/vEdit.php');
 }

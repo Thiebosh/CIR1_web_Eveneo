@@ -1,78 +1,42 @@
 <?php
-if ($_SESSION['rank'] == 'CUSTOMER') require('View/vFrontEnd.php');
-else require('View/vBackEnd.php');
-
-
-$template['pageName'] = 'Détails';
-
-$template['titleContent'] = 'Détails de l\'événement';
-
-ob_start(); ?>
-    <menu>
-        <li>
-            <?php if ($page['dateMonth'] != date('Y-m')) { ?>
-                <a href='index.php?action=reception'>
-                    <button>Mois en cours</button>
-                </a>
-            <?php }
-            else echo 'Mois en cours'; ?>
-        </li>
-        <li>
-            <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($page['dateMonth']) ?>">
-                <button>Mois de navigation</button>
-            </a>
-        </li>
-        <li>
-            <?php if ($page['date'] != date('Y-m-d')) { ?>
-                <a href='index.php?action=list&amp;date=<?= htmlspecialchars(date('Y-m-d')) ?>'>
-                    <button>Jour en cours</button>
-                </a>
-            <?php }
-            else echo 'Jour en cours'; ?>
-        </li>
-        <li>
-            <a href="index.php?action=list&amp;date=<?= htmlspecialchars($page['date']) ?>">
-                <button>Jour de navigation</button>
-            </a>
-        </li>
-    </menu>
-<?php $template['menuContent'] = ob_get_clean();
+if ($_SESSION['rank'] == 'CUSTOMER') require('View/Switch/vFrontEnd.php');
+else require('View/Switch/vBackEnd.php');
 
 
 ob_start(); ?>
     <div id="event">
         <header>
-            <h3><?= $display['title'] ?></h3>
+            <h3><?= $dataEvent['name'] ?></h3>
             <?php if (!isset($script)) { ?>
                 Cet événement a déjà commencé ou est déjà fini
             <?php }
-            else switchDisplayEvent(2, $script) ?>
+            else switchEvent(1, $script) ?>
         </header>
 
         <div>
             <aside>
-                <?php switchDisplayEvent(1, $dataEvent['login']) ?>
+                <?php switchEvent(2, $dataEvent['login']) ?>
                 <span>Places restantes : </span><?= htmlspecialchars($dataEvent['place']) ?>
                 <br>
                 <span>Durée : </span>
-                <?php foreach($display['duration'] as $displayPart) echo htmlspecialchars($displayPart).'<br>';?>
+                <?php foreach($page['duration'] as $pagePart) echo htmlspecialchars($pagePart).'<br>';?>
                 <br>
-                <span>Du </span><?= htmlspecialchars($display['startDate']) ?><span>
+                <span>Du </span><?= htmlspecialchars($page['startDate']) ?><span>
                 <br>
-                à </span><?= htmlspecialchars($display['startTime']) ?>
+                à </span><?= htmlspecialchars($page['startTime']) ?>
                 <br>
-                <span>Au </span><?= htmlspecialchars($display['endDate']) ?><span>
+                <span>Au </span><?= htmlspecialchars($page['endDate']) ?><span>
                 <br>
-                à </span><?= htmlspecialchars($display['endTime']) ?>
+                à </span><?= htmlspecialchars($page['endTime']) ?>
             </aside>
             <aside class="vLine"></aside>
             <aside>
                 <span>Description :</span>
-                <p><?= $dataEvent['description'] ?></p>
+                <p><?= $dataEvent['description'] ?></p><!--lui appliquer htmlspecialchar le detruit-->
             </aside>
         </div>
     </div>
-<?php $template['articleContent'] = ob_get_clean();
+<?php $template['article'] = ob_get_clean();
 
 
 require('View/template.php');

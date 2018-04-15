@@ -37,17 +37,17 @@ function verifID($id, $page) {
 function verifAction() {
     if (!isset($_GET['action'])) {
         if (!isset($_SESSION['rank'])) $action = 'login';
-        else $action = 'reception';
+        else $action = 'month';
     }
     else {
         $action = $_GET['action'];
 
         if ($action != 'login' && $action != 'logout' && $action != 'register' &&
-        $action != 'reception' && $action != 'list'   && $action != 'detail' &&
-        $action != 'delete'    && $action != 'new'    && $action != 'edit') {
+        $action != 'month'     && $action != 'day'    && $action != 'event' &&
+        $action != 'new'       && $action != 'edit'   && $action != 'delete') {
             throw new Exception("Page indéfinie");
         }
-        if (($action == 'new' || $action == 'edit') && $_SESSION['rank'] == 'CUSTOMER') {
+        if (($action == 'new' || $action == 'edit' || $action == 'delete') && $_SESSION['rank'] == 'CUSTOMER') {
             throw new Exception("Redirection : page invalide");
         }
     }
@@ -58,14 +58,14 @@ function verifAction() {
         exit();//mets fin au script courant
     }
 
-    if ($action == 'reception' && !isset($_GET['date'])) $_GET['date'] = date('Y-m');
+    if ($action == 'month' && !isset($_GET['date'])) $_GET['date'] = date('Y-m');
     
     switch ($action) {
-        case 'reception': if (count(explode('-', $_GET['date'])) != 2) throw new Exception("Evénements du mois : date invalide");
+        case 'month': if (count(explode('-', $_GET['date'])) != 2) throw new Exception("Evénements du mois : date invalide");
             break;
-        case 'list': if (count(explode('-', $_GET['date'])) != 3) throw new Exception("Evénements du jour : date invalide");
+        case 'day': if (count(explode('-', $_GET['date'])) != 3) throw new Exception("Evénements du jour : date invalide");
             break;
-        case 'new': if (count(explode('-', $_GET['date'])) != 3) throw new Exception("Evénement : date invalide");
+        case 'new': if (count(explode('-', $_GET['date'])) != 3) throw new Exception("Nouvel événement : date invalide");
             break;
     }
 
@@ -146,7 +146,8 @@ function verifScript($script) {
             break;
         case 'script_new':
             if (!isset($_POST['name']) || !isset($_POST['nbPlaces']) || !isset($_POST['description']) || !isset($_POST['startDate']) || !isset($_POST['endDate'])) {
-                throw new Exception("Nouvel événement : Donnée(s) formulaire absente(s)");
+                if ($_POST['script_new'] != 'script_edit') throw new Exception("Nouvel événement : Donnée(s) formulaire absente(s)");
+                else  throw new Exception("Modification d'événement : Donnée(s) formulaire absente(s)");
             }
 
             $received['name']        = filter_input(INPUT_POST, 'name',        FILTER_SANITIZE_STRING);
@@ -163,28 +164,34 @@ function verifScript($script) {
             if (!isPreviousDate($received['startDate'], $received['endDate'])) {
                 $received['echec'][] = 'durée nulle ou négative';
             }
-            if (!isPreviousDate(date('Y-m-d H-i'), $received['startDate'])) {
+            if ($_POST['script_new'] != 'script_edit' && !isPreviousDate(date('Y-m-d H-i'), $received['startDate'])) {
                 $received['echec'][] = 'date de début passée';
             }
             break;
         case 'script_edit':
-            if (!isset($_POST['name']) || !isset($_POST['nbPlaces']) || !isset($_POST['description']) || !isset($_POST['startDate']) || !isset($_POST['endDate'])) {
-                throw new Exception("Modification d'événement : Donnée(s) formulaire absente(s)");
-            }
+            $_POST['script_new'] = 'script_edit';
 
-            $received['name']        = filter_input(INPUT_POST, 'name',        FILTER_SANITIZE_STRING);
-            $received['nbPlaces']    = filter_input(INPUT_POST, 'nbPlaces',    FILTER_VALIDATE_INT);
-            $hidden['startDate']     = filter_input(INPUT_POST, 'startDate',   FILTER_SANITIZE_STRING);
-            $received['endDate']     = filter_input(INPUT_POST, 'endDate',     FILTER_SANITIZE_STRING);
-            $received['description'] = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+            $received = verifScript('script_new');
 
-            if (!$received['name'])               $received['echec'][] = 'nom';
-            if ($received['nbPlaces'] === false) $received['echec'][] = 'nombre de places';
-            if (!$received['description'])       $received['echec'][] = 'description';
-            if (!$received['endDate'])           $received['echec'][] = 'date de fin';
-            if (!isPreviousDate($received['startDate'], $received['endDate'])) {
-                $received['echec'][] = 'durée nulle ou négative';
-            }
+            /*
+                if (!isset($_POST['name']) || !isset($_POST['nbPlaces']) || !isset($_POST['description']) || !isset($_POST['startDate']) || !isset($_POST['endDate'])) {
+                    throw new Exception("Modification d'événement : Donnée(s) formulaire absente(s)");
+                }
+
+                $received['name']        = filter_input(INPUT_POST, 'name',        FILTER_SANITIZE_STRING);
+                $received['nbPlaces']    = filter_input(INPUT_POST, 'nbPlaces',    FILTER_VALIDATE_INT);
+                $hidden['startDate']     = filter_input(INPUT_POST, 'startDate',   FILTER_SANITIZE_STRING);
+                $received['endDate']     = filter_input(INPUT_POST, 'endDate',     FILTER_SANITIZE_STRING);
+                $received['description'] = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+
+                if (!$received['name'])               $received['echec'][] = 'nom';
+                if ($received['nbPlaces'] === false) $received['echec'][] = 'nombre de places';
+                if (!$received['description'])       $received['echec'][] = 'description';
+                if (!$received['endDate'])           $received['echec'][] = 'date de fin';
+                if (!isPreviousDate($received['startDate'], $received['endDate'])) {
+                    $received['echec'][] = 'durée nulle ou négative';
+                }
+            */
             break;
     }
 

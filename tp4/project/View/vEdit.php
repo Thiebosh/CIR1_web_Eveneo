@@ -1,51 +1,11 @@
 <?php 
-$template['pageName'] = 'Modification';
-
-$template['titleContent'] = 'Édition d\'événement';
-
-ob_start(); ?>
-    <menu>
-        <li>
-            <?php if ($page['dateMonth'] != date('Y-m')) { ?>
-                <a href='index.php?action=reception'>
-                    <button>Mois en cours</button>
-                </a>
-            <?php }
-            else echo 'Mois en cours'; ?>
-        </li>
-        <li>
-            <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($page['dateMonth']) ?>">
-                <button>Mois de navigation</button>
-            </a>
-        </li>
-        <li>
-            <?php if ($page['date'] != date('Y-m-d')) { ?>
-                <a href='index.php?action=list&amp;date=<?= htmlspecialchars(date('Y-m-d')) ?>'>
-                    <button>Jour en cours</button>
-                </a>
-            <?php }
-            else echo 'Jour en cours'; ?>
-        </li>
-        <li>
-            <a href="index.php?action=list&amp;date=<?= htmlspecialchars($page['date']) ?>">
-                <button>Jour de navigation</button>
-            </a>
-        </li>
-        <li>
-            <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($page['id']) ?>">
-                <button>Evénement de navigation</button>
-            </a>
-        </li>
-    </menu>
-<?php $template['menuContent'] = ob_get_clean();
-
 ob_start(); ?>
     <div>
         <?php 
-        if (isset($reception['echec'])) {
+        if (isset($dataPage['echec'])) {
             echo "<br><br>Erreur - Certains champs sont incorrects ou manquant : ";
-            foreach($reception['echec'] as $message) {
-                echo $message . ' ; ';
+            foreach($dataPage['echec'] as $message) {
+                echo htmlspecialchars($message) . ' ; ';
             }
         }
         ?>
@@ -62,7 +22,7 @@ ob_start(); ?>
             <br>
             <br>
             <label>Nouvelle description : </label><br>
-            <textarea id="description" name="description" placeholder="Description"><?= $page['description'] ?></textarea>
+            <textarea id="description" name="description" placeholder="Description"><?= $page['description'] ?></textarea><!--lui appliquer htmlspecialchar le detruit-->
             <br>
             <br>
             <input type="hidden" name="startDate" value=<?= htmlspecialchars($page['startdate']) ?>>
@@ -70,7 +30,7 @@ ob_start(); ?>
             <input type="submit" value="Modifier">
         </form>
     </fieldset>
-<?php $template['articleContent'] = ob_get_clean();
+<?php $template['article'] = ob_get_clean();
 
 
 require('View/template.php');

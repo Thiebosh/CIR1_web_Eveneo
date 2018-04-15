@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8"/>
         <title>Eveneo - Erreur</title>
-        <link href="style.css" rel="stylesheet"/>
     </head>
         
     <body>

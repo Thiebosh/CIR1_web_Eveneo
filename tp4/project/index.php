@@ -18,11 +18,11 @@ try {
     }
     
     switch ($action) {
-        case 'reception': EventsMonth(verifDateTime($_GET['date'], "Evénements du mois"));
+        case 'month': EventsMonth(verifDateTime($_GET['date'], "Evénements du mois"));
             break;
-        case 'list':      EventsDay(  verifDateTime($_GET['date'], "Evénements du jour"));
+        case 'day':      EventsDay(  verifDateTime($_GET['date'], "Evénements du jour"));
             break;
-        case 'detail':    EventDetail(verifID($_GET['id'], "Evénement"));
+        case 'event':    EventDetail(verifID($_GET['id'], "Evénement"));
             break;
         case 'new':
             $received = verifScript('script_new');
@@ -42,7 +42,7 @@ catch(Exception $error) {//rediriger vers la page en affichant un bloc erreur
     $errorMessage = $error->getMessage();
     $errorDetail = $error->getFile() . ', ligne ' . $error->getLine();
     $redirection['text'] = 'l\'accueil';
-    $redirection['link'] = 'reception';
+    $redirection['link'] = 'month';
     if (!isset($_SESSION['rank'])) {
         $redirection['text'] = 'l\'écran de  connexion';
         $redirection['link'] = 'login';

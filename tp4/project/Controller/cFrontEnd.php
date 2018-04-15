@@ -46,7 +46,7 @@ function switchEventDetail($part, $id, $status, $dateMonth) {
                 if (!$status) frontSetStatusON($id);
                 else frontSetStatusOFF($id);
         
-                header('Location: index.php?action=reception&date='.$dateMonth);
+                header('Location: index.php?action=month&date='.$dateMonth);
                 exit();
             }
             if (!$status) $script['action'] = "Inscription";

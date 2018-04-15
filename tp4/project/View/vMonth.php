@@ -1,24 +1,6 @@
 <?php
-if ($_SESSION['rank'] == 'CUSTOMER') require('View/vFrontEnd.php');
-else require('View/vBackEnd.php');
-
-
-$template['pageName'] = 'Accueil';
-
-$template['titleContent'] = 'Évènements du mois';
-
-ob_start(); ?>
-    <menu>
-        <li>
-            <?php if ($page['dateMonth'] != date('Y-m')) { ?>
-                <a href='index.php?action=reception'>
-                    <button>Mois en cours</button>
-                </a>
-            <?php }
-            else echo 'Mois en cours'; ?>
-        </li>
-    </menu>
-<?php $template['menuContent'] = ob_get_clean();
+if ($_SESSION['rank'] == 'CUSTOMER') require('View/Switch/vFrontEnd.php');
+else require('View/Switch/vBackEnd.php');
 
 
 function selectClass($dateFull, $monthDay) {
@@ -33,22 +15,22 @@ ob_start();
             <h4><?= htmlspecialchars($page['dayName']['fr'][$weekDay]) ?></h4>
         </th>
     <?php }
-$template['displayWeekDay'] = ob_get_clean();
+$page['headBand'] = ob_get_clean();
 
 ob_start(); ?>
     <table id="month">
         <thead>
-            <tr> <?= $template['displayWeekDay'] ?> </tr>
-            <?php switchDisplayMonth(1, false, false) ?>
+            <tr><?= $page['headBand'] ?></tr>
+            <?php switchMonth(1, false, false) ?>
         </thead>
-        <tfoot><tr> <?= $template['displayWeekDay'] ?> </tr></tfoot>
+        <tfoot><tr><?= $page['headBand'] ?></tr></tfoot>
         <tbody>
             <tr>
                 <?php
                 $monthDay = $weekDay = 0;
                 while ($page['dayName']['ang'][$monthDay] != $page['startMonth']) {//ne commence pas par lundi ?>
                     <td class="otherMonth">
-                        <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($lastMonth) ?>">
+                        <a href="index.php?action=month&amp;date=<?= htmlspecialchars($page['lastPage']) ?>">
                             <aside>
                                 <div class="date"></div>
                                 <div class="vLine"></div>
@@ -67,17 +49,17 @@ ob_start(); ?>
                     <td <?php selectClass($page['dateMonth'].'-'.$weekDay, $monthDay) ?>>
                         <aside>
                             <div class="date">
-                                <?php switchDisplayMonth(2, false, $page['dateMonth'].'-'.$weekDay) ?>
+                                <?php switchMonth(2, false, $page['dateMonth'].'-'.$weekDay) ?>
                                     <?= htmlspecialchars($weekDay) ?>
-                                <?php switchDisplayMonth(5, false, false) ?>
+                                <?php switchMonth(3, false, false) ?>
                             </div>
                             <div class="vLine"></div>
                             <div class="allEvents">
                                 <?php if ($dataDay) {
                                     $nbEvent = 0;
                                     foreach($dataDay as $dataEvent) {
-                                        if (switchDisplayMonth(3, $dataEvent, false)) {?>
-                                            <a href="index.php?action=detail&amp;id=<?= htmlspecialchars($dataEvent['id']) ?>" <?php switchDisplayMonth(4, $dataEvent, false) ?>>
+                                        if (switchMonth(4, $dataEvent, false)) {?>
+                                            <a href="index.php?action=event&amp;id=<?= htmlspecialchars($dataEvent['id']) ?>" <?php switchMonth(5, $dataEvent, false) ?>>
                                                 <?= htmlspecialchars($dataEvent['name']) ?>
                                             </a>
                                             <?php
@@ -88,7 +70,7 @@ ob_start(); ?>
                                     
                                     if (count($dataDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template ?>
                                         
-                                        <a href="index.php?action=list&amp;date=<?= htmlspecialchars($page['dateMonth'].'-'.$weekDay) ?>" class="more">
+                                        <a href="index.php?action=day&amp;date=<?= htmlspecialchars($page['dateMonth'].'-'.$weekDay) ?>" class="more">
                                             <button>Voir tout</button>
                                         </a>
                                     <?php }
@@ -103,7 +85,7 @@ ob_start(); ?>
 
                 while ($page['dayName']['ang'][$page['endMonth'] - 1] != 'Sun') {//ne s est pas arreté sur dimanche ?>
                     <td class="otherMonth">
-                    <a href="index.php?action=reception&amp;date=<?= htmlspecialchars($nextMonth) ?>">
+                        <a href="index.php?action=month&amp;date=<?= htmlspecialchars($page['nextPage']) ?>">
                             <aside>
                                 <div class="date"></div>
                                 <div class="vLine"></div>
@@ -117,7 +99,7 @@ ob_start(); ?>
             </tr>
         </tbody>
     </table>
-<?php $template['articleContent'] = ob_get_clean();
+<?php $template['article'] = ob_get_clean();
 
 
 require('View/template.php');

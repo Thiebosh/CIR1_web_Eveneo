@@ -1,6 +1,7 @@
 <?php
 require('Model/mExtern.php');
 
+
 function externLogin($data) {
     if ($data) {//active script_login
         $dataUser = externGetDataUser($data['login']);
@@ -17,11 +18,12 @@ function externLogin($data) {
         if ($dataUser['rank'] == 'CUSTOMER') $_SESSION['rankFR'] = 'Client';
         else                                 $_SESSION['rankFR'] = 'Organisateur';
 
-        header('Location: index.php?action=reception');
+        header('Location: index.php?action=month');
         exit();
     }
 
-    $template['pageName'] = $template['title'] = 'Connexion';
+    $page['pageName'] = $page['sectionTitle'] = 'Connexion';
+    $page['actual'] = 'login';
 
     require('View/vExtern.php');
 }
@@ -42,7 +44,8 @@ function externRegister($data) {
         exit();
     }
 
-    $template['pageName'] = $template['title'] = 'Inscription';
+    $page['pageName'] = $page['sectionTitle'] = 'Inscription';
+    $page['actual'] = 'register';
 
     require('View/vExtern.php');
 }

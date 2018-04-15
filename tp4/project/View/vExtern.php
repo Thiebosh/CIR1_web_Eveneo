@@ -1,7 +1,8 @@
 <?php
-function switchDisplayExtern($part, $page) {
-    if ($part == 1) {
-        if ($page == 'Connexion') { ?>
+ob_start(); ?>
+    <fieldset>
+        <legend>Identifiants</legend>
+        <?php if ($page['actual'] == 'login') { ?>
             <form method="post" action="index.php?action=login">
                 <label>Nom de compte : </label>
                 <input type="text" id="login" name="login" placeholder="Nom de compte">
@@ -14,7 +15,7 @@ function switchDisplayExtern($part, $page) {
                 <input type="submit" value="Se connecter">
             </form>
         <?php }
-        else if ($page == 'Inscription') { ?>
+        else if ($page['actual'] == 'register') { ?>
             <form method="post" action="index.php?action=register">
                 <label>Nom de compte : </label>
                 <input type="text" id="login" name="login" placeholder="Nom de compte">
@@ -37,36 +38,21 @@ function switchDisplayExtern($part, $page) {
                 <input type="hidden" name="script_register" value="true">
                 <input type="submit" value="S'inscrire">
             </form>
-        <?php }
-    }
-    else if ($part == 2) {
-        if ($page == 'Connexion') { ?>
-            <span>Pas encore membre?</span>
-            <a href="index.php?action=register">
-                <button>S'inscrire</button>
-            </a>
-        <?php }
-        else if ($page == 'Inscription') { ?>
-            <span>Déjà inscrit?</span>
-            <a href="index.php?action=login">
-                <button>Se connecter</button>
-            </a>
-        <?php }
-    }
-}
-
-
-$template['titleContent'] = 'Bienvenue sur Eveneo';
-
-$template['menuContent'] = '';
-
-ob_start(); ?>
-    <fieldset>
-        <legend>Identifiants</legend>
-        <?php switchDisplayExtern(1, $template['pageName']); ?>
+        <?php }?>
     </fieldset>
-    <?php switchDisplayExtern(2, $template['pageName']); ?>
-<?php $template['articleContent'] = ob_get_clean();
+    <?php if ($page['actual'] == 'login') { ?>
+        <span>Pas encore membre?</span>
+        <a href="index.php?action=register">
+            <button>S'inscrire</button>
+        </a>
+    <?php }
+    else if ($page['actual'] == 'register') { ?>
+        <span>Déjà inscrit?</span>
+        <a href="index.php?action=login">
+            <button>Se connecter</button>
+        </a>
+    <?php } ?>
+<?php $template['article'] = ob_get_clean();
 
 
 require('View/template.php');
