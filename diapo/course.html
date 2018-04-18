@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CIR1 : Développement Web</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-slide-container {
+    visibility: hidden;
+    display: initial;
+}
+.remark-visible {
+    visibility: visible;
+}
+.inlineimg img{
+	display: inline-block;
+	max-width: 150px;
+
+}
+.height400 img, .height400 svg  {
+	display: inline-block;
+	max-height: 400px;
+
+}
+.px300 img{
+	display: inline-block;
+	max-width: 300px;
+
+}
+.table_container td{
+	border-bottom: 1px solid black !important;
+	border-right: 1px solid black !important;
+}
+
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/mermaid@7.0.0/dist/mermaid.css" media="all"/>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle
+# CIR1 : Développement Web
+
+---
+class: center, middle
+
+## Agenda
+---
+
+1. S1: Introduction
+    - Les bases du web
+    - Les premières lignes de PHP
+    - Installation de l'environnement de travail, utilisation des outils
+    - TP1 : Le jeu de la vie
+2. S2: Jouer avec les données utilisateur
+	- Formulaires
+	- Fichiers
+	- Un peu de sécurité
+	- TP2: Un blog statique.
+3. S3: La base de données, quelques bases
+	- Se connecter, lire et écrire dans une bdd mysql/mariadb
+	- TP3: Un mini chat
+4. S4: Un peu plus loin dans le SQL
+    - Les jointures
+    - Les aggrégations
+    - Les dates
+5. S5: Un peu de POO
+    - Utilisation des objets de la SPL et de `DateTime`
+    - Les normes PSR et les namespace
+    - Les fonctions magiques
+    - Lien entre BDD et objet
+6. S6: Un code de qualité &amp;amp; en production
+    - Les tests
+    - Les analyses du code
+    - Le concept d'intégration continue
+    - L'opcode
+    - Déployer votre site
+---
+class: center, middle
+# Introduction
+
+---
+
+# Qui suis-je?
+
+- François Dambrine (ISEN, CIR, promo56) .inlineimg[![photo](https://scontent.flux1-1.fna.fbcdn.net/v/t1.0-9/10003522_610694192333147_860122324_n.jpg?oh=deb23430536ff1b4aae3a086a6781fe0&oe=5AC2819D)]
+- Développeur chez Vadesecure .inlineimg[![vadesecure](https://www.vadesecure.com/wp-content/uploads/vade-secure-logo@2x.png)]
+- Développeur Open Source pour Zeste De Savoir .inlineimg[![zds](./zds.png)]
+- Pour poser vos questions : francois.dambrine@isen-lille.fr
+
+---
+
+# Mais pourquoi PHP?
+
+- Quoi qu'il arrive le navigateur voit du HTML et du CSS
+- PHP est un langage de **programmation**, HTML un langage de **description**
+- [82.4%* des sites](https://w3techs.com/technologies/details/pl-php/all/all) internet utilisent PHP (Facebook, Wikipedia...) 
+
+**Avec PHP vous générez *dynamiquement* du HTML et l'envoyez au navigateur**
+
+---
+## Créer un site HTML
+
+<div class="mermaid">
+graph TD
+    html(Écrire le code HTML à la main) --> ftp(Envoyer le fichier html, les images et le CSS sur l'hébergement)
+    ftp --> nav(Affichage sur le navigateur)
+</div>
+
+A chaque fois que vous désirez changer quelque chose (texte, image) il faut tout refaire.
+
+---
+## Avec PHP
+
+<div class="mermaid">
+graph TD
+    php(Créer la logique qui permet d'afficher la page) --> ftp(Envoyer le fichier php, les images et le CSS sur l'hébergement)
+    ftp --> nav(Affichage sur le navigateur)
+    nav --> blog(Entrer le nouveau texte sur la page de rédaction)
+    blog --> nav
+</div>
+
+---
+
+# Client/Serveur (1/2)
+
+![modèle client server](./client_server.png)
+1. Requête HTTP du client au serveur;
+2. Exécution du code PHP;
+3. Réponse HTTP du serveur au client.
+
+???
+
+L'utilisation de page web est basée sur le modèle client/serveur et le protocole HTTP.
+A distance, un serveur "écoute" le port 80 (ou le port 443). 
+Le client (le navigateur) envoie une requête HTTP.
+Le serveur la reçoit et lance la génération du HTML. Puis renvoie la page via une réponse HTTP.
+
+---
+
+# Client/server (2/2)
+
+## URL (Unified ressource locator)
+
+https://fr.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Historique?lang=fr
+
+<div class="mermaid">
+graph BT
+	subgraph 
+		proto[https://]
+		dom[fr.wikipedia.org]
+		path["/wiki/Hypertext_Transfer_Protocol"]
+		tag["#Historique"]
+		qstring[?lang=fr]
+	end
+	subgraph 
+		e_proto[Protocole] --> proto
+		e_dom[Domaine ou FQDN] --> dom
+		e_path["Chemin (path) vers la page désirée"] --> path
+		e_tag[Tag ou ancre] --> tag
+		e_qstring[Query string] --> qstring
+	end
+</div>
+???
+C'est avec les URLs qu'on arrive à envoyer des requêtes au serveur et que celui-ci sait ce qu'il doit faire.
+Comme vous pouvez le remarquer lorsque vous utilisiez le html vous regardiez `file://....` alors que pour les sites dynamiques on utilise `http/https`.
+Dans un premier temps on va simplifier la gestion des urls à "le path est le chemin vers le fichier html ou PHP qu'on demande" on ira plus loin à la fin du cours.
+
+---
+# Le protocole HTTP
+
+- Créé au CERN pour partager les connaissances sur ARPANet
+- Protocole textuel
+- 2 parties : Entête et Corps
+
+.px300[![T.Berners Lee](./berners_lee.png)]
+
+???
+
+Le protocole HTTP (Hyper Text Transfert Protocole) est un protocole de la couche **applicative** du modèle OSI.
+
+Créé par le CEA pour partager les recherches et permettre à toutes les universités et centres de recherche d'avoir leur base d'articles/recherches tout en liant aux recherche des autres universités.
+
+Protocole textuel <=> un humain peut le lire. C'est du texte qui parcourt les tuyau. Inverse des protocoles binaires tels que bit torrent.
+
+La requête et la réponse contiennent potentiellement deux parties:  les entêtes et le corps.
+
+---
+
+# Entêtes
+
+La requête ET la réponse en ont
+
+Exemple:
+
+```
+Host: fr.wikipedia.org
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3
+Accept-Encoding: gzip, deflate, br
+Cookie: WMF-Last-Access-Global=18-Dec-2017; WMF-Last-Access=18-Dec-2017; CP=H2; GeoIP=FR:HDF:Lille:50.63:3.06:v4
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+If-Modified-Since: Sun, 17 Dec 2017 14:18:37 GMT
+Cache-Control: max-age=0
+```
+
+???
+
+Utiliser firefox, avec la touche F12 pour montrer les requêtes.
+
+---
+
+# Corps
+
+Facultatif, contient les données de la ressource.
+
+- Le HTML, les images, le CSS... pour la réponse;
+- Ce que vous envoyez au serveur pour la requête.
+
+**On en reparlera avec les formulaires et les superglobales**
+
+---
+class: center, middle
+
+# Let's go to code
+
+---
+class: center, middle
+
+# À votre avis, que faut-il faire?
+
+???
+
+---
+
+## Créer un code qui génère du HTML
+
+## Démarrer un serveur web
+
+## Entrer la bonne url dans votre navigateur
+
+---
+
+# Générer du HTML
+
+créer un fichier index.php
+
+```php
+<?php
+
+echo "<html>
+	<body>
+		<h1>Mon premier site en PHP</h1>
+	</body>
+</html>";
+?>
+```
+---
+
+## Lancer le serveur web
+
+### Pour développer : 
+
+`php -S localhost:8000 -t chemin_de_votre_dossier`
+
+### Pour héberger une vraie application
+
+[lighttpd](https://www.lighttpd.net/), [nginx](https://nginx.org/en/), [apache](https://httpd.apache.org/)...
+
+???
+
+notez le `:8000`: c'est dû au fait que votre OS n'acceptera de lancer votre serveur sur le port 80, il faut être root
+
+php possède un serveur léger qui vous permet de développer très facilement.
+Cependant ce serveur n'set pas très performant, ce n'est **pas** son but. 
+
+Les applications professionnelles utilisent des serveurs tels que nginx, lighttpd, apache... 
+Ces serveurs possèdent des fonctionnalités supplémentaire pour :
+
+- améliorer la rapidité de réponse (cache, maintient des connexions, répartition de la charge...)
+- améliorer la sécurité (interdiction de parcourir les arborescences, protection contre certaines failles...)
+- gestion du https
+- gestion des journaux d'accès (obligatoires par la loi)
+
+---
+
+## L'url dans le navigateur
+
+`http://localhost:8000/index.php`
+
+---
+
+## Algorithmique (1/4)
+```php
+<?php
+$testedVariable = 42;
+if ($testedVariable < 42) {
+    echo "Answer not yet found";
+} else if ($testedVariable === 42) {
+    echo "Answer to the question of life, universe and everything is " . $testedVariable;
+else {
+    echo "You don't even know the question."
+}
+for ($i = 0; $i < 5; $i++){
+    echo $i;
+}
+
+$hasAnEnd = false;
+while ($hasAnEnd) {
+    $hasAnEnd = rand(0, 10) < 4.2;
+    echo "let's continue";
+}
+?>
+```
+???
+- toute instruction se termine par `;`
+- une variable = `$uneVariable`, pas besoin de définir son type
+- `if`, `while` et `for` comme en C
+
+---
+## Algorithmique (2/4)
+
+
+```php
+<?php
+/*
+ * let's do bubble sort
+*/
+function bubbleSort($array) {
+	for ($inverseIterator = count($array) - 1; $inverseIterator > 0; $inverseIterator--) {
+		for ($comparedIterator = 0; $comparedIterator < $inverseIterator - 1; $comparedIterator++) {
+			if($array[$comparedIterator + 1] < $array[$comparedIterator]) {
+				// array_swap is a function integrated to php itself
+				array_swap($array, $comparedIterator + 1, $comparedIterator);
+			}
+		}
+	}
+}
+$toBeSortedArray = [5, 42, 8, sqrt(11), 3.14, 44, 128, 2];
+bubbleSort($toBeSortedArray); // tables are modified like if they were pointers
+?>
+```
+
+???
+deux syntaxes pour les commentaires
+la syntaxe du tableau
+définition d'une fonction
+appel d'une fonction
+référence pour les tableaux, valeur pour les autres.
+
+
+---
+## Algorithmique (3/4)
+
+Quatre [types] de données :
+
+- les "scalairs" : entiers, flottant, booléens et string : se manipulent comme en C;
+- les tableaux : toujours une référence
+- les objets : toujours une référence
+- les `callable` : permet d'être appelé comme une fonction.
+
+[types]: http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
+???
+
+pour faciliter la lisibilité des fonctions vous pouvez "forcer" le type des paramètres et du retour
+
+---
+## Algorithmique (4/4)
+
+```php
+<?php
+$i = 2 + 5;
+$j = 2 * $i;
+$i <= $j; // true
+$text = "with double quotes" . ' or with simple quotes' . ' but it\'s better to keep simple quotes';
+$r = 55 % 10; // 5
+5 == '5'; // true
+5 === '5'; // false
+true || false; // true
+true && false; // false
+!true || false; // false
+?>
+```
+
+???
+Les opérateurs sont les mêmes que dans à plupart des langages;
+les toutes les opérations sauf `===` sont des opérations "à conversion", c'est à dire que si le type n'est pas le même à gauche et à droite,
+php va tenter de convertir les types en quelques chose de comparable. Faites donc très attention. Il y a plusieurs manières de représenter true et false par exemple.
+
+
+---
+## Moteur de template (1/2)
+
+- fonction `include` : fait un "copier/coller" d'un autre fichier dans celui-là.
+- insérer du code php dans du html
+
+template.html
+```html+php
+<html>
+	<header><title><?= $title ?></title></header>
+	<body>
+		Bonjour, aujourd'hui nous sommes le : <?= $date ?>
+	</body>
+</html>
+```
+
+index2.php
+```php
+<?php
+$title = "Cours de CIR 1";
+$date = date('d/m/Y');
+include('template.html');
+?>
+
+```
+???
+
+La fonction "include" va chercher le fichier désiré et va le "copier/coller" dans le flux courant.
+Vous pouvez ainsi créer un premier fichier `.php` qui va inclure votre programme, puis inclure un fichier `.html` dans lequel vous n'allez faire que de l'affichage.
+la syntaxe `<?= $variable ?>` est en fait un alias de `<?php echo $variable; ?>`.
+
+Regarder [le serveur](http://localhost:8000/examples/example_template/index.php)
+---
+## Moteur de template (2/2)
+
+Insérer du code php dans le html (et vice versa)
+
+```php+html
+<html>
+<head><title>Liste des séances</title></head>
+<body>
+<ol>
+<?php
+	for($i=0; $i < count($seances); $i++) {
+		?>
+		<li>Séance <?= $i + 1 ?> : <?= $seances[$i] ?></li>
+		<?php
+	}
+?>
+</ol>
+</body>
+</html>
+```
+index.php
+```php
+<?php
+$seances = ['Introduction', 'Données utilisateur', 'Base de données (1/2)', 'Base de données (2/2)', 'PHP++'];
+include('template.html');
+?>
+```
+???
+Pour intégrer du code php, il suffit d'ouvrir `<?php` chaque fois qu'on veut ajouter du code et fermer avec `?>` chaque fois qu'on veut mettre du html
+
+Regarder [le server](http://localhost:8000/examples/example_template_for/index.php)
+---
+class: center, middle
+
+# Les tableaux
+---
+class: center, middle
+
+**Protip:** Oubliez ce que vous avez fait en C
+---
+class: center, middle
+![Clé-Valeur](./key_value.png)
+
+---
+class: table_container
+# Quand les clefs sont des entiers
+
+```php
+<?php
+$array = ['clef 0', 'clef 1'];
+$array[] = 'clef 2'; // mets "clef 2" à la fin
+in_array('clef 1', $array); // true
+?>
+```
+
+clefs|valeurs
+-----|-------
+0| `"clef 0"`
+1| `"clef 1"`
+2| `"clef 2"`
+
+---
+class: table_container
+
+# Quand les clefs ne sont pas des entiers (e.g string)
+```php
+<?php
+$array = ['clef 0' => 'valeur 0'];
+$array['clef 2'] = 'valeur 2'; // associe "valeur 2" à la clef "clef 2"
+$a = $array['clef 3']; // WARNING, Undefined Index
+in_array('clef 1', $array); // false
+isset($array, 'clef 2'); // true
+
+?>
+```
+clefs|valeurs
+-----|-------
+`"clef 0"`| `"valeur 0"`
+`"clef 2"`| `"valeur 2"`
+
+---
+
+# Parcourir un tableau
+
+```php
+<?php
+$array = ['clef 0' => 'valeur 0', 'clef 2' => 'valeur 2'];
+foreach($array as $key => $value) {
+	echo 'À la clef ' . $key . 'a été associé la valeur ' . $value;
+}
+?>
+```
+Si seule la valeur importe :
+
+```php
+<?php
+$array = [2, 4 ,6, 8, 10];
+foreach($array as $evenNumber) {
+	echo $evenNumber . '<br/>';
+}
+?>
+```
+---
+class: center, middle
+
+# Résumé avant la suite
+
+---
+class: middle
+
+- On evoie une requête HTTP.
+- PHP la traite et génère du code html en retour.
+- En PHP les tableaux sont une structure très puissante.
+- A chaque requête PHP s'exécute indépendamment de ce qu'il s'est passé dans les pages précédentes.
+---
+class: center, middle
+
+# Comment faire communiquer les pages entre elles? 
+
+ex: le panier Amazon
+
+---
+# Les super globales (1/3)
+
+- Ce sont des tableaux avec des clefs "string".
+- Ils sont accessibles partout dans votre programmes.
+- Ils contiennent des données que vous ne maîtrisez pas !
+
+---
+
+# Les super globales (2/3)
+
+- `$_SERVER`: contient les données de l'entête http
+- `$_SESSION` : contient les données de session (on y arrive)
+- `$_COOKIE` : contient les données de cookies (on y arrive)
+- `$_GET` : contient les données de la [query string](#10)
+- `$_POST` : contient les données des formulaires de type POST (séance 2)
+- `$_FILES` : contient les données des formulaires de type POST + multipart (séance 2)
+
+---
+# Les super globales (3/3)
+
+[exemple](http://localhost:8000/examples/example_superglobales/index.php?lang=fr&course=cir1)
+
+???
+- Aucune des données présente dans `$_SERVER` n'est fiable à 100%, démo avec F12 de FF
+- Faire attention quand on veut insérer un lien avec un `&` dans du html.
+- Faille XSS
+
+---
+# Faille XSS
+
+- Faille de type "injection" ([TOP 1 OWASP](https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/owasptop10/OWASP%20Top%2010%20-%202013%20-%20French.pdf))
+- On inject du code, html/js malicieux dans le site.
+- Une seule solution : `htmlspecialchars($displayedVariable, ENT_QUOTE);`
+
+**protip** : à chaque fois que vous voyez `<?= ... ?>` assurez vous que `htmlspecialchars` est appelé (`<?= htmlspecialchars($displayedVariable) ?>`)
+
+---
+
+# Filter Input, Escape Output
+
+- Vérifier que la variable existe et est correcte : `isset`, `empty`, `filter_var`;
+- N'altérez (retirer des caractères comme les espaces, enlever des bouts de textes complets...) la variable qu'au besoin;
+- Posez-vous toujours la question "quels sont les caractères spéciaux dans ce que j'utilise" et utilisez la fonction qui va "échaper" lesdits caractères.
+
+---
+# Session et Cookies
+
+Session | Cookie
+--------|-------
+Les données de la session sont stockées sur le serveur, l'identifiant de session est stocké dans un cookie| Les données sont stockées chez le client.
+L'identifiant est envoyé dans les headers HTTP|Les données transitent via les headers HTTP
+[`session_start`](http://php.net/manual/fr/function.session-start.php)|[`setcookie`](http://php.net/manual/fr/function.setcookie.php)
+`$_SESSION['clef'] = "valeur sérialisable" | `$_COOKIE['nom_du_cookie']= "valeur du cookie"
+Taille non limitée | 4 Ko max le plus souvent
+`session_destroy` pour arrêter la session| .
+
+---
+# Quelques exemples
+
+- [Quand tout marche bien](http://localhost:8000/examples/example_session/session_ok.php?lang=fr&course=cir1)
+- [Headers sent](http://localhost:8000/examples/example_session/session_headers.php?lang=fr&course=cir1)
+- [Cookie too big](http://localhost:8000/examples/example_session/cookie_big.php?lang=fr&course=cir1)
+
+---
+class: center, middle
+
+# Préparation du TP
+
+---
+# L'énoncé
+
+1. Se créer un compte (le temps du TP) sur https://framagit.org
+2. Allez sur https://framagit.org/artragis/cours-cir1 et appuyez sur "Forker"
+3. L'énoncé du TP est dans le dossier TP1
+
+---
+# Environnement de travail
+
+- Linux
+- Editeur de code libre, mais [netbeans](https://netbeans.org/downloads/) fortement conseillé
+
+---
+
+# Debuger votre code
+
+- `var_dump` vous permet d'afficher les informations d'une variable
+- Utilisez le débugeur pas à pas ([Une vidéo d'exemple](https://www.youtube.com/watch?v=VlaIeGhIeWM&list=PLVifCHXZPhdFkKfW3e6iOSFAEjzgBmCz4))
+
+---
+class: center, middle
+
+# Séance 2 : Jouer avec les données utilisateur
+---
+class: center, middle
+
+## Résumé du cours précédent
+---
+- PHP permet de **générer** *dynamiquement* du HTML
+- Se base sur le modèle **client-serveur** et le protocole **HTTP**
+- HTTP est un protocole **textuel**
+- PHP est un langage de **programmation** qui permet de mettre en place des **algorithmes**
+- Les tableaux en PHP associent une **clef** (entier/string) à sa **valeur** (peu importe)
+- Les variables **superglobales** sont accessibles partout dans le code
+
+---
+class: center, middle
+
+## Quelques questions par rapport au dernier cours
+
+---
+
+# Comment fonctionne foreach?
+
+
+---
+
+class: center, middle
+# Avez-vous le form?
+---
+# Envoyer des données au serveur (1/4)
+
+```html
+&lt;form action="./reponse_formulaire.php">
+    &lt;fieldset id="identity">
+        &lt;p>
+            &lt;input type="text" name="firstname" id="firstname"/>&lt;label for="firstname">Prénom&lt;/label>
+        &lt;/p>
+        &lt;p>
+            &lt;input type="text" name="lastname" id="lastname"/>&lt;label for="lastname">Nom&lt;/label>
+        &lt;/p>
+    &lt;/fieldset>
+    &lt;p>
+        &lt;input type="submit" value="Send"/>
+    &lt;/p>
+&lt;/form>
+```
+
+???
+Ce formulaire envoie les données avec la méthode GET. Du coup les données seront accessibles avec la variable $_GET
+Rappel sur la faille XSS
+Que se passe-t-il si je mets un texte trop long?
+---
+# Envoyer des données au serveur (2/4)
+
+```html
+&lt;form action="./reponse_formulaire-post.php" method="POST"&gt;
+    &lt;fieldset id="identity"&gt;
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+        <p>
+            &lt;textarea name="comment" placeholder="Votre texte"&gt;&lt/textarea&gt;
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+&lt;/form&gt;
+```
+---
+# Envoyer des données au serveur (3/4)
+
+```html
+&lt;form action="./reponse_formulaire-check.php" method="POST"&gt;
+    <fieldset id="identity">
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+        <p>
+            <label for="hobbies">Vos passions</label>
+            <input type="checkbox" name="hobby" value="foot">foot<br/>
+            <input type="checkbox" name="hobby" value="rugby">rugby<br/>
+            <input type="checkbox" name="hobby" value="fifa">fifa<br/>
+            <input type="checkbox" name="hobby" value="skyrim">Je suis le dovahkiin<br/>
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+&lt;/form&gt;
+```
+???
+Le cas des checkbox est un peu complexe. Comme on veut qu'elles aient le même nom pour rassembler toutes les valeurs ensemble, il faut dire à php comment s'en sortir.
+Voir la requête http (body).
+Expliquer l'astuce => les `[]`
+Expliquer que l'astuce vaut en fait pour tous les type de champ, on peut ainsi mettre plusieurs champs texte sous le même nom.
+---
+# Envoyer des données au serveur (3/4)
+
+```html
+&lt;form action="./reponse_formulaire-check.php" method="POST"&gt;
+    <fieldset id="identity">
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+        <p>
+            <label for="hobbies">Vos passions</label>
+*            <input type="checkbox" name="hobby[]" value="foot">foot<br/>
+*            <input type="checkbox" name="hobby[]" value="rugby">rugby<br/>
+*            <input type="checkbox" name="hobby[]" value="fifa">fifa<br/>
+*            <input type="checkbox" name="hobby[]" value="skyrim">Je suis le dovahkiin<br/>
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+&lt;/form&gt;
+```
+---
+# Envoyer des données au serveur (4/4)
+
+```html
+&lt;form action="./reponse_formulaire-file.php" 
+*         method="POST" enctype="multipart/form-data"&gt;
+    <fieldset id="identity">
+        <p>
+            <input type="text" name="firstname" id="firstname"/><label for="firstname">Prénom</label>
+        </p>
+        <p>
+            <input type="text" name="lastname" id="lastname"/><label for="lastname">Nom</label>
+        </p>
+        <p>
+            <input type="file" name="avatar" id="avatar"/><label for="avatar">Votre avatar</label>
+        </p>
+    </fieldset>
+    <p>
+        <input type="submit" value="Send"/>
+    </p>
+&lt;/form&gt;
+```
+???
+Envoyer un fichier demande une configuration supplémentaire.
+En effet, souvenez-vous, le protocole HTTP est un protocole textuel. A l'opposé un fichier est par défaut du simple code binaire.
+Il faut donc dire à votre navigateur "envoyez les fichiers dans une seconde partie de la requête au format binaire".
+Cela génère un encodage en base64.
+
+Montrer la requête.
+---
+# Sauvegarder le fichier
+
+- utiliser la fonction `move_uploaded_file`
+- utiliser les données dans la variable `$_FILES`
+```php
+<?php
+define('TARGET_DIRECTORY', './');
+if(!empty($_FILES['avatar'])) {
+    move_uploaded_file($_FILES['avatar']['tmp_name'], TARGET_DIRECTORY . $_FILES['avatar']['name']);
+}
+?>
+```
+
+---
+
+# Attention, sécurité
+
+- Les extensions ne suffisent pas à s'assurer qu'un fichier est ce qu'il prétend être.
+- Le type MIME aussi.
+- Si vous avez une image, n'hésitez pas à la retailler/la compresser pour éviter des pages trop lourdes.
+- Assurez-vous que le nom de fichier est unique (pour ne pas écraser un fichier quand ce n'est pas voulu) (`sha1`/`sha256`)
+
+---
+# Écrire, lire et modifier un fichier
+
+- Ouverture d’un fichier avec fopen (r/r+, w/w+, a/a+) et fermeture avec fclose. 
+- Lecture caractère par caractère avec fgetc, ligne par ligne avec fgets, ou la totalité du fichier avec file_get_contents.
+- Écriture ligne par ligne avec fputs, ou avec fwrite pour plus de contrôle.
+- Ouverture d’un dossier avec opendir et fermeture avec closedir. Parcours d’un dossier avec readdir. Lister en fonction des noms avec `glob`
+- Attention à la position du curseur, utilisez fseek pour le replacer. Avec a et a+, les données sont toujours ajoutées à la fin, fseek n’a donc aucune influence. Attention également aux permissions des fichiers/dossiers.
+
+---
+# Organisons-nous
+
+> En informatique, et plus particulièrement en développement logiciel, un patron de conception (souvent appelé design pattern) est un arrangement caractéristique de modules,
+> reconnu comme bonne pratique en réponse à un problème de conception d'un logiciel. Il décrit une solution standard, utilisable dans la conception de différents logiciels
+
+![source](https://fr.wikipedia.org/wiki/Patron_de_conception)
+???
+Lorsqu'on développe un logiciel, on finit rapidement par avoir affaire à des clases de problèmes similaires.
+Certains problèmes ont vu leur solution formalisée dans des **patrons de conception et d'organisation**.
+---
+# MVC
+
+- Comment les données sont-elles organisées <=> le modèle
+- Quelles sont les règles pour utiliser les données <=> Le contrôleur
+- Comment on affiche les données? La vue
+
+.height400[![MVC](./mvc.png)]
+
+# TP2 : un site dynamique (épicerie)
+---
+class: center, middle
+
+# Séance 3 : Les bases des bases... de données
+---
+class: center, middle
+
+## Résumé du cours précédent
+---
+- Utiliser la méthode $_POST dans les formulaires
+- Envoyer des fichiers
+- HTTP est un protocole **textuel**
+- PHP est un langage de **programmation** qui permet de mettre en place des **algorithmes**
+- Les tableaux en PHP associent une **clef** (entier/string) à sa **valeur** (peu importe)
+- Les variables **superglobales** sont accessibles partout dans le code
+
+---
+class: center, middle
+
+## Vos questions
+
+---
+# Une base de données?
+
+- plusieurs types : relationnelle, document, graphe, clé/valeur...
+- permettent de stocker les données de votre application 
+
+???
+Nous allons utiliser mysql/mariadb, qui est une base relationnelle
+---
+# Base relationnelles
+
+- Les données sont structurées en table;
+- Chaque **entité** est représentée par une **table**;
+- Lorsque des liens d'apartenance entre entités existent, des **clefs étrangères** sont créés.
+
+---
+# Gérer la base
+
+- le client `mysql`
+- le client PHPMyAdmin
+- le client MysqlWorkbenc
+???
+
+J'utiliserai le dernier, il est développé par oracle et permet d'éviter pas mal de soucis propres à phpmyadmin.
+---
+# La base de données pour le TP : nos premières entités
+
+- En tant qu'utilisateur anonyme, je veux pouvoir me connecter avec mon login et mon mot de passe.
+- En tant qu'utilisateur connecté, je veux pouvoir poster un message (du texte) sur le chat.
+- Chacun des messages postés par les utilisateurs seront datés pour être affichés dans l'ordre.
+
+---
+# La base de données pour le TP : nos premières entités
+
+<div class="mermaid height400">
+classDiagram
+    User --o Message
+    User : "id (int)"
+    User : "login (string)
+    User : "pass (string)
+    Message : "id (int)
+    Message : "message (string)
+    Message : "creation_date (DateTime)
+</div>
+---
+# Les `id`
+
+- C'est l'abréviation de "identifiant"
+- Il permet de retrouver le user/message car il est unique
+- Par convention, on crée un identifiant sous forme d'entier et on met les autres champs avec des contraintes plus lâche
+- **Propre à mysql** : utiliser l'AutoIncrement pour les champ ID.
+---
+# les différents string (1/2)
+
+- CHAR(size) : une chaîne de caractères de taille `size`.
+- VARCHAR(size) : une chaîne de caractères dont la taille maximale est `size`.
+- TEXT/LONG TEXT: une chaîne de caractères sans réelle limite de taille.
+
+L'avantage de `CHAR` et `VARCHAR` c'est qu'on peut mettre une contrainte d'unicité et un index => performance.
+---
+# les différents string (2/2)
+
+- login =&gt; varchar
+- pass =&gt; varchar (on verra juste après plus en détail)
+- body =&gt; TEXT
+
+---
+# Un point sur les password (un peu d'hygiène numérique)
+
+- Un mot de passe ne doit être connu que de l'utilisateur, pas de l'application;
+- Un mot de passe ne doit pas avoir de limite de nombre de caractères;
+- Un mot de passe ne doit pas être stocké en clair;
+
+---
+# Un point sur les password (un peu d'hygiène numérique)
+
+Il faut utiliser des **fonctions de hash**.
+
+- quand on stock en bdd `password_hash($userDefinedPassword, PASSWORD_DEFAULT);`
+- quand on veut vérifier que le mot de passe est bon :
+```php
+<?php
+$passwordFromLoginForm = (string)filter_input(INPUT_POST, 'password');
+$hashedPasswordInDatabase = getUserData()['pass']; // we'll code that together
+if (password_verify($passwordFromLoginForm, $hashedPasswordInDatabase) {
+    // It's OK
+} else {
+   // bad credentials
+}
+?>
+```
+???
+Il faut stocker un hash, ce hash a toujours le même nombre de caractères, 60.
+néanmoins, php nous conseille d'utiliser un champ de 255. 
+---
+class: middle, center
+
+# Créons les deux tables
+---
+# Les requêtes SQL de base
+
+```sql
+SELECT login, pass FROM user`;
+ 
+SELECT text, creation_date 
+FROM message 
+WHERE creation_date > DATE_SUB(NOW(), INTERVAL 1 HOUR) 
+ORDER BY creation_date ASC
+LIMIT 25 OFFSET 0;
+
+`INSERT INTO user (login, pass) VALUES('login', '');
+```
+
+---
+
+# Se connecter à la base avec PHP
+
+1. `PDO`/POO
+2. `new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '');`
+3. gérer les erreurs : les exceptions
+
+```php
+<?php
+try {
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '');
+} catch (Exception $e) {
+      exit('Erreur de connexion à la base de données.');
+}
+?>
+```
+
+---
+# Ce qu'on dira de l'orienté objet *pour le moment*
+
+- C'est un moyen de séparer le code pour que chaque **classe** fasse un métier bien défini;
+- Il s'appuie sur la notion de classe, qui définit le métier et d'instance qui permet d'avoir l'état courant;
+- Créer une instance avec `new`;
+- Chaque objet possède des **attributs** et des **méthodes**, accessible avec l'opérateur `->`.
+
+---
+
+# Ce qu'on dira de l'orienté objet **pour le moment** (exemple)
+```php
+<?php
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', $opts);
+   $resultCursor = $bdd->query('SELECT login, pass FROM user');
+   foreach($resultCursor as $row) {
+        echo $row['user'] . ' ' . $row['pass'];
+    }
+} catch (Exception $e) {
+        exit('Erreur de connexion à la base de données.');
+}
+?>
+```
+???
+
+On se connecte en faisant new PDO,
+On appelle la méthode query avec `->`
+Le "curseur" retourné est un objet qui *implémente une interface `Iterable`*, cela signifie qu'on dit à PHP "ça peut être utilisé comme un tableau dans un foreach"
+Les lignes retournées sont des tableaux associatifs.
+
+---
+
+# Bonjour, je m'appele `'; DROP DATABASE;`
+
+```php
+<?php
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', $opts);
+   $resultCursor = $bdd->query('SELECT login, pass FROM user WHERE login ="' . $_POST['login'] . '"');
+   // ...
+} catch (Exception $e) {
+        exit('Erreur de connexion à la base de données.');
+}
+?>
+```
+???
+- rappelez-vous filter input, escape output. Ici le output n'est plus de l'html mais du SQL. Il faut donc échaper le texte pour que le SQL soit bon
+- l'injection de code est une faille de sécurité importante
+- elle peut avoir lieu aussi bien dans les requêtes de sélection que dans les requêtes d'insertion
+
+---
+
+# Qui veut la sécurité, prépare la requête
+
+<div class="mermaid">
+graph LR
+    PDO -"prepare($request)"-> Statement
+    Statement --> execute["Execution in db execute([$param1,$param2])"]
+    exec --> fetch["fetch()"]
+    fetch -> close("Close statement")
+</div>
+
+---
+# Qui veut la sécurité, prépare la requête
+```php
+<?php
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', $opts);
+   $query = "SELECT text, creation_date FROM message WHERE creation_date > DATE_SUB(NOW(), INTERVAL 1 HOUR)
+   ORDER BY creation_date ASC LIMIT :limit OFFSET :offset";
+   $statement = $pdo ->prepare($query);
+   $statement->bindValue(':limit', 25, PDO::PARAM_INT); // important car sinon PDO mettra des quotes
+   $statement->bindValue(':offset', 0, PDO::PARAM_INT);
+   $statement->execute();
+   foreach($statement as $row){
+       // bla
+    }
+catch(PDOException $e){}
+```
+---
+# Update & Delete
+
+- `UPDATE message SET body = 'Hello world' WHERE id = 1;`
+- `DELETE FROM message WHERE creation_date < DATE_SUB(NOW(), INTERVAL 1 HOUR)`
+
+```php
+<?php
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', $opts);
+   $query = "UPDATE message SET body = :body WHERE id = :id";
+   $statement = $pdo ->prepare($query);
+   $statement->execute([':body' => 'Hello world', ':id' => 1]);
+   foreach($statement as $row){
+       // bla
+    }
+catch(PDOException $e){}
+```
+---
+# Sécurité des mots de passe de la BDD
+
+Stockez ces données dans un fichier de configuration, au format que vous souhaitez.
+
+Puis ne donnez les droits d'écriture à personne d'autre que le possesseur (chmod 644).
+Lors de la connexion, lisez le fichier et créez la connexion.
+
+```php
+<?php
+$ini_array = parse_ini_file("secrets.ini", true);
+try {
+   $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+   $bdd = new PDO($ini_array['db']['dsn'], $ini_array['db']['user'], $ini_array['db']['pass'], $opts);
+} catch (Exception $e) {
+        exit('Erreur de connexion à la base de données.');
+}
+```
+et secrets.ini :
+```ini
+[db]
+dsn = mysql:host=localhost;dbname=test;charset=utf8
+user = root
+pass = 
+```
+---
+class: center, middle
+# Séance 4 : Un peu plus loin avec la bdd
+---
+class: center, middle
+## Rappels du cours précédent
+---
+- Il y a plusieurs types de bases de données;
+
+--
+- Les bases de données fonctionnent selon le principe client/serveur
+
+--
+- Pour discuter avec la base de données on utilise le langage SQL
+
+--
+- Pour lier PHP à MySQL on utilise `PDO`
+
+--
+- Attention aux injections SQL ! Utilisez les requêtes préparées.
+
+---
+class: center, middle
+## Vos questions?
+
+---
+# Les utilisateurs postent des messages
+
+<div class="mermaid height400">
+classDiagram
+    class User1 {
+       id : int
+       login : string
+      pass : string
+    }
+   class Message1 {
+      id : int
+      message : string
+     creation_date : DateTime
+   }
+   User1 "1"  --o "many" Message1 : sends
+</div>
+???
+un utilisateur possède n messages
+un message possède 1 utilisateur
+Où doit-on créer le champ qui permet d'identifier l'auteur d'un message?
+clef étrangère dans la table messages (id_user)
+---
+# Lister les messages d'un utilisateur
+
+```sql
+SELECT m.*, u.*
+FROM messages m
+INNER JOIN users u ON m.id_user=u.id
+```
+???
+On utilise une jointure. D'abord on liste les tables puis dans la clause ON, on dit quelle est la clef étrangère
+
+---
+# Les utilisateurs sont dans des salons
+
+<div class="mermaid height400">
+classDiagram
+    User2 "1"  --o "many" Message2 : sends
+    User2 "many"  --o "many" Salon2: participates
+    Salon2 "1" --o "many" Message2: contains
+    User2 : "Integer id"
+    User2 : "String login"
+    User2 : "String pass"
+    Message2 : "Integer id"
+    Message2 : "String message"
+    Message2 : "DateTime creation_date"
+    Salon2 : "string nom"
+    Salon2 : "integer id"
+</div>
+---
+### Comment identifier les salons dans lequel un utilisateur se trouve?
+
+- une clef étrangère dans User?
+- une clef étrangère dans Salon?
+- Une clef étrangère dans chaque?
+
+---
+class: center,middle
+
+**Solution :** Créer une table intermédiaire
+
+Cette table "user_salon" aura une clef vers User et une clef vers Salon
+
+---
+### Comment identifier les salons dans lequel un utilisateur se trouve?
+
+```sql
+SELECT u.login, s.name
+FROM user u
+INNER JOIN user_salon us ON u.id = us.user_id
+INNER JOIN salon s ON s.id = us.salon_id
+WHERE u.login = 'Searched Login'
+```
+
+---
+### Comment compter le nombre de salons dans lequel se trouve chaque utilisateur?
+
+```sql
+SELECT u.login, COUNT(*) AS nbSalon
+FROM user u
+INNER JOIN user_salon us ON u.id = us.user_id
+INNER JOIN salon s ON s.id = us.salon_id
+GROUP BY u.login
+```
+---
+### Quelques autres fonctions
+
+- `AVG` : Faire une moyenne sur une colonne
+- `GROUP_CONCAT` : Permet de mettre les valeurs les unes à la suite des autres
+- `MIN`/`MAX`
+---
+### Un peu plus sur les dates
+
+- `DATETIME` et `TIMESTAMP` : vous connaissez le bug de 2038?
+- On peut utiliser `<` et `>` comme pour des entiers
+- Les dates sont lisibles au format `YYYY-MM-DD HH:mm:SS`
+- On peut sélectionner les parties de la date avec `MINUTE`, `HOUR`, `DAY`, `MONTH`, `YEAR`
+
+---
+### En PHP
+
+- `time()` envoie le nombre de secondes depuis le premier janvier 1970.
+- `strptime()` permet de transformer une date "normale" en entier.
+- `date($format, $time)` permet de créer une date lisible.
+
+---
+### Un peu de magie avec les dates
+
+```php
+<?php
+$today = strtotime('today');
+$tomorrow = strtotime('tomorrow');
+$in3days = strtotime('+3 days');
+$aWeekAgo = strtotime('1 week ago');
+$inOneDayAndThreeHours = strtotime('+1 days +1 hours');
+?>
+```
+
+---
+### Et avec la POO?
+
+```php
+<?php
+$date = new DateTime('+1 days +1 hours');
+echo $date->format('Y-m-d H:i:s');
+$dateFromDatabase = DateTime::dateFromFormat('Y-m-d H:i:s', $row['creationDate']);
+echo $date->format('Y-m-d H:i:s');
+$date->modify('+1 days'); // ajoute un jour
+
+?>
+```
+---
+### Quelques problèmes courrants avec les dates :
+
+- Attention : les timezones
+
+--
+- Attention : les heures d'été et d'hiver
+
+--
+- Attention : si vous fixez une timezone côté PHP, l'heure du serveur et du clients peuvent être différentes..
+
+--
+- Ne jamais comparer les dates sous leur forme "chaîne de caractères".
+
+---
+class: center,middle
+# Séance 5: Un peu de POO et d'organisation
+---
+class: middle,center
+Résumé du cours précédent
+---
+- Les relations 1-n grâce à une clef étrangère
+
+--
+- Les relations n-n grâce à une table intermédiaire qui a des clefs étrangères
+
+--
+- Sélection des relations grâce à INNER JOIN
+
+--
+- Compter le nombre d'entrées par utilisateur grâce à COUNT et GROUP_BY
+
+
+---
+# Les objets, comment les utiliser?
+
+- On peut voir les classes comme des "types" personnalisés;
+- `new NomDeLaClasse()`: permet de créer une instance
+- `$obj = new PDO(/* params */); $obj->methode(); $obj->attribute = "value";`: utiliser les attributs et les méthodes;
+- `DateTime::createFromFormat()`: permet d'appeler une fonction statique, c'est à dire liée à la "classe" et non à l'instance.
+---
+# Lire la documentation d'une classe
+
+[La classe DateTime](http://php.net/manual/fr/class.datetime.php)
+???
+- la fonction `__construct` est la fonction qui est appelée lorsque vous faite "new", elle initialise l'objet;
+- la liste des constantes
+- les fonctions statiques et non statiques
+- "implements"
+---
+# La magie du foreach
+
+Une classe implémente Iterator ou Traversable, elle peut alors être "parcourue" avec foreach:
+
+<div class="mermaid height400">
+graph LR
+    debut --> rewind
+    rewind --> valid{valid}
+    valid -->|yes| current[current + key]
+    current --> next
+    next --> valid
+    valid -->|no| fin
+
+</div>
+---
+# Organiser le code : les namespaces
+
+- Commencer votre fichier avec le nom du namespace, exemple `namespace \organizers\models\functions;`
+
+--
+- Pour appeler la fonction : `\organizers\models\functions\getEvents();`
+
+--
+- Pour éviter d'avoir des noms trop longs : `use`;
+
+--
+- [`PSR`](https://www.php-fig.org/psr/)
+
+---
+
+# Utiliser une bibliothèque tierse
+
+**Ne réinventez pas la roue**
+
+- télécharger [composer](https://getcomposer.org/download/)
+- ajouter votre dépendance dans la section "autoload" du fichier `composer.json`
+- ajouter vos fichiers de fonctions dans la même section
+- lancer la commande `php composer.phar install`
+- ajouter la ligne `require(__DIR__ . '/vendor/autoload.php');` dans votre contrôleur
+
+**Attention** : les dépendances seront codées avec la POO.
+---
+# Utiliser des objets pour obtenir les résultats de la bdd
+
+```php
+class Room {
+   private $name;
+   private $id;
+   public function getName() { return $this->name; }
+   public function setName($name) { $this->name = $name; return $this;}
+   public function getId() { return $this->id; }
+   public function setId($id) { $this->id = $id; return $this;}
+}
+$listOfRooms = $bdd->query("SELECT * FROM salons")
+                   ->fetch(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'Room');
+?>
+```
+
+---
+class: center, middle
+## Déployer son site
+---
+# Un hébergeur
+
+- Hébergeur mutualisé
+- Serveur privé : dédié/VPS
+
+---
+## Hébergeur mutualisé
+
+- Envoyer votre code via FTP
+- Pour customiser votre site (réécriture d'url, sécurité...) utiliser les fichiers `.htaccess`
+- Connectez-vous au PHPMyAdmin de l'hébereur
+
+---
+
+## Serveur dédié
+
+- Envoyer votre code via FTP;
+- Choisissez un serveur web de production (mon conseil: nginx);
+- Configurez le serveur pour assurer la sécurité, customiser la réécriture d'url;
+- Pour utiliser MySQL, évitez phpmyadmin (sécurité)
+
+---
+class: center, middle
+# Séance 6: Un code de qualité
+---
+
+- Les tests
+- Les analyses du code
+- Le concept d'intégration continue
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create({highlightLines: true});
+    </script>
+<script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad: true, theme: 'dark'});
+  </script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+fonction utile : print_r($array);
+pb : ne peut pas afficher un string contenant un espace avec <?= ?> dans la value d'un form
+
+travail restant :
+    refonte graphique
+        établir hiérarchie colorifique pour les événements et afficher un cadre d'information en bas à gauche de l'écran (?) :
+            orga : plus de places dispo
+            tous : événement passé (commencé / terminé?)
+            client : événement inscrit
+    gestion des erreurs
+        liste (erreur, alerte, confirmation), redirection vers la page d'origine?
+    tout mettre en simple guillemets (php)
+    implémenter dernières idées
+        désinscription
+        afficher nb de personnes inscrites (orga)
+        afficher bouton de suppression au survol (orga - mois)
+        afficher jours fériés d'une couleur différente
+
