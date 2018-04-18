@@ -10,7 +10,7 @@ ob_start(); ?>
             if (switchDay(2, $dataEvent, false)) { ?>
                 <aside  <?php switchDay(3, $dataEvent, false) ?>>
                     <a href="index.php?action=event&amp;id=<?= htmlspecialchars($dataEvent['id']) ?>">
-                        <h3><?= $dataEvent['name'] ?></h3><!--htmlspecialchar can break his display-->
+                        <h3><?= htmlspecialchars($dataEvent['name']) ?></h3>
                     </a>
                     <hr>
                     Début : <?= htmlspecialchars($dataEvent['displayStartTime']) ?><br>

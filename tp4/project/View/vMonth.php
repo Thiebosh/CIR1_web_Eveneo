@@ -60,7 +60,7 @@ ob_start(); ?>
                                     foreach($dataDay as $dataEvent) {
                                         if (switchMonth(4, $dataEvent, false)) {?>
                                             <a href="index.php?action=event&amp;id=<?= htmlspecialchars($dataEvent['id']) ?>" <?php switchMonth(5, $dataEvent, false) ?>>
-                                                <?= /*preg_replace ("\\", "", */preg_quote($dataEvent['name'], "'")/*)*/ ?><!--explode aux espaces et afficher tout au foreach?-->
+                                                <?= htmlspecialchars($dataEvent['name']) ?>
                                             </a>
                                             <?php
                                             $nbEvent++;

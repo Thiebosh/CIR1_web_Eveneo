@@ -137,8 +137,9 @@ function verifScript($scriptWanted) {
                 throw new Exception("Inscription : Données formulaire incomplètes");
             }
 
-            $received['rank']          = filter_input(INPUT_POST, 'rank',          FILTER_SANITIZE_STRING);
-            $received['login']         = filter_input(INPUT_POST, 'login',         FILTER_SANITIZE_STRING);
+            $received['rank']          = filter_input(INPUT_POST, 'rank',          FILTER_CALLBACK,
+            ['options' => function ($data) {return in_array($data, ['CUSTOMER', 'ORGANIZER']) ? $data : false;}]);
+            $received['login']         = filter_input(INPUT_POST, 'login');//filtrage avec htmlspecialchars
             $received['password']      = filter_input(INPUT_POST, 'password',      FILTER_SANITIZE_STRING);
             $received['passwordVerif'] = filter_input(INPUT_POST, 'passwordVerif', FILTER_SANITIZE_STRING);
 
@@ -154,17 +155,17 @@ function verifScript($scriptWanted) {
                 throw new Exception("Edition d'événement : Donnée(s) formulaire absente(s)");
             }
 
-            $received['name']        = filter_input(INPUT_POST, 'name',        FILTER_SANITIZE_STRING);
+            $received['name']        = filter_input(INPUT_POST, 'name');//filtrage avec htmlspecialchars
             $received['nbPlaces']    = filter_input(INPUT_POST, 'nbPlaces',    FILTER_VALIDATE_INT);
-            $received['description'] = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+            $received['description'] = filter_input(INPUT_POST, 'description');//filtrage avec htmlspecialchars
             $received['startDate']   = filter_input(INPUT_POST, 'startDate',   FILTER_SANITIZE_STRING);
             $received['startTime']   = filter_input(INPUT_POST, 'startTime',   FILTER_SANITIZE_STRING);
             $received['endDate']     = filter_input(INPUT_POST, 'endDate',     FILTER_SANITIZE_STRING);
             $received['endTime']     = filter_input(INPUT_POST, 'endTime',     FILTER_SANITIZE_STRING);
 
             if (!$received['name'])        $received['echec'][] = 'nom';
-            if ($received['nbPlaces'] === false ||
-            $received['nbPlaces'] < 0)     $received['echec'][] = 'nombre de places';
+            if ($received['nbPlaces'] === false || $received['nbPlaces'] < 0)
+                                           $received['echec'][] = 'nombre de places';
             if (!$received['description']) $received['echec'][] = 'description';
             if (!$received['startDate'])   $received['echec'][] = 'date de début';
             if (!$received['startTime'])   $received['echec'][] = 'heure de début';
