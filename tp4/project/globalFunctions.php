@@ -119,10 +119,7 @@ function isPreviousDate($reference, $compared) {//strictly superior
 }
 
 function verifScript($scriptWanted) {
-    if (!isset($_POST['script']) || $_POST['script'] != $scriptWanted) {//return $_POST['script'] = false; ->tester
-        $_POST['script'] = false;
-        return false;
-    }
+    if (!isset($_POST['script']) || $_POST['script'] != $scriptWanted) return $_POST['script'] = false;// ->tester
 
     switch ($scriptWanted) {
         case 'login':
