@@ -61,9 +61,9 @@ function verifAction() {
     }
 
     if ($action == 'logout') {
-        $_SESSION = array();//nettoie la variable
-        header('Location: index.php?action=login');//redirige vers la page de connexion
-        exit();//mets fin au script courant
+        $_SESSION = array();//cleans the variable
+        header('Location: index.php?action=login');//redirects to login page
+        exit();
     }
 
     if ($action == 'month' && !isset($_GET['date'])) $_GET['date'] = date('Y-m');
@@ -77,7 +77,7 @@ function verifAction() {
     return $action;
 }
 
-function isPreviousDate($reference, $compared) {//strictement superieur
+function isPreviousDate($reference, $compared) {//strictly superior
     $splitReference = explode(' ', $reference);
     $dateReference = explode('-', $splitReference[0]);//Y-m-d
     if (isset($splitReference[1])) $timeReference = explode('-', $splitReference[1]);//h-m
@@ -187,7 +187,7 @@ function verifScript($scriptWanted) {
         //case 'delete': validate $_POST['script'] only
     }
 
-    if (isset($received['echec'])) $_POST['script'] = false;//invalide le script
+    if (isset($received['echec'])) $_POST['script'] = false;//invalidate the script
     else $_POST['script'] = true;
 
     return $received;

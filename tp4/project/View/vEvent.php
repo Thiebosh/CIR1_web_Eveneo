@@ -6,7 +6,7 @@ else require('View/Switch/vBackEnd.php');
 ob_start(); ?>
     <div id="event">
         <header>
-            <h3><?= $dataEvent['name'] ?></h3><!--lui appliquer htmlspecialchar peut le detruire-->
+            <h3><?= $dataEvent['name'] ?></h3><!--htmlspecialchar can break his display-->
             <?php if (!isset($script)) { ?>
                 Le début de cet événement est déjà passé
             <?php }
@@ -36,7 +36,7 @@ ob_start(); ?>
             <aside class="vLine"></aside>
             <aside>
                 <span>Description :</span>
-                <p><?= $dataEvent['description'] ?></p><!--lui appliquer htmlspecialchar peut le detruire-->
+                <p><?= $dataEvent['description'] ?></p><!--htmlspecialchar can break his display-->
             </aside>
         </div>
     </div>

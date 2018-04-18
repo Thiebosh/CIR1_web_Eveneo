@@ -31,7 +31,7 @@ ob_start(); ?>
                     <td colspan="2"><label>Description de l'événement : </label></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><textarea id="description" name="description" placeholder="Description"><?= $page['description'] ?></textarea></td><!--htmlspecialchars casse son affichage-->
+                    <td colspan="2"><textarea id="description" name="description" placeholder="Description"><?= $page['description'] ?></textarea></td><!--htmlspecialchar can break his display-->
                 </tr>
             </table>
             <br>

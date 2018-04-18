@@ -40,7 +40,7 @@ try {
         break;
     }
 }
-catch(Exception $error) {//rediriger vers la page en affichant un bloc erreur
+catch(Exception $error) {//resume
     $errorMessage = $error->getMessage();
     $errorDetail = $error->getFile() . ', ligne ' . $error->getLine();
     $redirection['text'] = 'l\'accueil';

@@ -46,7 +46,7 @@
                     </li>
                     <li>
                         Aller au jour
-                        <?php //une seule evaluation
+                        <?php //only one evaluation
                         $firstCond = $secondCond = false;
                         if (!($page['startDate'] == date('Y-m-d') && $page['actual'] == 'day')) $firstCond = true;
                         if ($page['actual'] != 'month' && $page['actual'] != 'day') $secondCond = true;

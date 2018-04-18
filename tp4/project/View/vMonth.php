@@ -28,7 +28,7 @@ ob_start(); ?>
             <tr>
                 <?php
                 $monthDay = $weekDay = 0;
-                while ($page['dayName']['ang'][$monthDay] != $page['startMonth']) {//ne commence pas par lundi ?>
+                while ($page['dayName']['ang'][$monthDay] != $page['startMonth']) {//does not start with monday ?>
                     <td class="otherMonth">
                         <a href="index.php?action=month&amp;date=<?= htmlspecialchars($page['lastPage']) ?>">
                             <aside>
@@ -68,7 +68,7 @@ ob_start(); ?>
                                         if ($nbEvent == MAX_LIST) break;
                                     }
                                     
-                                    if (count($dataDay) > MAX_LIST) {//au moins 6 : ajoute bouton au template ?>
+                                    if (count($dataDay) > MAX_LIST) {//at least 6 : add button ?>
                                         
                                         <a href="index.php?action=day&amp;date=<?= htmlspecialchars($page['dateMonth'].'-'.$weekDay) ?>" class="more">
                                             <button>Voir tout</button>
@@ -78,12 +78,12 @@ ob_start(); ?>
                             </div>
                         </aside>
                     </td>
-                    <?php if ($monthDay % 7 == 0 && $weekDay < $page['nbDays']) {//si egal a nbDayMonth, est fermé par le dernier
-                        echo '</tr><tr>';//nouvelle semaine
+                    <?php if ($monthDay % 7 == 0 && $weekDay < $page['nbDays']) {//if equal to nbDayMonth, is closed by the last </tr>
+                        echo '</tr><tr>';//new week
                     }
                 }
 
-                while ($page['dayName']['ang'][$page['endMonth'] - 1] != 'Sun') {//ne s est pas arreté sur dimanche ?>
+                while ($page['dayName']['ang'][$page['endMonth'] - 1] != 'Sun') {//did not stop on sunday ?>
                     <td class="otherMonth">
                         <a href="index.php?action=month&amp;date=<?= htmlspecialchars($page['nextPage']) ?>">
                             <aside>

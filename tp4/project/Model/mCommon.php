@@ -14,7 +14,7 @@ function dbConnect() {
     return $dataBase;
 }
 
-function getEventStatus($idEvent) {//valeur ou false
+function getEventStatus($idEvent) {//value or false
     $bdd = dbConnect();
 
     $query = 'SELECT iduser_participates_events
