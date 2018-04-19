@@ -1,0 +1,12 @@
+fonction utile : print_r($array);
+
+travail restant :
+    gestion des erreurs
+    implémenter dernières idées
+        désinscription
+        afficher bouton de suppression au survol (orga - mois)
+        afficher jours fériés d'une couleur différente
+    établir hiérarchie colorifique pour les événements et afficher un cadre d'information en bas à gauche de l'écran (?) :
+        orga : plus de places dispo
+        tous : événement passé (commencé / terminé?)
+        client : événement inscrit
