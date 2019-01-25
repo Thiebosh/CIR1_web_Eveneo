@@ -1,6 +1,0 @@
-[27-Dec-2017 09:15:00 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/fdambrine/course/diapo/examples/example_session/cookie_big.php:8) in /home/fdambrine/course/diapo/examples/example_session/cookie_big.php on line 9
-[27-Dec-2017 09:15:37 Europe/Berlin] PHP Notice:  Undefined index: my_big_cookie in /home/fdambrine/course/diapo/examples/example_session/cookie_big.php on line 10
-[27-Dec-2017 09:22:55 Europe/Berlin] PHP Notice:  A non well formed numeric value encountered in /home/fdambrine/course/diapo/examples/example_session/cookie_big.php on line 9
-[27-Dec-2017 09:25:43 Europe/Berlin] PHP Notice:  Undefined index: my_big_cookie in /home/fdambrine/course/diapo/examples/example_session/cookie.inc on line 6
-[27-Dec-2017 09:25:54 Europe/Berlin] PHP Notice:  Undefined index: my_big_cookie in /home/fdambrine/course/diapo/examples/example_session/cookie.inc on line 6
-[27-Dec-2017 10:33:06 Europe/Berlin] PHP Parse error:  syntax error, unexpected '{' in /home/fdambrine/course/diapo/examples/example_session/cookie_big.php on line 9
